@@ -1,0 +1,179 @@
+body{
+  padding: 0 150px;
+  font-family: "Gilroy-Medium", sans-serif;
+}
+/* === Хедер === */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+    max-width: var(--max-width);
+
+    width: 100%;
+    font-family: var(--font-primary);
+  }
+  
+  .header-left, .header-center, .header-right {
+    display: flex;
+    align-items: center;
+  }
+
+  a {
+    text-decoration: none !important; /* И никаких подчеркиваний! */
+  }
+
+  .header-left {
+    gap: 20px;
+  }
+  
+  .delivery {
+    font-size: 18px;
+    color: #000;
+  }
+  
+  .delivery span{
+    margin-top: -2px;
+  }
+  
+  .delivery img {
+    width: 22px;
+    height: 22px;
+    margin-right: 5px;
+    object-fit: contain;
+  }
+  
+  .catalog-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 18px;
+    font-size: 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .logo {
+    height: 32px;
+  }
+  
+  .header-center {
+    flex: 1;
+    justify-content: center;
+  }
+  
+  .search-bar {
+    background: var(--background-light);
+    border-radius: var(--border-radius);
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    padding-left: 10px;
+    height: 40px;
+    margin-right: 20px;
+  }
+  
+  .search-bar input {
+    border: none;
+    background: transparent;
+    outline: none;
+    width: 200px;
+    font-size: 14px;
+    padding: 10px;
+  }
+  .search-button {
+    background: none;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+  }
+  .search-button img {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+  }
+
+ 
+  .header-icons {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  
+  .icon {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    cursor: pointer;
+  }
+  
+  /* Іконки */
+  .icon-cart {
+    width: 32px;
+    height: 28px;
+  }
+  .icon-heart {
+    width: 22px;
+    height: 22px;
+  }
+  .icon-user {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .icon-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: transform var(--transition-speed) ease;
+  }
+  .icon-button img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+  }
+  .icon-button:hover {
+    transform: scale(1.2);
+  }
+
+  .delivery {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 8px 16px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+
+    max-width: fit-content;
+  }
+  
+  .delivery .icon-small {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .delivery select {
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: white;
+    font-size: 14px;
+    cursor: pointer;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .delivery select:hover {
+    border-color: #0077cc;
+  }
+  
+  .delivery select:focus {
+    outline: none;
+    border-color: #0077cc;
+    box-shadow: 0 0 0 2px rgba(0, 119, 204, 0.2);
+  }

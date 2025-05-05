@@ -1,0 +1,87 @@
+/* === Скидання стилів === */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* === Змінні (root) === */
+:root {
+  --primary-color: #007bff;
+  --secondary-color: #1F1F1F;
+  --background-light: #e0e0e0;
+  --font-primary: "Gilroy-Light", sans-serif;
+  --font-secondary: "Gilroy-Medium", sans-serif;
+  --border-radius: 8px;
+  --transition-speed: 0.3s;
+  --max-width: 1920px;
+}
+
+/* === Підключення шрифтів === */
+@font-face {
+  font-family: "Gilroy-Light";
+  src: url("/fonts/Gilroy-Light.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Gilroy-Medium";
+  src: url("/fonts/Gilroy-Medium.ttf") format("truetype");
+}
+
+/* === Базові стилі === */
+body {
+  height: 100%;
+  font-family: var(--font-primary);
+  background: #fff;
+  padding: 0 150px;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.category-summary {
+  background: #F7F7F7;
+  padding: 10px 14px;
+  border-radius: 10px;
+  margin-bottom: 12px;
+}
+
+.category-name {
+  font-weight: 600;
+  font-size: 15px;
+  margin-bottom: 4px;
+}
+
+.category-info {
+  font-size: 13px;
+  color: #444;
+}
+
+/* === Адаптивність === */
+@media (max-width: 1024px) {
+  .product-card {
+    width: calc(33.333% - 20px);
+  }
+}
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    padding: 20px;
+  }
+  .product-card {
+    width: calc(50% - 10px);
+  }
+  .search-bar input {
+    width: 100%;
+  }
+}
+@media (max-width: 480px) {
+  .product-card {
+    width: 100%;
+  }
+  .services-menu {
+    gap: 15px;
+  }
+}
