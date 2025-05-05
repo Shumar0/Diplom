@@ -1,0 +1,406 @@
+#catalog-page body{
+  padding: 0 150px;
+  font-family: "Gilroy-Medium", sans-serif;
+}
+#catalog-page .catalog-header {
+  font-size: 19px;
+  color: #1F1F1F;
+  padding: 10px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+  max-width: var(--max-width);
+  min-height: 120px;
+}
+
+#catalog-page #product-count {
+  font-size: 24px;
+  font-weight: 500;
+}
+
+#catalog-page .active-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 10px 0;
+}
+
+#catalog-page .active-filter {
+  padding: 6px 16px;
+  border: 1px solid #000;
+  border-radius: 12px;
+  font-size: 14px;
+  background-color: white;
+  color: #1f1f1f;
+  font-family: 'Gilroy-Light', sans-serif;
+  cursor: default;
+  transition: background 0.3s;
+}
+
+#catalog-page .active-filter:hover {
+  background: #f0f0f0;
+}
+
+#catalog-page .filter-group {
+  width: 300px;
+  background-color: #d9d9d9;
+  border-radius: 16px;
+  overflow: hidden;
+  max-width: 250px;
+  min-width: 200px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+
+  max-height: fit-content;
+}
+
+#catalog-page .filter-toggle {
+  font-family: "Gilroy-Light", sans-serif;
+  width: 100%;
+  padding: 12px 20px;
+  font-size: 16px;
+  background-color: transparent; /* фон наслідується від .filter-group */
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #1f1f1f;
+}
+
+#catalog-page .filter-toggle .arrow {
+  font-size: 18px;
+  transition: transform 0.3s ease;
+}
+
+#catalog-page .filter-options {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 10px 20px;
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+  background-color: #d9d9d9;
+}
+
+#catalog-page .filter-group.open .filter-options {
+  display: flex;
+}
+
+#catalog-page .filter-group.open .arrow {
+  transform: rotate(180deg);
+}
+#catalog-page .custom-radio {
+  position: relative;
+  padding-left: 28px;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  font-family: 'Gilroy-Light', sans-serif;
+  color: #1f1f1f;
+}
+
+#catalog-page .custom-radio input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+#catalog-page .checkmark {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 20px;
+  width: 20px;
+  background-color: #d9d9d9;
+  border: 2px solid black;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#catalog-page .custom-radio input:checked ~ .checkmark::after {
+  content: "";
+  width: 8px;
+  height: 8px;
+  background: black;
+  border-radius: 50%;
+}
+
+#catalog-page .main {
+  display: flex;
+  max-width: 1620px;
+  width: 100%;
+}
+
+#catalog-page .products{
+  margin-bottom: 30px;
+}
+
+#catalog-page .product-card {
+  display: flex;
+  font-family: "Gilroy-Medium", sans-serif;
+  justify-content: space-between;
+  background-color: #D9D9DB;
+  margin-bottom: 20px;
+  width: 100%;
+  height: 330px;
+  border-radius: 15px;
+}
+
+#catalog-page .product-card:hover .product-image {
+  transform: scale(1.1);
+  transition: transform 0.3s ease;
+}
+
+#catalog-page .product-image {
+  transition: transform 0.3s ease; /* щоб не стрибало */
+}
+
+#catalog-page .left-product-block {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  gap: 40px;
+  padding: 25px 40px;
+}
+
+#catalog-page .product-image-slider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 300px;
+  height: 250px;
+  margin-bottom: 10px;
+}
+
+#catalog-page .product-image {
+  max-width: 100%;
+}
+
+#catalog-page .image-controls {
+  display: flex;
+  gap: 15px;
+  max-width: 285px;
+  width: 100%;
+}
+
+#catalog-page .img-btn {
+  background-color: #ADACAC;
+  border: 0;
+  max-width: 45px;
+  width: 100%;
+  height: 5px;
+  border-radius: 2px;
+  transition: all 0.3s linear;
+  &:hover {
+    cursor: pointer;
+    background-color: #787777;
+  }
+}
+
+#catalog-page .product-info-block {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 265px;
+}
+
+#catalog-page .product-controls {
+  display: flex;
+  margin-left: auto;
+  align-items: center;
+  gap: 30px;
+  margin-bottom: 15px;
+}
+
+#catalog-page .product-controls-btn:hover {
+  cursor: pointer;
+  svg {
+    transition: all 0.2s linear;
+    transform: scale(1.2);
+  }
+}
+
+#catalog-page .product-category {
+  font-family: Gilroy;
+  font-weight: 300;
+  font-size: 13px;
+  color: #ADACAC;
+}
+
+#catalog-page .product-name {
+  font-family: Gilroy;
+  font-weight: 300;
+  font-size: 20px;
+  margin-bottom: 28px;
+}
+
+#catalog-page .data-field {
+  font-family: Gilroy;
+  font-weight: 300;
+  font-size: 13px;
+  margin-bottom: 15px;
+}
+
+#catalog-page .product-data {
+  font-family: "Gilroy-Medium", sans-serif;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+#catalog-page .chahracteristic-name {
+  color: #ADACAC;
+}
+
+#catalog-page .right-product-block {
+  color: #FFF;
+  max-height: 100%;
+  border-radius: 15px;
+  background-color: #1F1F1F;
+  padding: 25px 35px;
+}
+
+#catalog-page .product-status {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 11px;
+}
+
+#catalog-page .status-text {
+  font-family: Gilroy;
+  font-weight: 300;
+  font-size: 13px;
+  color: #FFF;
+}
+
+#catalog-page .status-indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #00CB00;
+}
+
+#catalog-page .delivery-block {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+  margin-bottom: 130px;
+}
+
+#catalog-page .delivery-icon svg{
+  width: 20px;
+  height: 20px;
+}
+
+#catalog-page .delivery-data {
+  font-weight: 400;
+  font-size: 13px;
+}
+
+#catalog-page .price-block {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: space-between;
+  margin-bottom: 22px;
+}
+
+#catalog-page .product-price {
+
+  font-weight: 400;
+  font-size: 24px;
+}
+
+#catalog-page .add-to-cart {
+  white-space: nowrap;
+  font-weight: 400;
+  font-size: 20px;
+  background-color: #007AFF;
+  border: 0;
+  border-radius: 10px;
+  padding: 13px 80px;
+  color: #000;
+}
+
+#catalog-page .range-container {
+  position: relative;
+  width: 100%;
+  height: 40px;
+}
+
+#catalog-page .range-slider {
+  position: absolute;
+  width: 100%;
+  height: 40px;
+  background: none;
+  pointer-events: none;
+  -webkit-appearance: none;
+}
+
+#catalog-page .range-slider::-webkit-slider-thumb {
+  pointer-events: auto;
+  -webkit-appearance: none;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background: #1F1F1F;
+  border: none;
+  cursor: pointer;
+  margin-top: 2px; /* 👈 опускає кружечки вниз */
+  z-index: 2;
+  position: relative;
+}
+
+#catalog-page .slider-track {
+  position: absolute;
+  height: 4px;
+  width: 100%;
+
+  z-index: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  border-radius: 5px;
+}
+
+#catalog-page .filters-container {
+  font-family: "Gilroy-Light", sans-serif;
+  display: flex;
+  margin-right: 47px;
+  flex-direction: column;
+  gap: 20px; /* відступ між блоками */
+}
+
+#catalog-page .filter-group.always-open .filter-title {
+  font-weight: bold;
+  margin-bottom: 8px;
+  font-size: 16px;
+}
+
+#catalog-page .filter-title{
+  font-family: "Gilroy-Light", sans-serif;
+  padding: 12px 20px;
+}
+
+#catalog-page a {
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-decoration: none;
+  outline: none;
+  box-shadow: none;
+}
+

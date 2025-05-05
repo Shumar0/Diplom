@@ -1,0 +1,22 @@
+.breadcrumb {
+    font-size: 14px;
+    color: #1F1F1F;
+    padding: 10px 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-family: 'Gilroy-Light', sans-serif;
+
+    max-width: var(--max-width);
+  }
+  
+  .breadcrumb a {
+    text-decoration: none;
+    color: #1F1F1F;
+    transition: border-bottom 0.2s ease;
+  }
+  
+  .breadcrumb .separator {
+    color: #555;
+  }
+  

@@ -1,0 +1,27 @@
+.pagination {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 50px;
+  }
+  
+  .pagination .page-item {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 16px;
+    color: black;
+    transition: all 0.3s;
+  }
+  
+  .pagination .page-item.active {
+    background-color: #1f1f1f;
+    color: white;
+  }
+  

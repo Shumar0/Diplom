@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Favorites</title>
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/breadcrumb.css">
+    <link rel="stylesheet" href="/css/favorites.css">
+    <link rel="stylesheet" href="/css/footer.css">
+</head>
+<body>
+    
+    <!-- Header -->
+    <header class="header">
+        <div class="header-left">
+            <div class="delivery"> 
+                <svg class="icon-small" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256">
+                  <g transform="translate(1.41 1.41) scale(2.81)">
+                    <path d="M 45 0 C 27.677 0 13.584 14.093 13.584 31.416 
+                      c 0 4.818 1.063 9.442 3.175 13.773 
+                      c 2.905 5.831 11.409 20.208 20.412 35.428 
+                      l 4.385 7.417 C 42.275 89.252 43.585 90 45 90 
+                      s 2.725 -0.748 3.444 -1.966 l 4.382 -7.413 
+                      c 8.942 -15.116 17.392 -29.4 20.353 -35.309 
+                      c 0.027 -0.051 0.055 -0.103 0.08 -0.155 
+                      c 2.095 -4.303 3.157 -8.926 3.157 -13.741 
+                      C 76.416 14.093 62.323 0 45 0 z 
+                      M 45 42.81 c -6.892 0 -12.5 -5.607 -12.5 -12.5 
+                      c 0 -6.893 5.608 -12.5 12.5 -12.5 
+                      c 6.892 0 12.5 5.608 12.5 12.5 
+                      C 57.5 37.202 51.892 42.81 45 42.81 z" 
+                      fill="#007AFF"/>
+                  </g>
+                </svg>
+                <span>Delivery to</span>
+                <select>
+                  <option value="ukraine">Ukraine</option>
+                  <option value="germany">Germany</option>
+                  <option value="poland">Poland</option>
+                </select>
+            </div>
+            <button class="catalog-button">Catalog</button>
+        </div>
+
+        <div class="header-center">
+            <a href="main_page.html">
+                <img src="images/logo.png" alt="NextTech Logo" class="logo">
+            </a>
+        </div>
+
+        <div class="header-right">
+            <div class="search-bar">
+                <input type="text" placeholder="Site search...">
+                <button class="search-button">
+                <img src="images/search.svg" alt="Search" class="icon-small">
+                </button>
+            </div>
+            <div class="header-icons">
+                <a href="cart.html">
+                <button class="icon-button">
+                    <img src="images/cart.svg" alt="Cart" class="icon icon-cart">
+                </button>
+                </a>
+                <a href="favorites.html">
+                <button class="icon-button">
+                    <img src="images/heart.svg" alt="Favorites" class="icon icon-heart">
+                </button>
+                </a>
+                <a href="account.html">
+                <button class="icon-button">
+                    <img src="images/user.svg" alt="Profile" class="icon icon-user">
+                </button>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!--BREAD CRUMB-->
+    <nav class="breadcrumb" id="breadcrumb"></nav>
+
+    <div class="main">
+        <div class="cart-header">
+            <h2>Favorites</h2>
+        </div> 
+        <div class="container">
+            <div class="left-side">
+                <div id="cart-items"></div>
+                <div id="category-summary"></div>
+            </div> 
+            <div class="right-side">
+              <div class="summary-title">Your cart <span id="item-count">0</span><span>Products</span></div>
+              <div class="summary-item">Products <span id="subtotal">0₴</span></div>
+              <div class="summary-item">Discount <span id="discount">0₴</span></div>
+              <div class="line"></div>
+              <div class="summary-item">Delivery <span>Free</span></div>
+              <div class="line"></div>
+              <div class="summary-total">Total cost <span id="total">0₴</span></div>
+              <a href="cart.html">
+              <button class="btn-payment">Proceed to payment</button>
+                </a>
+              <div class="line"></div>
+              <div class="promo-section">
+                <input type="text" class="promo-input" placeholder="Promocode" />
+              </div>
+            </div>
+        </div>
+    </div>
+
+    <script  src="/js/breadcrumb.js"></script>
+    <script type="module"  src="/js/cart.js"></script>
+</body>
+</html>

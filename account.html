@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account</title>
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/breadcrumb.css">
+    <link rel="stylesheet" href="/css/account.css">
+    <link rel="stylesheet" href="/css/footer.css">
+</head>
+<body>
+    
+  <!-- Header -->
+  <header class="header">
+    <div class="header-left">
+      <div class="delivery"> 
+        <svg class="icon-small" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256">
+          <g transform="translate(1.41 1.41) scale(2.81)">
+            <path d="M 45 0 C 27.677 0 13.584 14.093 13.584 31.416 
+              c 0 4.818 1.063 9.442 3.175 13.773 
+              c 2.905 5.831 11.409 20.208 20.412 35.428 
+              l 4.385 7.417 C 42.275 89.252 43.585 90 45 90 
+              s 2.725 -0.748 3.444 -1.966 l 4.382 -7.413 
+              c 8.942 -15.116 17.392 -29.4 20.353 -35.309 
+              c 0.027 -0.051 0.055 -0.103 0.08 -0.155 
+              c 2.095 -4.303 3.157 -8.926 3.157 -13.741 
+              C 76.416 14.093 62.323 0 45 0 z 
+              M 45 42.81 c -6.892 0 -12.5 -5.607 -12.5 -12.5 
+              c 0 -6.893 5.608 -12.5 12.5 -12.5 
+              c 6.892 0 12.5 5.608 12.5 12.5 
+              C 57.5 37.202 51.892 42.81 45 42.81 z" 
+              fill="#007AFF"/>
+          </g>
+        </svg>
+        <span>Delivery to</span>
+        <select>
+          <option value="ukraine">Ukraine</option>
+          <option value="germany">Germany</option>
+          <option value="poland">Poland</option>
+        </select>
+      </div>
+      
+        <a href="catalog.html">
+            <button class="catalog-button">Catalog</button>
+        </a>
+    </div>
+
+    <div class="header-center">
+        <a href="main_page.html">
+            <img src="images/logo.png" alt="NextTech Logo" class="logo">
+        </a>
+    </div>
+
+    <div class="header-right">
+      <div class="search-bar">
+        <input type="text" placeholder="Site search...">
+        <button class="search-button">
+        <img src="images/search.svg" alt="Search" class="icon-small">
+        </button>
+      </div>
+      <div class="header-icons">
+          <a href="cart.html">
+          <button class="icon-button">
+            <img src="images/cart.svg" alt="Cart" class="icon icon-cart">
+          </button>
+          </a>
+          <a href="">
+          <button class="icon-button">
+            <img src="images/heart.svg" alt="Favorites" class="icon icon-heart">
+          </button>
+          </a>
+          <a href="account.html">
+            <button class="icon-button">
+              <img src="images/user.svg" alt="Profile" class="icon icon-user">
+            </button>
+          </a>
+      </div>
+    </div>
+  </header>
+
+  <nav class="breadcrumb" id="breadcrumb"></nav>
+
+  <div class="account-wrapper">
+    <!-- Ліва навігація -->
+    <div class="navigation-container">
+      <div class="nav-item active" data-target="profile">Personal account</div>
+      <div class="nav-item" data-target="orders">Orders</div>
+      <div class="nav-item" data-target="bonuses">
+        Bonuses <span class="bonus-info">590 <img src="/images/Group.svg" /></span>
+      </div>
+      <div class="nav-item" data-target="privileges">Your privileges</div>
+      <div class="nav-item" data-target="favorites">Favorites</div>
+      <div class="nav-item" data-target="comparison">Comparison</div>
+      <div class="nav-item" data-target="data">Personal data</div>
+      <div class="nav-item" data-target="cards">Gift Cards</div>
+    </div>
+    
+    <!-- Права частина з динамічним контентом -->
+    <div class="account-content">
+      <div class="content-section" id="profile">
+        <div class="profile-layout">
+          <!-- Profile Button -->
+          <div class="profile-box">
+            <div class="avatar"></div>
+            <div class="profile-name">Profile Name</div>
+            <div class="arrow">➤</div>
+          </div>
+        
+          <!-- Loyalty Program Button -->
+          <div class="loyalty-card">
+            <div class="loyalty-header">
+              <h2 class="section-title">Loyalty Program</h2>
+              <div id="loyalty-level" class="loyalty-title">Basic</div>
+              <div id="points-earned" class="loyalty-progress">0 </div>
+              <div id="points-left" class="loyalty-next-level">Need 10000 more points to reach Medium</div>
+            </div>
+            <div class="progress-bar">
+              <div class="progress" id="progress-bar" style="width: 0%;"></div>
+            </div>
+            <div class="loyalty-footer">
+              Learn more about the loyalty program
+              <span class="arrow">➤</span>
+            </div>
+          </div>
+        </div>
+            
+        <!-- Orders Section -->
+        <h2 class="section-title">Orders</h2>
+        <div class="order-card">
+          <img src="/images/144249716-Photoroom.png" alt="Product" />
+          <div class="order-info">
+            <strong>On the way</strong>
+            <div class="light" id="delivery-date">We'll deliver in<br />1 May 10:00 – 22:00</div>
+          </div>
+        </div>
+            
+        <!-- You may like Section -->
+        <section class="recommend-section">
+          <h2 class="section-title">You may like</h2>
+          <div id="recommendation-list" class="recommend-grid"></div>
+        </section>
+        <!-- Тут розмістиш товари -->
+      </div>
+        <div class="content-section" id="orders">[Order Info]</div>
+        <div class="content-section" id="bonuses">[Bonuses Info]</div>
+        <div class="content-section" id="privileges">[Privileges Content]</div>
+        <div class="content-section" id="favorites">[Favorites]</div>
+        <div class="content-section" id="comparison">[Comparison Items]</div>
+        <div class="content-section" id="data">[Personal Data Form]</div>
+        <div class="content-section" id="cards">[Gift Cards Info]</div>
+    </div>
+  </div> 
+
+  <footer class="footer">
+     
+    <div class="footer-top">
+      <div class="newsletter-text">
+        <p>I want to keep up to date with promotions and new products</p>
+      </div>
+      <div class="newsletter-form">
+        <input type="email" placeholder="My e-mail">
+        <div class="footer-bottons"><button>Sign</button></div>
+      </div>
+    </div>
+  
+    <hr>
+  
+    <div class="footer-main">
+      <div class="app-download">
+        <div class="app-image">
+          <!-- Місце для QR коду або картинки -->
+        </div>
+        <p>Point your camera and download the free NameStore app</p>
+        <div class="app-icons">
+          <div class="app-icon"></div>
+          <div class="app-icon"></div>
+          <div class="app-icon"></div>
+          <div class="app-icon"></div>
+        </div>
+      </div>
+  
+      <div class="footer-links">
+        <div class="footer-column">
+          <h3>Buyers</h3>
+          <ul>
+            <li><a href="#">Information</a></li>
+            <li><a href="#">Delivery</a></li>
+            <li><a href="#">Guarantee</a></li>
+            <li><a href="#">Promotions and discount</a></li>
+            <li><a href="#">Public offer</a></li>
+            <li><a href="#">Gift Cards</a></li>
+            <li><a href="#">Exchanges and returns</a></li>
+          </ul>
+        </div>
+  
+        <div class="footer-column">
+          <h3>Partners</h3>
+            <ul>
+              <li><a href="#">Information</a></li>
+              <li><a href="#">Working conditions</a></li>
+              <li><a href="#">Guarantee</a></li>
+              <li><a href="#">Public offer</a></li>
+            </ul>
+          </div>
+  
+        <div class="footer-column">
+          <h3>Company</h3>
+            <ul>
+              <li><a href="#">About Us</a></li>
+              <li><a href="#">Contacts</a></li>
+              <li><a href="#">Hotline</a></li>
+              <li><a href="#">Company policy</a></li>
+            </ul>
+        </div>
+  
+        <div class="footer-column">
+          <h3>Contacts</h3>
+          <p><a href="#">Address of shops</a></p>
+          <p>12345678900</p>
+          <button class="ask-button">Ask question</button>
+        </div>
+  
+        <div class="footer-column">
+          <h3>We're on social media</h3>
+          <div class="social-icons">
+            <div class="social-icon"></div>
+            <div class="social-icon"></div>
+            <div class="social-icon"></div>
+            <div class="social-icon"></div>
+            <div class="social-icon"></div>
+            <div class="social-icon"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <hr>
+  
+    <div class="footer-bottom">
+      <a href="#">Privacy Policy</a>
+      <span>|</span>
+      <a href="#">Terms of Use</a>
+      <span>|</span>
+      <a href="#">Sales and Refunds</a>
+    </div>
+
+  </footer>
+      
+  <script src="/js/breadcrumb.js"></script>
+  <script type="module" src="/js/account.js"></script>
+
+</body>
+</html>

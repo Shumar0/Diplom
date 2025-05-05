@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="breadcrumb-title" content="Main">
+    <title>NextTech - Catalog</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/slider.css">
+    <link rel="stylesheet" href="/css/main_page.css">
+    <link rel="stylesheet" href="/css/footer.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+      <div class="header-left">
+        <div class="delivery"> 
+          <svg class="icon-small" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256">
+            <g transform="translate(1.41 1.41) scale(2.81)">
+              <path d="M 45 0 C 27.677 0 13.584 14.093 13.584 31.416 
+                c 0 4.818 1.063 9.442 3.175 13.773 
+                c 2.905 5.831 11.409 20.208 20.412 35.428 
+                l 4.385 7.417 C 42.275 89.252 43.585 90 45 90 
+                s 2.725 -0.748 3.444 -1.966 l 4.382 -7.413 
+                c 8.942 -15.116 17.392 -29.4 20.353 -35.309 
+                c 0.027 -0.051 0.055 -0.103 0.08 -0.155 
+                c 2.095 -4.303 3.157 -8.926 3.157 -13.741 
+                C 76.416 14.093 62.323 0 45 0 z 
+                M 45 42.81 c -6.892 0 -12.5 -5.607 -12.5 -12.5 
+                c 0 -6.893 5.608 -12.5 12.5 -12.5 
+                c 6.892 0 12.5 5.608 12.5 12.5 
+                C 57.5 37.202 51.892 42.81 45 42.81 z" 
+                fill="#007AFF"/>
+            </g>
+          </svg>
+          <span>Delivery to</span>
+          <select>
+            <option value="ukraine">Ukraine</option>
+            <option value="germany">Germany</option>
+            <option value="poland">Poland</option>
+          </select>
+        </div>
+        <a href="catalog.html">
+        <button class="catalog-button">Catalog</button>
+        </a>
+      </div>
+
+      <div class="header-center">
+        <a href="main_page.html">
+            <img src="images/logo.png" alt="NextTech Logo" class="logo">
+        </a>
+      </div>
+
+      <div class="header-right">
+        <div class="search-bar">
+          <input type="text" id="search-input" placeholder="Site search...">
+          <button class="search-button" id="search-button">
+            <img src="images/search.svg" alt="Search" class="icon-small">
+          </button>
+          
+        </div>
+        
+        <div class="header-icons">
+          <a href="cart.html">
+            <button class="icon-button">
+              <img src="images/cart.svg" alt="Cart" class="icon icon-cart">
+            </button>
+          </a>
+          <a href="favorites.html">
+            <button class="icon-button">
+              <img src="images/heart.svg" alt="Favorites" class="icon icon-heart">
+            </button>
+          </a>
+          <a href="account.html">
+            <button class="icon-button">
+              <img src="images/user.svg" alt="Profile" class="icon icon-user">
+            </button>
+          </a>
+        </div>
+      </div>
+  </header>
+  <div id="search-results"></div>
+
+  <div class="slider">
+      <div class="slide active">
+        <img src="/images/Frame.png" alt="Slide 1">
+      </div>
+      <div class="slide">
+        <img src="/images/Frame.png" alt="Slide 2">
+      </div>
+      <div class="slide">
+        <img src="/images/Frame.png" alt="Slide 3">
+      </div>
+  </div>
+
+  <div class="slider-controls">
+      <button id="prev">&#10094;</button>
+      <div id="slide-indicator">1 / 3</div> 
+      <button id="next">&#10095;</button>
+  </div>
+
+  <div class="services-menu">
+      <button class="service-button">
+        <img src="/images/gitf-card.png" alt="Gift Cards">
+        <p>Gift Cards</p>
+      </button>
+      <button class="service-button">
+        <img src="/images/activegameplay.png" alt="Active gameplay">
+        <p>Active gameplay</p>
+      </button>
+      <button class="service-button">
+        <img src="/images/worldwide.png" alt="Worldwide delivery">
+        <p>Worldwide delivery</p>
+      </button>
+      <button class="service-button">
+        <img src="/images/favorable offers.png" alt="Favorable offers">
+        <p>Favorable offers</p>
+      </button>
+      <button class="service-button">
+        <img src="/images/save deals.png" alt="Save deals">
+        <p>Save deals</p>
+      </button>
+      <button class="service-button">
+        <img src="/images/Partnership.png" alt="Partnership Program">
+        <p>Partnership Program</p>
+      </button>
+      <button class="service-button">
+        <img src="/images/all for the smart home.png" alt="All for the smart home">
+        <p>All for the smart home</p>
+      </button>
+  </div>
+
+
+  <div class="best-sellers-header">
+    <div class="best-sellers-left">
+      <h2>Best Sellers</h2>
+      <div class="sort-options">
+        <span>Sort by</span>
+        <button class="sort-button">In stock</button>
+        <button class="sort-button">Special offer</button>
+        <button class="sort-button">Most New</button>
+        <button class="sort-button price-button">Price ▼</button>
+      </div>
+    </div>
+    <div class="best-sellers-right">
+      <a href="catalog.html" class="catalog-link">Go to catalog →</a>
+    </div>
+  </div>
+  
+  <div id="productCatalog">
+
+    <div class="product-card" data-stock="true" data-special="true" data-new="false">
+      <img src="/images/airpods-max.webp" alt="Product 1" class="product-image">
+      <div class="product-info">
+        <span class="product-category">Headphones</span> 
+          <h3 class="product-name">Apple AirPods Max</h3>
+          <div class="product-stock">
+              <span class="status-circle"></span>
+              <span class="stock-text"></span>
+          </div>
+          <div class="product-price">25 000₴</div>
+      </div>
+      <div class="product-icons">
+        <button class="icon-button heart-icon">
+          <img src="/images/heart.svg" alt="Favorite">
+        </button>
+        <button class="icon-button compare-icon">
+          <img src="/images/compare.svg" alt="Compare">
+        </button>
+        <button class="icon-button cart-icon">
+          <img src="/images/cart.svg" alt="Cart">
+        </button>
+      </div>
+    </div>
+
+    <div class="product-card" data-stock="false" data-special="true" data-new="true">
+        <img src="/images/22_f19k-js.png" alt="Product 2" class="product-image">
+        <div class="product-info">
+          <span class="product-category">Phone</span> 
+            <h3 class="product-name">iPhone 11</h3>
+            <div class="product-stock">
+                <span class="status-circle"></span>
+                <span class="stock-text"></span>
+            </div>
+            <div class="product-price">18 000₴</div>
+        </div>
+        <div class="product-icons">
+          <button class="icon-button heart-icon">
+            <img src="/images/heart.svg" alt="Favorite">
+          </button>
+          <button class="icon-button compare-icon">
+            <img src="/images/compare.svg" alt="Compare">
+          </button>
+          <button class="icon-button cart-icon">
+            <img src="/images/cart.svg" alt="Cart">
+          </button>
+        </div>
+    </div>
+    
+    <div class="product-card" data-stock="true" data-special="true" data-new="true">
+      <img src="/images/462811863.png" alt="Product 1" class="product-image">
+      <div class="product-info">
+        <span class="product-category">Smart Watch</span> 
+          <h3 class="product-name">Galaxy Watch 7</h3>
+          <div class="product-stock">
+              <span class="status-circle"></span>
+              <span class="stock-text"></span>
+          </div>
+          <div class="product-price">13 499₴</div>
+      </div>
+      <div class="product-icons">
+        <button class="icon-button heart-icon">
+          <img src="/images/heart.svg" alt="Favorite">
+        </button>
+        <button class="icon-button compare-icon">
+          <img src="/images/compare.svg" alt="Compare">
+        </button>
+        <button class="icon-button cart-icon">
+          <img src="/images/cart.svg" alt="Cart">
+        </button>
+      </div>
+    </div>
+
+    <div class="product-card" data-stock="false" data-special="true" data-new="true">
+      <img src="/images/296444775.png" alt="Product 2" class="product-image">
+      <div class="product-info">
+        <span class="product-category">Charging Station</span> 
+          <h3 class="product-name">EcoFlow River 2 Pro</h3>
+          <div class="product-stock">
+              <span class="status-circle"></span>
+              <span class="stock-text"></span>
+          </div>
+          <div class="product-price">15 661₴</div>
+      </div>
+      <div class="product-icons">
+        <button class="icon-button heart-icon">
+          <img src="/images/heart.svg" alt="Favorite">
+        </button>
+        <button class="icon-button compare-icon">
+          <img src="/images/compare.svg" alt="Compare">
+        </button>
+        <button class="icon-button cart-icon">
+          <img src="/images/cart.svg" alt="Cart">
+        </button>
+      </div>
+    </div>
+
+  </div>
+  
+  <footer class="footer">
+     
+    <div class="footer-top">
+      <div class="newsletter-text">
+        <p>I want to keep up to date with promotions and new products</p>
+      </div>
+      <div class="newsletter-form">
+        <input type="email" placeholder="My e-mail">
+        <div class="footer-bottons"><button>Sign</button></div>
+      </div>
+    </div>
+  
+    <hr>
+  
+    <div class="footer-main">
+      <div class="app-download">
+        <div class="app-image">
+          <!-- Місце для QR коду або картинки -->
+        </div>
+        <p>Point your camera and download the free NameStore app</p>
+        <div class="app-icons">
+          <div class="app-icon"></div>
+          <div class="app-icon"></div>
+          <div class="app-icon"></div>
+          <div class="app-icon"></div>
+        </div>
+      </div>
+  
+      <div class="footer-links">
+        <div class="footer-column">
+          <h3>Buyers</h3>
+          <ul>
+            <li><a href="#">Information</a></li>
+            <li><a href="#">Delivery</a></li>
+            <li><a href="#">Guarantee</a></li>
+            <li><a href="#">Promotions and discount</a></li>
+            <li><a href="#">Public offer</a></li>
+            <li><a href="#">Gift Cards</a></li>
+            <li><a href="#">Exchanges and returns</a></li>
+          </ul>
+        </div>
+  
+        <div class="footer-column">
+          <h3>Partners</h3>
+            <ul>
+              <li><a href="#">Information</a></li>
+              <li><a href="#">Working conditions</a></li>
+              <li><a href="#">Guarantee</a></li>
+              <li><a href="#">Public offer</a></li>
+            </ul>
+          </div>
+  
+        <div class="footer-column">
+          <h3>Company</h3>
+            <ul>
+              <li><a href="#">About Us</a></li>
+              <li><a href="#">Contacts</a></li>
+              <li><a href="#">Hotline</a></li>
+              <li><a href="#">Company policy</a></li>
+            </ul>
+        </div>
+  
+        <div class="footer-column">
+          <h3>Contacts</h3>
+          <p><a href="#">Address of shops</a></p>
+          <p>12345678900</p>
+          <button class="ask-button">Ask question</button>
+        </div>
+  
+        <div class="footer-column">
+          <h3>We're on social media</h3>
+          <div class="social-icons">
+            <div class="social-icon"></div>
+            <div class="social-icon"></div>
+            <div class="social-icon"></div>
+            <div class="social-icon"></div>
+            <div class="social-icon"></div>
+            <div class="social-icon"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <hr>
+  
+    <div class="footer-bottom">
+      <a href="#">Privacy Policy</a>
+      <span>|</span>
+      <a href="#">Terms of Use</a>
+      <span>|</span>
+      <a href="#">Sales and Refunds</a>
+    </div>
+
+  </footer>
+  <!-- <script src="/js/slider.js"></script> -->
+  <script src="/js/button.js"></script>
+  <script type="module" src="/js/search.js"></script>
+</body>
+
+</html>
