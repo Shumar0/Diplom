@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="breadcrumb-title" content="Product">
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/breadcrumb.css">
+    <link rel="stylesheet" href="/css/product_page.css">
+    <link rel="stylesheet" href="/css/footer.css">
+</head>
+<body>
+    
+    <!-- Header -->
+    <header class="header">
+        <div class="header-left">
+          <div class="delivery"> 
+            <svg class="icon-small" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256">
+              <g transform="translate(1.41 1.41) scale(2.81)">
+                <path d="M 45 0 C 27.677 0 13.584 14.093 13.584 31.416 
+                  c 0 4.818 1.063 9.442 3.175 13.773 
+                  c 2.905 5.831 11.409 20.208 20.412 35.428 
+                  l 4.385 7.417 C 42.275 89.252 43.585 90 45 90 
+                  s 2.725 -0.748 3.444 -1.966 l 4.382 -7.413 
+                  c 8.942 -15.116 17.392 -29.4 20.353 -35.309 
+                  c 0.027 -0.051 0.055 -0.103 0.08 -0.155 
+                  c 2.095 -4.303 3.157 -8.926 3.157 -13.741 
+                  C 76.416 14.093 62.323 0 45 0 z 
+                  M 45 42.81 c -6.892 0 -12.5 -5.607 -12.5 -12.5 
+                  c 0 -6.893 5.608 -12.5 12.5 -12.5 
+                  c 6.892 0 12.5 5.608 12.5 12.5 
+                  C 57.5 37.202 51.892 42.81 45 42.81 z" 
+                  fill="#007AFF"/>
+              </g>
+            </svg>
+            <span>Delivery to</span>
+            <select>
+              <option value="ukraine">Ukraine</option>
+              <option value="germany">Germany</option>
+              <option value="poland">Poland</option>
+            </select>
+          </div>
+            <a href="catalog.html">
+                <button class="catalog-button">Catalog</button>
+            </a>
+        </div>
+
+        <div class="header-center">
+            <a href="main_page.html">
+                <img src="images/logo.png" alt="NextTech Logo" class="logo">
+            </a>
+        </div>
+
+        <div class="header-right">
+            <div class="search-bar">
+                <input type="text" placeholder="Site search...">
+                <button class="search-button">
+                <img src="images/search.svg" alt="Search" class="icon-small">
+                </button>
+            </div>
+            <div class="header-icons">
+                <a href="cart.html">
+                <button class="icon-button">
+                    <img src="images/cart.svg" alt="Cart" class="icon icon-cart">
+                </button>
+                </a>
+                <a href="favorites.html">
+                <button class="icon-button">
+                    <img src="images/heart.svg" alt="Favorites" class="icon icon-heart">
+                </button>
+                </a>
+                <a href="account.html">
+                <button class="icon-button">
+                    <img src="images/user.svg" alt="Profile" class="icon icon-user">
+                </button>
+                </a>
+            </div>
+        </div>
+    </header>
+
+        <!--BREAD CRUMB-->
+    <nav class="breadcrumb" id="breadcrumb"></nav>
+
+    <div class="header-page">
+        <h1 id="product-title-heading" class="product-title"></h1>
+        <div id="product-price" class="product-price"></div>
+    </div>
+    
+    <div class="product-main">
+        <div class="product-left">
+          <img id="product-image" src="" alt="Product Image" />
+        </div>
+        <div class="product-right configurator">
+
+        </div>
+    </div>
+    
+    <div class="product-info-block" id="productInfo">
+        <div class="inner-container">
+          <div class="product-info-left">
+            <h2>Your New <br><span id="productName">Product Name</span></h2>
+            <p class="subtitle">Just the way you want it</p>
+          </div>
+      
+          <div class="product-info-right">
+                <div class="product-summary">
+                <p class="price">From <strong id="productPrice">--</strong></p>
+                <p class="bonuses">Bonuses: <span id="productBonus">--</span></p>
+            
+                <p class="save-note">Need a moment?<br>
+                    <span>Keep your selections by saving this device to Your Saves.</span>
+                </p>
+                <a href="#" class="save-link">💙 Save for later</a>
+                </div>
+            
+                <div class="product-info-extra">
+                <ul class="product-details-list">
+                    <li> <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="256" height="256" viewBox="0 0 256 256" xml:space="preserve">
+                        <g style="stroke: none; stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: none; fill-rule: nonzero; opacity: 1;" transform="translate(1.4065934065934016 1.4065934065934016) scale(2.81 2.81)" >
+                            <path d="M 44.982 89.997 c -3.887 0 -7.835 -0.537 -11.753 -1.667 C 10.722 81.838 -2.308 58.247 4.182 35.741 C 7.326 24.838 14.528 15.811 24.46 10.325 c 9.933 -5.487 21.407 -6.778 32.31 -3.632 c 1.592 0.459 2.511 2.122 2.052 3.714 s -2.121 2.51 -3.714 2.051 c -9.364 -2.699 -19.217 -1.592 -27.747 3.119 S 12.647 28.04 9.947 37.403 C 4.374 56.73 15.564 76.99 34.892 82.564 c 19.327 5.574 39.587 -5.618 45.161 -24.945 c 0.459 -1.592 2.12 -2.512 3.714 -2.052 c 1.592 0.459 2.511 2.122 2.052 3.714 C 80.457 77.871 63.428 89.997 44.982 89.997 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+                            <path d="M 64.576 16.217 c -0.506 0 -1.02 -0.128 -1.49 -0.398 l -0.398 -0.224 c -1.45 -0.802 -1.975 -2.628 -1.173 -4.078 c 0.803 -1.449 2.628 -1.976 4.077 -1.172 l 0.48 0.27 c 1.438 0.825 1.934 2.658 1.108 4.095 C 66.627 15.676 65.616 16.217 64.576 16.217 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+                            <path d="M 83.568 42.044 c -1.38 0 -2.621 -0.957 -2.928 -2.36 c -0.065 -0.299 -0.136 -0.597 -0.209 -0.893 c -0.398 -1.608 0.582 -3.235 2.191 -3.634 c 1.612 -0.398 3.235 0.583 3.634 2.191 c 0.087 0.35 0.169 0.701 0.246 1.054 c 0.354 1.619 -0.672 3.218 -2.29 3.571 C 83.995 42.022 83.78 42.044 83.568 42.044 z M 79.751 31.767 c -1.068 0 -2.102 -0.571 -2.644 -1.577 c -0.146 -0.27 -0.295 -0.538 -0.447 -0.804 c -0.825 -1.437 -0.329 -3.271 1.107 -4.096 c 1.436 -0.825 3.271 -0.33 4.096 1.107 c 0.18 0.313 0.355 0.627 0.525 0.944 c 0.786 1.459 0.241 3.279 -1.217 4.065 C 80.719 31.651 80.232 31.767 79.751 31.767 z M 73.257 22.927 c -0.782 0 -1.564 -0.304 -2.151 -0.91 c -0.214 -0.219 -0.429 -0.435 -0.648 -0.649 c -1.188 -1.155 -1.213 -3.055 -0.057 -4.242 c 1.155 -1.188 3.056 -1.213 4.242 -0.057 c 0.259 0.252 0.515 0.508 0.766 0.767 c 1.155 1.189 1.127 3.088 -0.061 4.242 C 74.764 22.646 74.01 22.927 73.257 22.927 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+                            <path d="M 84.444 52.477 c -0.054 0 -0.107 -0.001 -0.161 -0.004 c -1.655 -0.088 -2.925 -1.5 -2.838 -3.154 l 0.021 -0.446 c 0.058 -1.657 1.442 -2.969 3.104 -2.893 c 1.656 0.059 2.951 1.448 2.893 3.104 l -0.024 0.552 C 87.352 51.236 86.028 52.477 84.444 52.477 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+                            <path d="M 60.316 63.306 c -0.637 0 -1.278 -0.201 -1.822 -0.618 L 41.921 49.992 c -0.741 -0.568 -1.176 -1.448 -1.176 -2.382 V 22.874 c 0 -1.657 1.343 -3 3 -3 s 3 1.343 3 3 v 23.255 l 15.397 11.795 c 1.316 1.008 1.565 2.891 0.558 4.206 C 62.109 62.901 61.218 63.306 60.316 63.306 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+                            <path d="M 49.362 17.181 c -0.56 0 -1.119 -0.156 -1.612 -0.47 c -1.023 -0.652 -1.553 -1.857 -1.342 -3.051 l 1.972 -11.184 c 0.21 -1.195 1.12 -2.146 2.305 -2.408 c 1.19 -0.265 2.412 0.215 3.107 1.208 l 4.606 6.578 c 0.951 1.358 0.621 3.228 -0.736 4.178 l -6.578 4.606 C 50.567 17 49.964 17.181 49.362 17.181 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+                        </g>
+                        </svg> Delivery time: <strong id="productDelivery">--</strong></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="256" height="256" viewBox="0 0 256 256" xml:space="preserve">
+                        <g style="stroke: none; stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: none; fill-rule: nonzero; opacity: 1;" transform="translate(1.4065934065934016 1.4065934065934016) scale(2.81 2.81)" >
+                            <path d="M 89.334 47.69 L 79.145 36.229 c -0.5 -0.563 -1.218 -0.885 -1.97 -0.885 h -9.356 v -6.467 c 0 -3.053 -2.1 -5.537 -4.681 -5.537 H 31.866 c -2.581 0 -4.681 2.484 -4.681 5.537 v 30.23 c 0 1.758 1.245 3.188 2.774 3.188 h 7.277 c 0.563 2.495 2.794 4.365 5.457 4.365 s 4.893 -1.87 5.457 -4.365 h 17.669 h 2 h 7.542 c 0.563 2.495 2.794 4.365 5.457 4.365 s 4.894 -1.87 5.457 -4.365 h 1.089 c 1.453 0 2.636 -1.183 2.636 -2.636 V 49.441 C 90 48.797 89.764 48.175 89.334 47.69 z M 86.773 47.819 H 74.619 c -0.255 0 -0.463 -0.207 -0.463 -0.462 v -5.44 c 0 -0.255 0.208 -0.463 0.463 -0.463 h 6.495 L 86.773 47.819 z M 42.693 64.66 c -1.984 0 -3.598 -1.614 -3.598 -3.598 c 0 -1.984 1.614 -3.599 3.598 -3.599 s 3.598 1.614 3.598 3.599 C 46.291 63.046 44.677 64.66 42.693 64.66 z M 48.232 60.295 c -0.376 -2.724 -2.713 -4.831 -5.539 -4.831 s -5.163 2.107 -5.539 4.831 h -7.195 c -0.366 0 -0.774 -0.487 -0.774 -1.188 v -30.23 c 0 -1.95 1.203 -3.537 2.681 -3.537 h 31.272 c 1.479 0 2.681 1.587 2.681 3.537 v 6.467 v 15.598 H 38.095 c -0.552 0 -1 0.447 -1 1 s 0.448 1 1 1 h 27.724 v 7.353 H 48.232 z M 80.817 64.66 c -1.983 0 -3.598 -1.614 -3.598 -3.598 c 0 -1.984 1.614 -3.599 3.598 -3.599 c 1.984 0 3.599 1.614 3.599 3.599 C 84.416 63.046 82.802 64.66 80.817 64.66 z M 87.364 60.295 h -1.007 c -0.376 -2.724 -2.714 -4.831 -5.54 -4.831 s -5.163 2.107 -5.539 4.831 h -7.46 V 37.344 h 9.356 c 0.182 0 0.354 0.078 0.476 0.214 l 1.686 1.896 h -4.717 c -1.358 0 -2.463 1.105 -2.463 2.463 v 5.44 c 0 1.357 1.104 2.462 2.463 2.462 H 88 v 9.84 C 88 60.01 87.715 60.295 87.364 60.295 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+                            <path d="M 21.207 52.942 H 8.615 c -0.552 0 -1 -0.447 -1 -1 s 0.448 -1 1 -1 h 12.592 c 0.552 0 1 0.447 1 1 S 21.759 52.942 21.207 52.942 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+                            <path d="M 21.207 46.031 H 4.617 c -0.552 0 -1 -0.448 -1 -1 s 0.448 -1 1 -1 h 16.59 c 0.552 0 1 0.448 1 1 S 21.759 46.031 21.207 46.031 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+                            <path d="M 21.207 39.121 H 1 c -0.552 0 -1 -0.448 -1 -1 s 0.448 -1 1 -1 h 20.207 c 0.552 0 1 0.448 1 1 S 21.759 39.121 21.207 39.121 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+                        </g>
+                        </svg> Free shipping</li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="256" height="256" viewBox="0 0 256 256" xml:space="preserve">
+                        <g style="stroke: none; stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: none; fill-rule: nonzero; opacity: 1;" transform="translate(1.4065934065934016 1.4065934065934016) scale(2.81 2.81)" >
+                            <path d="M 45 37.605 c -0.254 0 -0.509 -0.048 -0.749 -0.146 l -16.076 -6.494 c -1.024 -0.414 -1.519 -1.58 -1.105 -2.604 c 0.414 -1.024 1.58 -1.519 2.604 -1.105 L 45 33.448 l 36.253 -14.646 L 45 4.157 L 8.747 18.803 l 11.485 4.64 c 1.024 0.414 1.519 1.58 1.105 2.604 c -0.414 1.025 -1.58 1.52 -2.604 1.105 L 2.659 20.657 c -0.756 -0.306 -1.251 -1.039 -1.251 -1.854 s 0.495 -1.549 1.251 -1.854 L 44.251 0.146 c 0.48 -0.194 1.018 -0.194 1.498 0 l 41.593 16.803 c 0.756 0.306 1.251 1.039 1.251 1.854 s -0.495 1.549 -1.251 1.854 L 45.749 37.46 C 45.509 37.557 45.254 37.605 45 37.605 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+                            <path d="M 45 90 c -0.393 0 -0.783 -0.116 -1.119 -0.342 C 43.331 89.286 43 88.665 43 88 V 35.605 c 0 -0.815 0.495 -1.549 1.251 -1.854 l 41.593 -16.803 c 0.615 -0.249 1.316 -0.176 1.867 0.196 c 0.552 0.372 0.882 0.993 0.882 1.658 v 52.395 c 0 0.815 -0.495 1.549 -1.251 1.854 L 45.749 89.854 C 45.508 89.952 45.253 90 45 90 z M 47 36.955 v 48.081 l 37.593 -15.187 V 21.768 L 47 36.955 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+                            <path d="M 45 90 c -0.253 0 -0.508 -0.048 -0.749 -0.146 L 2.659 73.052 c -0.756 -0.306 -1.251 -1.039 -1.251 -1.854 V 18.803 c 0 -0.665 0.331 -1.286 0.882 -1.658 c 0.55 -0.372 1.251 -0.446 1.867 -0.196 l 16.075 6.495 c 1.024 0.414 1.519 1.58 1.105 2.604 c -0.414 1.025 -1.578 1.52 -2.604 1.105 L 5.408 21.768 v 48.081 L 43 85.035 V 36.955 l -14.825 -5.989 c -1.024 -0.414 -1.519 -1.58 -1.105 -2.604 c 0.414 -1.024 1.58 -1.519 2.604 -1.105 l 16.076 6.494 C 46.505 34.057 47 34.79 47 35.605 V 88 c 0 0.665 -0.33 1.286 -0.882 1.658 C 45.783 89.884 45.393 90 45 90 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+                            <path d="M 28.924 53.036 c -0.253 0 -0.507 -0.048 -0.749 -0.146 l -9.441 -3.813 c -0.756 -0.306 -1.251 -1.039 -1.251 -1.854 V 25.297 c 0 -0.815 0.495 -1.549 1.251 -1.854 L 60.326 6.64 c 0.48 -0.194 1.018 -0.194 1.498 0 l 9.441 3.814 c 0.756 0.306 1.251 1.039 1.251 1.854 s -0.495 1.549 -1.251 1.854 L 30.924 30.46 v 20.576 c 0 0.665 -0.331 1.286 -0.881 1.658 C 29.708 52.92 29.317 53.036 28.924 53.036 z M 21.483 45.874 l 5.441 2.198 v -18.96 c 0 -0.815 0.495 -1.549 1.251 -1.854 l 37.002 -14.948 l -4.103 -1.657 L 21.483 26.646 V 45.874 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+                            <path d="M 52.372 78.616 c -0.792 0 -1.541 -0.473 -1.855 -1.252 c -0.414 -1.024 0.081 -2.189 1.105 -2.604 l 9.44 -3.813 c 1.025 -0.411 2.19 0.081 2.604 1.105 c 0.414 1.024 -0.081 2.189 -1.105 2.604 l -9.44 3.813 C 52.875 78.568 52.621 78.616 52.372 78.616 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+                            <path d="M 52.372 71.526 c -0.792 0 -1.541 -0.473 -1.855 -1.252 c -0.414 -1.023 0.081 -2.189 1.105 -2.604 l 9.44 -3.814 c 1.025 -0.411 2.19 0.081 2.604 1.105 c 0.414 1.023 -0.081 2.189 -1.105 2.604 l -9.44 3.814 C 52.875 71.479 52.621 71.526 52.372 71.526 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+                            <path d="M 52.372 64.436 c -0.792 0 -1.541 -0.473 -1.855 -1.252 c -0.414 -1.024 0.081 -2.189 1.105 -2.604 l 9.44 -3.813 c 1.025 -0.412 2.19 0.081 2.604 1.105 c 0.414 1.024 -0.081 2.189 -1.105 2.604 l -9.44 3.813 C 52.875 64.388 52.621 64.436 52.372 64.436 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+                        </g>
+                        </svg> Availability: <span id="productAvailability">--</span></li>
+                </ul>
+            
+                <button class="order-button">Order</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="product-navigation">
+        <button class="nav-item active" data-target="features">All features</button>
+        <button class="nav-item" data-target="description">Description</button>
+        <button class="nav-item" data-target="reviews">Reviews</button>
+        <button class="nav-item" data-target="accessories">Accessories</button>
+        <button class="nav-item" data-target="tradein">Trade-in</button>
+    </div>
+
+    
+    
+    <div class="product-content">
+        <div class="content-section active" id="features">
+        <h3>All Features</h3>
+        <p>...</p>
+        </div>
+        <div class="content-section" id="description">
+        <h3>Description</h3>
+        <p>...</p>
+        </div>
+        <div class="content-section" id="reviews">
+            <!-- Ліва частина: заголовок + відгуки -->
+            <div class="review-area">
+              <div class="review-title">
+                <span class="review-count"></span>
+                <span class="product-name"></span>
+              </div>
+              <div id="reviewsContainer"></div>
+            </div>
+          
+            <!-- Права частина: зірки + бари -->
+            <div class="rating-summary">
+              <div class="star-average">
+                <div class="stars" id="starIcons"></div>
+                <span id="averageScoreText">0.0 / 5.0</span>
+              </div>
+              <div class="rating-bars" id="ratingBars"></div>
+            </div>
+        </div>
+        <div class="content-section" id="accessories">
+        <h3>Accessories</h3>
+        <p>...</p>
+        </div>
+        <div class="content-section" id="tradein">
+        <h3>Trade-in</h3>
+        <p>...</p>
+        </div>
+    </div>
+  
+    <footer class="footer">
+     
+        <div class="footer-top">
+          <div class="newsletter-text">
+            <p>I want to keep up to date with promotions and new products</p>
+          </div>
+          <div class="newsletter-form">
+            <input type="email" placeholder="My e-mail">
+            <div class="footer-bottons"><button>Sign</button></div>
+          </div>
+        </div>
+      
+        <hr>
+      
+        <div class="footer-main">
+          <div class="app-download">
+            <div class="app-image">
+              <!-- Місце для QR коду або картинки -->
+            </div>
+            <p>Point your camera and download the free NameStore app</p>
+            <div class="app-icons">
+              <div class="app-icon"></div>
+              <div class="app-icon"></div>
+              <div class="app-icon"></div>
+              <div class="app-icon"></div>
+            </div>
+          </div>
+      
+          <div class="footer-links">
+            <div class="footer-column">
+              <h3>Buyers</h3>
+              <ul>
+                <li><a href="#">Information</a></li>
+                <li><a href="#">Delivery</a></li>
+                <li><a href="#">Guarantee</a></li>
+                <li><a href="#">Promotions and discount</a></li>
+                <li><a href="#">Public offer</a></li>
+                <li><a href="#">Gift Cards</a></li>
+                <li><a href="#">Exchanges and returns</a></li>
+              </ul>
+            </div>
+      
+            <div class="footer-column">
+              <h3>Partners</h3>
+                <ul>
+                  <li><a href="#">Information</a></li>
+                  <li><a href="#">Working conditions</a></li>
+                  <li><a href="#">Guarantee</a></li>
+                  <li><a href="#">Public offer</a></li>
+                </ul>
+              </div>
+      
+            <div class="footer-column">
+              <h3>Company</h3>
+                <ul>
+                  <li><a href="#">About Us</a></li>
+                  <li><a href="#">Contacts</a></li>
+                  <li><a href="#">Hotline</a></li>
+                  <li><a href="#">Company policy</a></li>
+                </ul>
+            </div>
+      
+            <div class="footer-column">
+              <h3>Contacts</h3>
+              <p><a href="#">Address of shops</a></p>
+              <p>12345678900</p>
+              <button class="ask-button">Ask question</button>
+            </div>
+      
+            <div class="footer-column">
+              <h3>We're on social media</h3>
+              <div class="social-icons">
+                <div class="social-icon"></div>
+                <div class="social-icon"></div>
+                <div class="social-icon"></div>
+                <div class="social-icon"></div>
+                <div class="social-icon"></div>
+                <div class="social-icon"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        <hr>
+      
+        <div class="footer-bottom">
+          <a href="#">Privacy Policy</a>
+          <span>|</span>
+          <a href="#">Terms of Use</a>
+          <span>|</span>
+          <a href="#">Sales and Refunds</a>
+        </div>
+    
+      </footer>
+
+    <script type="module" src="/js/product_page.js"></script>
+    <script src="/js/breadcrumb.js"></script>
+</body>
+</html>
