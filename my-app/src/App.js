@@ -141,10 +141,11 @@ function App() {
           <Route path="/catalog" element={<Catalog products={products} />} />
           {/*<Route path="/favorites" element={<Favorites />} />*/}
           {/*<Route path="/account" element={<Account />} />*/}
-          <Route path="/" element={<Main />} />
           {/*<Route path="/catalog" element={<Catalog />} />*/}
             <Route path="/favorites" element={<Favorites products={products} />} />
           <Route path="/account" element={<Account product={products} />} />
+          {/*<Route path="/favorites" element={<Favorites />} />*/}
+          <Route path="/account" element={<Account products={products} />} />
           {/*<Route path="/product" element={<Product />} />*/}
           {/*<Route path="/cart" element={<Cart />} />*/}
         </Routes>

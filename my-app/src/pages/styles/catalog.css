@@ -333,6 +333,10 @@
   color: #000;
 }
 
+#catalog-page .add-to-cart.out-of-stock {
+  background-color: #ADACAC;
+}
+
 #catalog-page .range-container {
   position: relative;
   width: 100%;
