@@ -299,39 +299,39 @@ export default function Catalog(props) {
                         <div className="footer-column">
                             <h3>Buyers</h3>
                             <ul>
-                                <li><a href="#">Information</a></li>
-                                <li><a href="#">Delivery</a></li>
-                                <li><a href="#">Guarantee</a></li>
-                                <li><a href="#">Promotions and discount</a></li>
-                                <li><a href="#">Public offer</a></li>
-                                <li><a href="#">Gift Cards</a></li>
-                                <li><a href="#">Exchanges and returns</a></li>
+                                <li><Link to="/">Information</Link></li>
+                                <li><Link to="/">Delivery</Link></li>
+                                <li><Link to="/">Guarantee</Link></li>
+                                <li><Link to="/">Promotions and discount</Link></li>
+                                <li><Link to="/">Public offer</Link></li>
+                                <li><Link to="/">Gift Cards</Link></li>
+                                <li><Link to="/">Exchanges and returns</Link></li>
                             </ul>
                         </div>
 
                         <div className="footer-column">
                             <h3>Partners</h3>
                             <ul>
-                                <li><a href="#">Information</a></li>
-                                <li><a href="#">Working conditions</a></li>
-                                <li><a href="#">Guarantee</a></li>
-                                <li><a href="#">Public offer</a></li>
+                                <li><Link to="/">Information</Link></li>
+                                <li><Link to="/">Working conditions</Link></li>
+                                <li><Link to="/">Guarantee</Link></li>
+                                <li><Link to="/">Public offer</Link></li>
                             </ul>
                         </div>
 
                         <div className="footer-column">
                             <h3>Company</h3>
                             <ul>
-                                <li><a href="#">About Us</a></li>
-                                <li><a href="#">Contacts</a></li>
-                                <li><a href="#">Hotline</a></li>
-                                <li><a href="#">Company policy</a></li>
+                                <li><Link to="/">About Us</Link></li>
+                                <li><Link to="/">Contacts</Link></li>
+                                <li><Link to="/">Hotline</Link></li>
+                                <li><Link to="/">Company policy</Link></li>
                             </ul>
                         </div>
 
                         <div className="footer-column">
                             <h3>Contacts</h3>
-                            <p><a href="#">Address of shops</a></p>
+                            <p><Link to="/">Address of shops</Link></p>
                             <p>12345678900</p>
                             <button className="ask-button">Ask question</button>
                         </div>

@@ -141,7 +141,7 @@ const Favorites = ({ products: initialProducts }) => {
                                                     <div className="cart-item-details">
                                                         <div className="cart-item-title">{item.title}</div>
                                                         <div className="cart-item-desc">{item.desc}</div>
-                                                        <a href="#" className="cart-item-fav">Add to Favorite</a>
+                                                        {/*<Link to="/" className="cart-item-fav">Add to Favorite</Link>*/}
                                                     </div>
                                                     <div className="cart-item-actions">
                                                         <div className="quantity-control">
@@ -185,9 +185,9 @@ const Favorites = ({ products: initialProducts }) => {
                         <div className="summary-item">Delivery <span>Free</span></div>
                         <div className="line"></div>
                         <div className="summary-total">Total cost <span id="total">{summary.total}₴</span></div>
-                        <a href="cart.html">
+                        <Link to="/cart">
                             <button className="btn-payment">Proceed to payment</button>
-                        </a>
+                        </Link>
                         <div className="line"></div>
                         <div className="promo-section">
                             <input type="text" className="promo-input" placeholder="Promocode"/>

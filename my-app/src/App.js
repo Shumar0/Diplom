@@ -5,7 +5,7 @@ import Catalog from "./pages/Catalog";
 import Favorites from "./pages/Favorites";
 import Account from "./pages/Account";
 // import Product from "./pages/Product";
-// import Cart from "./pages/Cart";
+import Cart from "./pages/Cart";
 
 
 const products = [
@@ -139,15 +139,11 @@ function App() {
         <Routes>
           <Route path="/" element={<Main products={products} />} />
           <Route path="/catalog" element={<Catalog products={products} />} />
-          {/*<Route path="/favorites" element={<Favorites />} />*/}
-          {/*<Route path="/account" element={<Account />} />*/}
-          {/*<Route path="/catalog" element={<Catalog />} />*/}
             <Route path="/favorites" element={<Favorites products={products} />} />
           <Route path="/account" element={<Account product={products} />} />
-          {/*<Route path="/favorites" element={<Favorites />} />*/}
           <Route path="/account" element={<Account products={products} />} />
           {/*<Route path="/product" element={<Product />} />*/}
-          {/*<Route path="/cart" element={<Cart />} />*/}
+          <Route path="/cart" element={<Cart products={products} />} />
         </Routes>
       </Router>
   );
