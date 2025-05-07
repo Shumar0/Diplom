@@ -6,6 +6,7 @@ import Favorites from "./pages/Favorites";
 import Account from "./pages/Account";
 // import Product from "./pages/Product";
 import Cart from "./pages/Cart";
+import Account_manager from "./pages/Account_manager";
 
 
 const products = [
@@ -140,8 +141,10 @@ function App() {
           <Route path="/" element={<Main products={products} />} />
           <Route path="/catalog" element={<Catalog products={products} />} />
             <Route path="/favorites" element={<Favorites products={products} />} />
-          <Route path="/account" element={<Account product={products} />} />
+          {/*<Route path="/account" element={<Account product={products} />} />*/}
+
           <Route path="/account" element={<Account products={products} />} />
+          <Route path="/account-manager" element={<Account_manager products={products} />} />
           {/*<Route path="/product" element={<Product />} />*/}
           <Route path="/cart" element={<Cart products={products} />} />
         </Routes>

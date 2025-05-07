@@ -42,7 +42,6 @@
     font-family: "Gilroy-Medium", sans-serif;
     padding: 10px;
     margin-bottom: 18px;
-    border-radius: 12px;
     background-color: #CACACA;
     display: flex;
     gap: 15px;
@@ -54,12 +53,10 @@
 .cart-item {
     display: flex;
     background: white;
-    border-radius: 12px;
     padding: 16px;
     margin-bottom: 20px;
     gap: 20px;
     align-items: center;
-    border: 2px solid #D9D9DB;
     flex-wrap: wrap;
 }
 
