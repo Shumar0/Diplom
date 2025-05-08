@@ -11,6 +11,23 @@ const Account_manager = (props) => {
 
     const products = props.products;
 
+    const dashboardData = {
+        dateRange: 'From 1–31 May, 2025',
+        pieChartData: [
+            { label: 'Device', value: 28, color: '#dcd6f3' },
+            { label: 'Laptops', value: 40, color: '#5b5fa4' },
+            { label: 'Phone', value: 32, color: '#a9aef1' }
+        ],
+        barChart: {
+            change: 2.1,
+            date: 'Sales from 1–31 May, 2025',
+        },
+        totalCustomers: {
+            value: 5423,
+            change: 2
+        }
+    };
+
     const users = {
         user1: {
             fullName: "John Smith",
@@ -129,6 +146,53 @@ const Account_manager = (props) => {
                 </div>
             </div>
         ),
+        dashboard: (
+            <div className="dashboard">
+                <h2>Dashboard</h2>
+                <div className="dashboard-grid">
+
+                    {/* Pie Chart Card */}
+                    <div className="dashboard-card pie-chart">
+                        <h4>Order Product</h4>
+                        <p className="subtext">{dashboardData.dateRange}</p>
+                        <div className="chart-placeholder">[Pie Chart]</div>
+                        <ul className="legend">
+                            {dashboardData.pieChartData.map((item, idx) => (
+                                <li key={idx}>
+                <span
+                    className="legend-color"
+                    style={{backgroundColor: item.color}}
+                ></span>
+                                    {item.label} — {item.value}%
+                                </li>
+                            ))}
+                        </ul>
+                        <button className="export-btn">Export Report</button>
+                    </div>
+
+                    {/* Bar Chart Card */}
+                    <div className="dashboard-card bar-chart">
+                        <h4>Orders</h4>
+                        <p className="subtext up">↑ {dashboardData.barChart.change}% vs last week</p>
+                        <p className="subtext">{dashboardData.barChart.date}</p>
+                        <div className="chart-placeholder">[Bar Chart]</div>
+                        <button className="export-btn">Export Report</button>
+                    </div>
+
+                    {/* Total Customers */}
+                    <div className="dashboard-card total-customers">
+                        <div className="icon-circle">
+                           <img src="images/user.svg" alt="User"/>  {/* Нужна иконка свг*/}
+                        </div>
+                        <div>
+                            <h3>{dashboardData.totalCustomers.value.toLocaleString()}</h3>
+                            <p className="subtext">Total Customers</p>
+                            <p className="subtext up-blue">↑ {dashboardData.totalCustomers.change}% this month</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )
     };
 
     const navItems = [
@@ -146,7 +210,7 @@ const Account_manager = (props) => {
                     <div className="delivery">
                         <svg className="icon-small" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
                              viewBox="0 0 256 256">
-                        <g transform="translate(1.41 1.41) scale(2.81)">
+                            <g transform="translate(1.41 1.41) scale(2.81)">
                                 <path d="M 45 0 C 27.677 0 13.584 14.093 13.584 31.416
                 c 0 4.818 1.063 9.442 3.175 13.773
                 c 2.905 5.831 11.409 20.208 20.412 35.428
