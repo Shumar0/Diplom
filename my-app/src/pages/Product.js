@@ -13,7 +13,6 @@ export default function Product() {
     const param = useParams();
     const [item, setItem] = useState({});
     const [groupedConfigs, setGroupedConfigs] = useState({});
-    const [selectedOptions, setSelectedOptions] = useState({});
 
     function getNextDay(date = new Date()) {
         const nextDay = new Date(date);
@@ -62,19 +61,15 @@ export default function Product() {
             .catch(console.error);
     }, [param.id]);
 
-    const handleOptionSelect = (key, value) => {
-        setSelectedOptions(prev => ({ ...prev, [key]: value }));
-    };
 
-    const createConfigBlock = (title, subtitle, id, values, isColor = false) => {
+    const createConfigBlock = (title, id, values, isColor = false) => {
         if (!values || values.length === 0) return null;
 
         return (
             <div key={id} className="config-section">
-                <h3>{title} <span>{subtitle}</span></h3>
+                <h3>{title}</h3>
                 <div className="options" id={id}>
                     {values.map(value => {
-                        const isSelected = selectedOptions[id] === value;
                         const baseStyle = {
                             margin: '0 5px',
                             cursor: 'pointer',
@@ -88,22 +83,19 @@ export default function Product() {
                                 width: '24px',
                                 height: '24px',
                                 borderRadius: '50%',
-                                border: isSelected ? '2px solid #007AFF' : '1px solid #999'
                             }
                             : {
                                 ...baseStyle,
                                 padding: '6px 12px',
                                 borderRadius: '4px',
-                                border: isSelected ? '2px solid #007AFF' : '1px solid #ccc'
                             };
 
                         return (
                             <button
                                 key={value}
-                                className={`option-button${isSelected ? ' active' : ''}`}
+                                className={`option-button`}
                                 style={style}
                                 title={isColor ? value : undefined}
-                                onClick={() => handleOptionSelect(id, value)}
                             >
                                 {!isColor && value}
                             </button>
@@ -194,7 +186,7 @@ export default function Product() {
                 </div>
                 <div className="product-right configurator">
                     {Object.entries(groupedConfigs).map(([key, values]) =>
-                        createConfigBlock(key, `Choose your ${key.toLowerCase()}`, key, values, key.toLowerCase() === 'color')
+                        createConfigBlock(key, key, values, key.toLowerCase() === 'color')
                     )}
                 </div>
             </div>

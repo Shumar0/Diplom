@@ -26,15 +26,12 @@ export default function Catalog(props) {
             .then(res => {
                 const data = res.data;
                 const grouped = {};
-
                 for (let i = 1; i < data.length; i++) {
                     const conf = data[i];
                     if (!conf?.item_id) continue;
-
                     if (!grouped[conf.item_id]) grouped[conf.item_id] = [];
                     grouped[conf.item_id].push({ key: conf.key, value: conf.value });
                 }
-
                 setConfigs(grouped);
             })
             .catch(err => console.error('Error', err));
@@ -42,33 +39,20 @@ export default function Catalog(props) {
 
     const renderConfig = (itemId) => {
         const confList = configs[itemId] || [];
-
         if (confList.length === 0) {
             return <p className="no-config">Empty list</p>;
         }
 
-        const grouped = {};
-
-        confList.forEach(conf => {
-            if (!grouped[conf.key]) {
-                grouped[conf.key] = [];
-            }
-            grouped[conf.key].push(conf.value);
-        });
-
-        const keys = Object.keys(grouped);
-        const values = Object.values(grouped);
-
         return (
             <div className="product-data">
                 <div className="chahracteristics-block">
-                    {keys.map((key, index) => (
-                        <p key={`key-${index}`} className="chahracteristic-name data-field">{key}</p>
+                    {confList.map((conf, index) => (
+                        <p key={`key-${index}`} className="chahracteristic-name data-field">{conf.key}</p>
                     ))}
                 </div>
                 <div className="chahracteristics-block">
-                    {values.map((vals, index) => (
-                        <p key={`val-${index}`} className="chahracteristic-value data-field">{vals.join(', ')}</p>
+                    {confList.map((conf, index) => (
+                        <p key={`val-${index}`} className="chahracteristic-value data-field">{conf.value}</p>
                     ))}
                 </div>
             </div>
