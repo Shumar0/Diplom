@@ -150,16 +150,16 @@ const Main = (props) => {
 
           <div id="productCatalog">
               {products.map(product => (
-                  <div key={product.id} className="product-card" data-stock={product.isInStock} data-special={product.isSpecial} data-new={product.isNew}>
+                  <div key={product.id} className="product-card" data-stock={product.available} data-special={product.isSpecial} data-new={product.isNew}>
                       <img src={product.image} alt={product.name} className="product-image"/>
                       <div className="product-info">
                           <span className="product-category">{product.category}</span>
                           <h3 className="product-name">{product.brand} {product.title}</h3>
                           <div className="product-stock">
                               <span className={`status-circle ${product.available ? 'in-stock' : 'out-of-stock'}`}></span>
-                              <span className="stock-text">{product.available ? 'in-stock' : 'out-of-stock'}</span>
+                              <span className="stock-text">{product.available ? 'In stock' : 'Out of stock'}</span>
                           </div>
-                          <div className="product-price">{product.price}</div>
+                          <div className="product-price">{product.price}₴</div>
                       </div>
                       <div className="product-icons">
                           <button className="icon-button heart-icon">

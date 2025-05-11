@@ -244,9 +244,9 @@ export default function Catalog(props) {
                                         <p className="delivery-data">Delivery: {product.delivery}</p>
                                     </div>
                                     <div className="price-block">
-                                        <h3 className="product-price">${product.price}₴</h3>
+                                        <h3 className="product-price">{product.price}₴</h3>
                                         <div className="bonuses-block">
-                                            <p className="bonuses-amount">+${product.bonus}</p>
+                                            <p className="bonuses-amount">+{product.bonus}</p>
                                             <p>bonuses</p>
                                         </div>
                                     </div>

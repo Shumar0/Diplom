@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Main from "./pages/Main";
 import Catalog from "./pages/Catalog";
@@ -7,6 +7,7 @@ import Account from "./pages/Account";
 // import Product from "./pages/Product";
 import Cart from "./pages/Cart";
 import Account_manager from "./pages/Account_manager";
+import axios from "axios";
 
 
 const products = [
@@ -135,13 +136,50 @@ const products = [
 ];
 
 function App() {
-  return (
+
+    const [items, setItems] = useState([])
+
+    useEffect(() => {
+        axios
+            .get('https://nexttech-eae93-default-rtdb.europe-west1.firebasedatabase.app/Item.json')
+            .then(res => {
+                const data = res.data;
+
+                if (!data) {
+                    console.warn('No data');
+                    setItems([]);
+                    return;
+                }
+
+                const loadedItems = [];
+
+                for (const key in data) {
+                    if (data[key]) {
+                        loadedItems.push({
+                            id: key,
+                            brand: data[key].brand,
+                            title: data[key].title,
+                            price: data[key].price,
+                            image: data[key].image,
+                            amount_on_stock: data[key].amount_on_stock,
+                            category: data[key].category,
+                            available: data[key].amount_on_stock > 0,
+                        });
+                    }
+                }
+
+                setItems(loadedItems);
+            })
+            .catch(err => console.error('Error: ', err));
+    }, []);
+
+
+    return (
       <Router>
         <Routes>
-          <Route path="/" element={<Main products={products} />} />
+          <Route path="/" element={<Main products={items} />} />
           <Route path="/catalog" element={<Catalog products={products} />} />
             <Route path="/favorites" element={<Favorites products={products} />} />
-          {/*<Route path="/account" element={<Account product={products} />} />*/}
 
           <Route path="/account" element={<Account products={products} />} />
           <Route path="/account-manager" element={<Account_manager products={products} />} />
