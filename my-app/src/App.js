@@ -8,6 +8,7 @@ import Product from "./pages/Product";
 import Cart from "./pages/Cart";
 import Account_manager from "./pages/Account_manager";
 import axios from "axios";
+import Login from "./pages/Login";
 
 
 const products = [
@@ -185,6 +186,7 @@ function App() {
           <Route path="/account-manager" element={<Account_manager products={products} />} />
           <Route path="/product/:id" element={<Product />} />
           <Route path="/cart" element={<Cart products={products} />} />
+            <Route path="/auth/login" element={<Login />} />
         </Routes>
       </Router>
   );
