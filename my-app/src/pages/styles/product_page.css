@@ -1,0 +1,396 @@
+#product .header-page {
+    font-family: "Gilroy-Medium", sans-serif;
+    color: #1F1F1F;
+    padding: 10px 0;
+    max-width: var(--max-width);
+}
+
+#product .product-title {
+    font-size: 32px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+#product .product-price {
+    margin-top: 20px;
+    font-family: "Gilroy-Light", sans-serif;
+    font-size: 20px;
+    font-weight: 500;
+    color: #6c6c6c;
+}
+
+#product .product-price del {
+    color: #999;
+    margin-left: 6px;
+    text-decoration: line-through;
+}
+
+/* Основна обгортка */
+#product .product-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 40px;
+    max-width: var(--max-width);
+    margin: 40px auto;
+    padding: 0 20px;
+    margin-bottom: 130px;
+}
+
+/* Ліва частина — зображення */
+#product .product-left {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f2f2f2;
+    border-radius: 10px;
+    padding: 30px;
+    width:750px;
+    height: 450px;
+}
+
+#product #product-image {
+    max-width: 300px;
+    height: auto;
+    object-fit: contain;
+}
+
+/* Права частина — конфігуратор */
+#product .product-right {
+    flex: 1;
+    font-family: "Gilroy-Medium", sans-serif;
+    color: #1F1F1F;
+}
+
+#product .configurator {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+#product .config-section h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+#product .config-section h3 span {
+    font-weight: normal;
+    color: #888;
+    font-size: 16px;
+    margin-left: 5px;
+}
+
+#product .options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+/* Кнопки конфігурації */
+#product .options button {
+    padding: 15px;
+    border: 2px solid #ADACAC;
+    border-radius: 50%;
+    background-color: white;
+    cursor: pointer;
+    font-size: 14px;
+    font-family: inherit;
+    transition: all 0.2s ease-in-out;
+}
+
+#product .options button.active {
+    border-color: #0071e3;
+    color: #0071e3;
+    font-weight: 600;
+}
+
+#product .options button:hover {
+    border-color: #0071e3;
+}
+
+/* Кнопки кольорів */
+#product #color-options button {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    padding: 0;
+}
+
+#product #color-options button.active {
+    border: 2px solid #0071e3;
+}
+
+#product #color-options button:hover {
+    border: 2px solid #0071e3;
+}
+
+#product .product-info-block {
+    background-color: #D9D9D9;
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    padding: 40px 0;
+    height: 730px;
+}
+
+#product .inner-container {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex; /* перемістили сюди */
+    justify-content: space-between;
+    flex-wrap: wrap;
+    overflow: hidden;
+}
+
+#product .inner-container img.product-banner {
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+    display: block;
+
+}
+
+#product .product-info-left {
+    flex: 1;
+    min-width: 250px;
+}
+
+#product .product-info-left h2 {
+    font-size: 2rem;
+    margin: 0;
+}
+
+#product .product-info-left h2 span {
+    font-weight: 600;
+}
+
+#product .subtitle {
+    color: gray;
+    margin-top: 10px;
+}
+
+#product .product-info-right {
+    display: flex;
+    justify-content: space-between;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+#product .product-summary,
+#product .product-info-extra {
+    flex: 1;
+    min-width: 250px;
+}
+
+#product .product-info-right .price {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+#product .product-info-right .bonuses {
+    margin-bottom: 15px;
+    color: #555;
+}
+
+#product .save-note {
+    font-size: 0.9rem;
+    color: #444;
+}
+
+#product .save-note span {
+    font-size: 0.8rem;
+    color: #777;
+}
+
+#product .save-link {
+    display: inline-block;
+    margin: 10px 0;
+    color: #007aff;
+    text-decoration: none;
+}
+
+#product .product-details-list {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 20px;
+}
+
+#product .product-details-list svg {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    margin-right: 8px;
+    flex-shrink: 0;
+}
+
+#product .product-details-list li {
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+}
+
+#product .order-button {
+    width: 100%;
+    background-color: #007aff;
+    color: #fff;
+    padding: 10px 25px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+#product .order-button:hover {
+    background-color: #005dc1;
+}
+
+#product .order-button.disabled {
+    background-color: #1F1F1F;
+    cursor: not-allowed;
+    color: #007AFF;
+}
+
+#product .product-navigation {
+    display: flex;
+    gap: 10px;
+    margin: 50px 0;
+    flex-wrap: wrap;
+}
+
+#product .nav-item {
+    padding: 10px 18px;
+    border: 2px solid black;
+    background: transparent;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s, color 0.3s;
+}
+
+#product .nav-item.active {
+    background-color: #0099ff;
+    color: white;
+    border-color: transparent;
+}
+
+#product .content-section {
+    display: none;
+    margin-top: 20px;
+    margin-bottom: 60px;
+}
+
+#product .content-section.active{
+    display: block;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px;
+    font-family: "Gilroy-Light";
+}
+/* Ліва частина — відгуки */
+#product .review-area {
+    flex: 2 1 500px;
+    padding-right: 20px;
+
+}
+
+#product .review-title {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+#product .review-count{
+    font-size: 24px;
+    font-family: "Gilroy-Medium";
+}
+
+#product .product-name{
+    color: #ADACAC;
+}
+
+/* Відгуки */
+#product .review {
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    font-family: "Gilroy-Medium";
+}
+
+#product .review-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+
+}
+
+#product .user-initial {
+    border: 1px solid black;
+    color: black;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+#product .review-section {
+    margin-bottom: 8px;
+    font-family: "Gilroy-Light";
+}
+
+#product .review-section strong {
+    display: block;
+    margin-bottom: 4px;
+}
+
+/* Права частина — рейтинг */
+#product .rating-summary {
+    flex: 1 1 300px;
+    padding-left: 20px;
+}
+
+#product .star-average {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+}
+
+#product .star-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 4px;
+    display: inline-block;
+}
+
+/* Бар рейтингів */
+#product .rating-bars .rating-bar {
+    display: flex;
+    align-items: center;
+    margin: 6px 0;
+}
+
+#product .rating-bars span {
+    width: 20px;
+    font-weight: bold;
+}
+
+#product .bar-container {
+    flex: 1;
+    background: #231F20;
+    border-radius: 5px;
+    height: 10px;
+    margin-left: 10px;
+}
+
+#product .bar-fill {
+    height: 100%;
+    background-color: #008CF6;
+    border-radius: 5px;
+}

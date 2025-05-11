@@ -5,90 +5,26 @@ import './styles/footer.css'
 import './styles/breadcrumb.css'
 import './styles/catalog.css'
 import './styles/pagination.css'
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import axios from "axios";
 
 export default function Catalog(props) {
 
     const products = props.products;
     const [configs, setConfigs] = useState({});
+    const navigator = useNavigate();
 
     function getNextDay(date = new Date()) {
         const nextDay = new Date(date);
         nextDay.setDate(nextDay.getDate() + 2);
-        return nextDay.toISOString().split('T')[0]; // формат: 'YYYY-MM-DD'
+        return nextDay.toISOString().split('T')[0];
     }
-
-    // const findItemsConfig = async (id) => {
-    //
-    //     try {
-    //         const res = await
-    //             axios.get(`${process.env.REACT_APP_DB_LINK}Config.json`)
-    //
-    //         const data = res.data;
-    //
-    //         console.log(data)
-    //
-    //         if (!data) {
-    //             console.warn('No data');
-    //             return;
-    //         }
-    //
-    //         const loadedItems = []
-    //
-    //         for (const k in data) {
-    //             if (data[k]) {
-    //                 if (data[k].item_id === id) {
-    //                     loadedItems.push({
-    //                         id: k,
-    //                         item_id: data[k].item_id,
-    //                         key: data[k].key,
-    //                         value: data[k].value
-    //                     });
-    //                     console.log(k);
-    //                 }
-    //             }
-    //         }
-    //         console.log(loadedItems);
-    //     } catch (e) {
-    //         console.log(e.response.data);
-    //     }
-    // }
-    //
-    // const itemDetails = (id) => {
-    //
-    //     let configuration = findItemsConfig(id);
-    //     let keys = []
-    //     let values = []
-    //
-    //     for (const k in configuration) {
-    //         keys.push(configuration[k].key);
-    //         values.push(configuration[k].value);
-    //     }
-    //
-    //         return (
-    //             <>
-    //                 <div className="product-data">
-    //                     <div className="chahracteristics-block">
-    //                         {keys.map(k => (
-    //                             <p className="chahracteristic-name data-field">{k}</p>
-    //                         ))}
-    //                     </div>
-    //                     <div className="chahracteristics-block">
-    //                         {values.map(v => (
-    //                             <p className="chahracteristic-name data-field">{v}</p>
-    //                         ))}
-    //                     </div>
-    //                 </div>
-    //             </>
-    //         )
-    // }
 
 
     useEffect(() => {
         axios.get(`${process.env.REACT_APP_DB_LINK}Config.json`)
             .then(res => {
-                const data = res.data || [];
+                const data = res.data;
                 const grouped = {};
 
                 for (let i = 1; i < data.length; i++) {
@@ -101,17 +37,16 @@ export default function Catalog(props) {
 
                 setConfigs(grouped);
             })
-            .catch(err => console.error('Ошибка загрузки конфигов', err));
+            .catch(err => console.error('Error', err));
     }, []);
 
     const renderConfig = (itemId) => {
         const confList = configs[itemId] || [];
 
         if (confList.length === 0) {
-            return <p className="no-config">Нет характеристик</p>;
+            return <p className="no-config">Empty list</p>;
         }
 
-        // Группируем по ключу
         const grouped = {};
 
         confList.forEach(conf => {
@@ -211,7 +146,7 @@ export default function Catalog(props) {
             <nav className="breadcrumb" id="breadcrumb"></nav>
 
             <div className="catalog-header">
-                <h2 id="product-count">Found 0 products in 0 categories</h2>
+                <h2 id="product-count">Found {products.length} items</h2>
                 <div className="active-filters" id="active-filters"></div>
             </div>
 
@@ -282,19 +217,20 @@ export default function Catalog(props) {
                     {products.map(product => (
                         <div className="product-card">
                             <div className="product-card" key={product.id}>
-                                <div className="left-product-block">
+                                <div className="left-product-block" onClick={() =>
+                                    navigator(`/product/${product.id}`)}>
                                     <div className="product-image-block">
                                         <div className="product-image-slider">
                                             <img className="product-image" src={product.image}
                                                  alt={product.title}/>
                                         </div>
-                                        <div className="image-controls">
-                                            <button className="img-btn"></button>
-                                            <button className="img-btn"></button>
-                                            <button className="img-btn"></button>
-                                            <button className="img-btn"></button>
-                                            <button className="img-btn"></button>
-                                        </div>
+                                        {/*<div className="image-controls">*/}
+                                        {/*    <button className="img-btn"></button>*/}
+                                        {/*    <button className="img-btn"></button>*/}
+                                        {/*    <button className="img-btn"></button>*/}
+                                        {/*    <button className="img-btn"></button>*/}
+                                        {/*    <button className="img-btn"></button>*/}
+                                        {/*</div>*/}
                                     </div>
                                     <div className="product-info-block">
                                         <div className="product-controls">
