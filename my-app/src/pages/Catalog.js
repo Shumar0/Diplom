@@ -20,7 +20,6 @@ export default function Catalog(props) {
         return nextDay.toISOString().split('T')[0];
     }
 
-
     useEffect(() => {
         axios.get(`${process.env.REACT_APP_DB_LINK}Config.json`)
             .then(res => {
@@ -57,6 +56,27 @@ export default function Catalog(props) {
                 </div>
             </div>
         );
+    };
+
+    const addToCart = (product) => {
+        const objectToCart = {
+            amount: 1,
+            item: product,
+            total_price: product.price,
+        };
+
+        const cartString = localStorage.getItem('cart');
+        let cart = cartString ? JSON.parse(cartString) : [];
+        const itemIndex = cart.findIndex(item => Number(item.item.id) === Number(product.id));
+
+        if (itemIndex > -1) {
+            cart[itemIndex].amount += objectToCart.amount;
+            cart[itemIndex].total_price += objectToCart.total_price;
+        } else {
+            cart.push(objectToCart);
+        }
+
+        localStorage.setItem('cart', JSON.stringify(cart));
     };
 
 
@@ -199,7 +219,7 @@ export default function Catalog(props) {
 
                 <div className="products" id="product-list">
                     {products.map(product => (
-                        <div className="product-card">
+                        <div className="product-card" style={product.discount > 0 ? { backgroundColor: '#f9f2f2', border: '1px solid #ffe3e3' } : {}}>
                             <div className="product-card" key={product.id}>
                                 <div className="left-product-block" onClick={() =>
                                     navigator(`/product/${product.id}`)}>
@@ -208,13 +228,6 @@ export default function Catalog(props) {
                                             <img className="product-image" src={product.image}
                                                  alt={product.title}/>
                                         </div>
-                                        {/*<div className="image-controls">*/}
-                                        {/*    <button className="img-btn"></button>*/}
-                                        {/*    <button className="img-btn"></button>*/}
-                                        {/*    <button className="img-btn"></button>*/}
-                                        {/*    <button className="img-btn"></button>*/}
-                                        {/*    <button className="img-btn"></button>*/}
-                                        {/*</div>*/}
                                     </div>
                                     <div className="product-info-block">
                                         <div className="product-controls">
@@ -280,7 +293,16 @@ export default function Catalog(props) {
                                             (<p className="delivery-data">No info</p>)}
                                     </div>
                                     <div className="price-block">
-                                        <h3 className="product-price">{product.price}₴</h3>
+                                        {product.discount > 0 && (
+                                            <h3 style={{ color: '#888', textDecoration: 'line-through', fontSize: '0.9em', marginBottom: '5px' }}>
+                                                {product.price}₴
+                                            </h3>
+                                        )}
+                                        <h3 className="product-price">
+                                            {product.discount > 0
+                                                ? (product.price * (1 - product.discount / 100)).toFixed(0) + '₴'
+                                                : product.price + '₴'}
+                                        </h3>
                                         <div className="bonuses-block">
                                             <p className="bonuses-amount">+{product.price / 100}{product.bonus}</p>
                                             <p>bonuses</p>
@@ -288,7 +310,7 @@ export default function Catalog(props) {
                                     </div>
                                     <button
                                         className={`add-to-cart ${!product.available ? 'out-of-stock' : ''}`}
-                                        disabled={!product.available}>
+                                        disabled={!product.available} onClick={() => addToCart(product)} style={{cursor: product.available ? 'pointer' : 'not-allowed'}} >
                                         {product.available ? 'Into a basket' : 'Not available'}
                                     </button>
                                 </div>

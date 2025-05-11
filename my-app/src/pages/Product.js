@@ -1,4 +1,4 @@
-import {Link, useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import { History, Truck, Package } from "lucide-react";
@@ -13,6 +13,7 @@ export default function Product() {
     const param = useParams();
     const [item, setItem] = useState({});
     const [groupedConfigs, setGroupedConfigs] = useState({});
+    const navigate = useNavigate();
 
     function getNextDay(date = new Date()) {
         const nextDay = new Date(date);
@@ -35,7 +36,8 @@ export default function Product() {
                             image: data[k].image,
                             amount_on_stock: data[k].amount_on_stock,
                             category: data[k].category,
-                            available: data[k].amount_on_stock > 0
+                            available: data[k].amount_on_stock > 0,
+                            discount: data[k].discount,
                         });
                     }
                 }
@@ -104,6 +106,28 @@ export default function Product() {
                 </div>
             </div>
         );
+    };
+
+    const addToCart = () => {
+        const objectToCart = {
+            amount: 1,
+            item: item,
+            total_price: item.price,
+        };
+
+        const cartString = localStorage.getItem('cart');
+        let cart = cartString ? JSON.parse(cartString) : [];
+        const itemIndex = cart.findIndex(item => Number(item.item.id) === Number(param.id));
+
+        if (itemIndex > -1) {
+            cart[itemIndex].amount += objectToCart.amount;
+            cart[itemIndex].total_price += objectToCart.total_price;
+        } else {
+            cart.push(objectToCart);
+        }
+
+        localStorage.setItem('cart', JSON.stringify(cart));
+        navigate('/catalog');
     };
 
     return (
@@ -177,7 +201,20 @@ export default function Product() {
 
             <div className="header-page">
                 <h1 id="product-title-heading" className="product-title">{item.brand} {item.title}</h1>
-                <div id="product-price" className="product-price">From {item.price}₴</div>
+                <div id="product-price" className="product-price">
+                    {item.discount > 0 ? (
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                            <div style={{ color: '#888', textDecoration: 'line-through', marginRight: '5px', fontSize: '0.9em' }}>
+                                From {item.price}₴
+                            </div>
+                            <div style={{ color: 'green', fontWeight: 'bold' }}>
+                                Now from {(item.price * (1 - item.discount / 100)).toFixed(0)}₴
+                            </div>
+                        </div>
+                    ) : (
+                        <>From {item.price}₴</>
+                    )}
+                </div>
             </div>
 
             <div className="product-main">
@@ -200,7 +237,20 @@ export default function Product() {
 
                     <div className="product-info-right">
                         <div className="product-summary">
-                            <p className="price">From <strong id="productPrice">{item.price}₴</strong></p>
+                            <p className="price">
+                                {item.discount > 0 ? (
+                                    <>
+                                        From <strong style={{ color: '#888', textDecoration: 'line-through', marginRight: '5px', fontSize: '0.9em' }}>
+                                        {item.price}₴
+                                    </strong>
+                                        <strong id="productPrice" style={{ color: 'green', fontWeight: 'bold' }}>
+                                            {(item.price * (1 - item.discount / 100)).toFixed(0)}₴
+                                        </strong>
+                                    </>
+                                ) : (
+                                    <>From <strong id="productPrice">{item.price}₴</strong></>
+                                )}
+                            </p>
                             <p className="bonuses">Bonuses: <span id="productBonus">{item.price / 100}</span></p>
 
                             <p className="save-note">Need a moment?<br/>
@@ -225,7 +275,21 @@ export default function Product() {
                                     'Out of stock'}</span></li>
                             </ul>
 
-                            <button className="order-button">Order</button>
+                            <button
+                                disabled={!item.available}
+                                style={{
+                                    padding: '10px 20px',
+                                    backgroundColor: item.available ? '#007bff' : '#dc3545',
+                                    color: 'white',
+                                    border: 'none',
+                                    borderRadius: '5px',
+                                    cursor: item.available ? 'pointer' : 'not-allowed',
+                                    fontSize: '16px',
+                                }}
+                                onClick={() => addToCart()}
+                            >
+                                {item.available ? 'Order' : 'Out of Stock'}
+                            </button>
                         </div>
                     </div>
                 </div>

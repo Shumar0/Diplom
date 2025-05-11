@@ -164,6 +164,7 @@ function App() {
                             amount_on_stock: data[key].amount_on_stock,
                             category: data[key].category,
                             available: data[key].amount_on_stock > 0,
+                            discount: data[key].discount
                         });
                     }
                 }

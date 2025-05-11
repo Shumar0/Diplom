@@ -8,75 +8,92 @@ import './styles/cart.css';
 
 export default function Cart(props) {
 
-    const initialProducts = props.products;
+    const [cartItems, setCartItems] = useState([]);
 
-    const [products, setProducts] = useState(() => {
-        return initialProducts.map(p => ({ ...p, quantity: p.quantity === undefined ? 1 : p.quantity }));
-    });
+    const getProductsFromCart = () => {
+        const cartString = localStorage.getItem('cart');
+        let cartData = cartString ? JSON.parse(cartString) : [];
+        console.log(cartData);
+        setCartItems(cartData);
+    };
+
+    useEffect(() => {
+        getProductsFromCart();
+    }, []);
 
     useEffect(() => {
         updateSummary();
-    }, [products]);
+    }, [cartItems]);
 
     const updateQuantity = (index, delta) => {
-        setProducts(currentProducts => {
-            const newProducts = [...currentProducts];
-            if (newProducts[index]) {
-                newProducts[index].quantity = Math.max(1, newProducts[index].quantity + delta);
+        setCartItems(currentCartItems => {
+            const newCartItems = [...currentCartItems];
+            if (newCartItems[index]) {
+                newCartItems[index].amount = Math.max(1, newCartItems[index].amount + delta);
+                newCartItems[index].total_price = newCartItems[index].amount * newCartItems[index].item.price;
             }
-            return newProducts;
+            localStorage.setItem('cart', JSON.stringify(newCartItems));
+            return newCartItems;
         });
     };
 
-    const removeItem = (id) => {
-        setProducts(currentProducts => currentProducts.filter(p => p.id !== id));
+    const removeItem = (itemId) => {
+        const updatedCart = cartItems.filter(item => item.item.id !== itemId);
+        setCartItems(updatedCart);
+        localStorage.setItem('cart', JSON.stringify(updatedCart));
     };
 
     const updateSummary = () => {
         let itemCount = 0;
         let subtotal = 0;
+        let totalDiscount = 0;
 
-        products.forEach(item => {
-            if (item.available && item.quantity > 0) {
-                itemCount += item.quantity;
-                subtotal += item.price * item.quantity;
+        cartItems.forEach(cartItem => {
+            const item = cartItem.item;
+            if (item.available && cartItem.amount > 0) {
+                itemCount += cartItem.amount;
+                subtotal += item.price * cartItem.amount;
+                if (item.discount > 0) {
+                    totalDiscount += Math.round((item.price * cartItem.amount) * (item.discount / 100));
+                }
             }
         });
 
-        const discount = Math.round(subtotal * 0.1);
-        const total = subtotal - discount;
+        const total = subtotal - totalDiscount;
 
         document.getElementById("item-count").textContent = itemCount;
         document.getElementById("subtotal").textContent = `${subtotal}₴`;
-        document.getElementById("discount").textContent = `-${discount}₴`;
+        document.getElementById("discount").textContent = `-${totalDiscount}₴`;
         document.getElementById("total").textContent = `${total}₴`;
     };
 
     const renderCartItems = () => {
         const categoryMap = {};
-        products.forEach(item => {
+        cartItems.forEach(cartItem => {
+            const item = cartItem.item;
             if (!categoryMap[item.category]) {
                 categoryMap[item.category] = [];
             }
-            categoryMap[item.category].push(item);
+            categoryMap[item.category].push(cartItem);
         });
 
-        const cartItems = [];
+        const cartItemElements = [];
         for (const category in categoryMap) {
             const categoryItems = categoryMap[category];
-            const count = categoryItems.reduce((acc, item) => acc + item.quantity, 0);
-            const total = categoryItems.reduce((acc, item) => acc + item.quantity * item.price, 0);
+            const count = categoryItems.reduce((acc, cartItem) => acc + cartItem.amount, 0);
+            const total = categoryItems.reduce((acc, cartItem) => acc + cartItem.amount * cartItem.item.price, 0);
 
-            cartItems.push(
+            cartItemElements.push(
                 <div key={category} className="category-header">
                     <h3>{category}</h3>
                     <p>({count}) {total}₴</p>
                 </div>
             );
 
-            categoryItems.forEach((item, index) => {
-                const oldPrice = Math.round(item.price * 1.1 / 100) * 100;
-                cartItems.push(
+            categoryItems.forEach((cartItem, index) => {
+                const item = cartItem.item;
+                const newPrice = item.price - Math.round(item.price * item.discount / 100);
+                cartItemElements.push(
                     <div key={item.id} className="cart-item">
                         <img src={item.image} alt={item.title} />
                         <div className="cart-item-details">
@@ -86,17 +103,25 @@ export default function Cart(props) {
                         </div>
                         <div className="cart-item-actions">
                             <div className="quantity-control">
-                                <button onClick={() => updateQuantity(products.indexOf(item), -1)}>-</button>
-                                <span>{item.quantity}</span>
-                                <button onClick={() => updateQuantity(products.indexOf(item), 1)}>+</button>
+                                <button onClick={() => updateQuantity(cartItems.indexOf(cartItem), -1)}>-</button>
+                                <span>{cartItem.amount}</span>
+                                <button onClick={() => updateQuantity(cartItems.indexOf(cartItem), 1)}>+</button>
                             </div>
                             <div className="cart-item-price">
-                                <span className="current-price">{item.price * item.quantity}₴</span><br />
-                                <span className="old-price">{oldPrice * item.quantity}₴</span>
+                                {item.discount > 0 ? (
+                                    <>
+                                        <span className="current-price">{newPrice * cartItem.amount}₴</span><br />
+                                        <span className="old-price">{item.price * cartItem.amount}₴</span>
+                                    </>
+                                ) : (
+                                    <>
+                                        <span className="current-price">{item.price * cartItem.amount}₴</span><br />
+                                    </>
+                                )}
                             </div>
                             <button className="delete-btn" onClick={() => removeItem(item.id)}>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
-                                    {/* SVG path for delete icon - keeping it for completeness */}
+                                    {/* SVG path for delete icon */}
                                     <g transform="translate(1.41 1.41) scale(2.81)">
                                         <path d="M 64.71 90 H 25.291 c -4.693 0 -8.584 -3.67 -8.859 -8.355 l -3.928 -67.088 c -0.048 -0.825 0.246 -1.633 0.812 -2.234 c 0.567 -0.601 1.356 -0.941 2.183 -0.941 h 59.002 c 0.826 0 1.615 0.341 2.183 0.941 c 0.566 0.601 0.86 1.409 0.813 2.234 l -3.928 67.089 C 73.294 86.33 69.403 90 64.71 90 z M 18.679 17.381 l 3.743 63.913 C 22.51 82.812 23.771 84 25.291 84 H 64.71 c 1.52 0 2.779 -1.188 2.868 -2.705 l 3.742 -63.914 H 18.679 z" style={{ fill: "#007AFF" }} strokeLinecap="round" />
                                         <path d="M 80.696 17.381 H 9.304 c -1.657 0 -3 -1.343 -3 -3 s 1.343 -3 3 -3 h 71.393 c 1.657 0 3 1.343 3 3 S 82.354 17.381 80.696 17.381 z" style={{ fill: "#007AFF" }} strokeLinecap="round" />
@@ -113,7 +138,7 @@ export default function Cart(props) {
                 );
             });
         }
-        return cartItems;
+        return cartItemElements;
     };
 
     return (
