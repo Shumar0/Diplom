@@ -4,7 +4,7 @@ import Main from "./pages/Main";
 import Catalog from "./pages/Catalog";
 import Favorites from "./pages/Favorites";
 import Account from "./pages/Account";
-// import Product from "./pages/Product";
+import Product from "./pages/Product";
 import Cart from "./pages/Cart";
 import Account_manager from "./pages/Account_manager";
 import axios from "axios";
@@ -141,7 +141,7 @@ function App() {
 
     useEffect(() => {
         axios
-            .get('https://nexttech-eae93-default-rtdb.europe-west1.firebasedatabase.app/Item.json')
+            .get(`${process.env.REACT_APP_DB_LINK}Item.json`)
             .then(res => {
                 const data = res.data;
 
@@ -178,12 +178,11 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Main products={items} />} />
-          <Route path="/catalog" element={<Catalog products={products} />} />
+          <Route path="/catalog" element={<Catalog products={items} />} />
             <Route path="/favorites" element={<Favorites products={products} />} />
-
           <Route path="/account" element={<Account products={products} />} />
           <Route path="/account-manager" element={<Account_manager products={products} />} />
-          {/*<Route path="/product" element={<Product />} />*/}
+          <Route path="/product/:id" element={<Product />} />
           <Route path="/cart" element={<Cart products={products} />} />
         </Routes>
       </Router>

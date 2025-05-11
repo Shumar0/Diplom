@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import './styles/style.css'
 import './styles/header.css'
 import './styles/footer.css'
@@ -6,10 +6,140 @@ import './styles/breadcrumb.css'
 import './styles/catalog.css'
 import './styles/pagination.css'
 import {Link} from "react-router-dom";
+import axios from "axios";
 
 export default function Catalog(props) {
 
     const products = props.products;
+    const [configs, setConfigs] = useState({});
+
+    function getNextDay(date = new Date()) {
+        const nextDay = new Date(date);
+        nextDay.setDate(nextDay.getDate() + 2);
+        return nextDay.toISOString().split('T')[0]; // формат: 'YYYY-MM-DD'
+    }
+
+    // const findItemsConfig = async (id) => {
+    //
+    //     try {
+    //         const res = await
+    //             axios.get(`${process.env.REACT_APP_DB_LINK}Config.json`)
+    //
+    //         const data = res.data;
+    //
+    //         console.log(data)
+    //
+    //         if (!data) {
+    //             console.warn('No data');
+    //             return;
+    //         }
+    //
+    //         const loadedItems = []
+    //
+    //         for (const k in data) {
+    //             if (data[k]) {
+    //                 if (data[k].item_id === id) {
+    //                     loadedItems.push({
+    //                         id: k,
+    //                         item_id: data[k].item_id,
+    //                         key: data[k].key,
+    //                         value: data[k].value
+    //                     });
+    //                     console.log(k);
+    //                 }
+    //             }
+    //         }
+    //         console.log(loadedItems);
+    //     } catch (e) {
+    //         console.log(e.response.data);
+    //     }
+    // }
+    //
+    // const itemDetails = (id) => {
+    //
+    //     let configuration = findItemsConfig(id);
+    //     let keys = []
+    //     let values = []
+    //
+    //     for (const k in configuration) {
+    //         keys.push(configuration[k].key);
+    //         values.push(configuration[k].value);
+    //     }
+    //
+    //         return (
+    //             <>
+    //                 <div className="product-data">
+    //                     <div className="chahracteristics-block">
+    //                         {keys.map(k => (
+    //                             <p className="chahracteristic-name data-field">{k}</p>
+    //                         ))}
+    //                     </div>
+    //                     <div className="chahracteristics-block">
+    //                         {values.map(v => (
+    //                             <p className="chahracteristic-name data-field">{v}</p>
+    //                         ))}
+    //                     </div>
+    //                 </div>
+    //             </>
+    //         )
+    // }
+
+
+    useEffect(() => {
+        axios.get(`${process.env.REACT_APP_DB_LINK}Config.json`)
+            .then(res => {
+                const data = res.data || [];
+                const grouped = {};
+
+                for (let i = 1; i < data.length; i++) {
+                    const conf = data[i];
+                    if (!conf?.item_id) continue;
+
+                    if (!grouped[conf.item_id]) grouped[conf.item_id] = [];
+                    grouped[conf.item_id].push({ key: conf.key, value: conf.value });
+                }
+
+                setConfigs(grouped);
+            })
+            .catch(err => console.error('Ошибка загрузки конфигов', err));
+    }, []);
+
+    const renderConfig = (itemId) => {
+        const confList = configs[itemId] || [];
+
+        if (confList.length === 0) {
+            return <p className="no-config">Нет характеристик</p>;
+        }
+
+        // Группируем по ключу
+        const grouped = {};
+
+        confList.forEach(conf => {
+            if (!grouped[conf.key]) {
+                grouped[conf.key] = [];
+            }
+            grouped[conf.key].push(conf.value);
+        });
+
+        const keys = Object.keys(grouped);
+        const values = Object.values(grouped);
+
+        return (
+            <div className="product-data">
+                <div className="chahracteristics-block">
+                    {keys.map((key, index) => (
+                        <p key={`key-${index}`} className="chahracteristic-name data-field">{key}</p>
+                    ))}
+                </div>
+                <div className="chahracteristics-block">
+                    {values.map((vals, index) => (
+                        <p key={`val-${index}`} className="chahracteristic-value data-field">{vals.join(', ')}</p>
+                    ))}
+                </div>
+            </div>
+        );
+    };
+
 
     return (
         <div id="catalog-page">
@@ -151,7 +281,7 @@ export default function Catalog(props) {
                 <div className="products" id="product-list">
                     {products.map(product => (
                         <div className="product-card">
-                            <div className="product-card" data-id={product.id}>
+                            <div className="product-card" key={product.id}>
                                 <div className="left-product-block">
                                     <div className="product-image-block">
                                         <div className="product-image-slider">
@@ -173,22 +303,7 @@ export default function Catalog(props) {
                                         </div>
                                         <p className="product-category data-field">{product.category}</p>
                                         <h3 className="product-name">{product.title}</h3>
-                                        <div className="product-data">
-                                            <div className="chahracteristics-block">
-                                                <p className="chahracteristic-name data-field">Processor</p>
-                                                <p className="chahracteristic-name data-field">Screen Size</p>
-                                                <p className="chahracteristic-name data-field">Video card</p>
-                                                <p className="chahracteristic-name data-field">RAM</p>
-                                                <p className="chahracteristic-name data-field">Volume</p>
-                                            </div>
-                                            <div className="chahracteristics-data">
-                                                <p className="cpu-info data-field">{Array.isArray(product.processor) ? product.processor[0] : product.processor || '—'}</p>
-                                                <p className="screen-info data-field">{Array.isArray(product.screenSize) ? product.screenSize[0] : product.screenSize || '—'}</p>
-                                                <p className="gpu-info data-field">{Array.isArray(product.videoCard) ? product.videoCard[0] : product.videoCard || '—'}</p>
-                                                <p className="ram-info data-field">{Array.isArray(product.ram) ? product.ram[0] : product.ram || '—'}</p>
-                                                <p className="volume-info data-field">{Array.isArray(product.volume) ? product.volume[0] : product.volume || '—'}</p>
-                                            </div>
-                                        </div>
+                                        {renderConfig(product.id)}
                                     </div>
                                 </div>
                                 <div className="right-product-block">
@@ -241,12 +356,13 @@ export default function Catalog(props) {
                                                         style={{ stroke: 'none', strokeWidth: 1, strokeDasharray: 'none', strokeLinecap: 'butt', strokeLinejoin: 'miter', strokeMiterlimit: 10, fill: 'rgb(0,122,255)', fillRule: 'nonzero', opacity: 1 }}
                                                         transform=" matrix(1 0 0 1 0 0) " strokeLinecap="round"/></g></svg>
                                         </div>
-                                        <p className="delivery-data">Delivery: {product.delivery}</p>
+                                        {product.available ? (<p className="delivery-data">Delivery: {getNextDay()}</p>) :
+                                            (<p className="delivery-data">No info</p>)}
                                     </div>
                                     <div className="price-block">
                                         <h3 className="product-price">{product.price}₴</h3>
                                         <div className="bonuses-block">
-                                            <p className="bonuses-amount">+{product.bonus}</p>
+                                            <p className="bonuses-amount">+{product.price / 100}{product.bonus}</p>
                                             <p>bonuses</p>
                                         </div>
                                     </div>
