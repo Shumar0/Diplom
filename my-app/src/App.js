@@ -43,7 +43,7 @@ function App() {
                 for (const key in data) {
                     if (data[key]) {
                         loadedItems.push({
-                            id: key,
+                            id: data[key].id,
                             brand: data[key].brand,
                             title: data[key].title,
                             price: data[key].price,

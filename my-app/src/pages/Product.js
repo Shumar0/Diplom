@@ -1,4 +1,4 @@
-import {Link, useNavigate, useParams} from "react-router-dom";
+import {Link, replace, useNavigate, useParams} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import { History, Truck, Package } from "lucide-react";
@@ -7,6 +7,7 @@ import "./styles/header.css"
 import "./styles/breadcrumb.css"
 import "./styles/footer.css"
 import "./styles/product_page.css"
+import {useAuth} from "../context/authContext";
 
 export default function Product() {
 
@@ -14,6 +15,8 @@ export default function Product() {
     const [item, setItem] = useState({});
     const [groupedConfigs, setGroupedConfigs] = useState({});
     const navigate = useNavigate();
+
+    const auth = useAuth();
 
     function getNextDay(date = new Date()) {
         const nextDay = new Date(date);
@@ -129,6 +132,46 @@ export default function Product() {
         localStorage.setItem('cart', JSON.stringify(cart));
         navigate('/catalog');
     };
+
+    const fetchUserById = async () => {
+        try {
+            const res = await axios.get(`${process.env.REACT_APP_DB_LINK}Person.json`);
+            const data = res.data;
+
+            if (!data) {
+                return
+            }
+
+            for (let key in data) {
+                if (data[key]) {
+                    if (key === auth.currentUser.uid) {
+                        return data[key].id;
+                    }
+                }
+            }
+        } catch (error) {
+            console.error("Error fetching user by ID:", error);
+            return null;
+        }
+    };
+
+    const addToFavourite = async () => {
+        const personId = await fetchUserById();
+        console.log("Person id: ", personId);
+
+        const favourite = {
+            item_id: Number(item.id),
+            person_id: personId,
+        }
+
+        try {
+            const res = await axios.post(`${process.env.REACT_APP_DB_LINK}Favourite.json`, favourite);
+            console.log("Добавлено в избранное:", res.data);
+        } catch (e) {
+            console.log(e);
+        }
+
+    }
 
     return (
         <div id="product">
@@ -256,7 +299,10 @@ export default function Product() {
                             <p className="save-note">Need a moment?<br/>
                                 <span>Keep your selections by saving this device to Your Saves.</span>
                             </p>
-                            <a href="#" className="save-link">💙 Save for later</a>
+                            <button onClick={() => {
+                                addToFavourite()
+                                navigate("/catalog")
+                            }} className="save-link">💙 Save for later</button>
                         </div>
 
                         <div className="product-info-extra">

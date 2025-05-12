@@ -6,9 +6,12 @@ import "./styles/footer.css";
 import "./styles/slider.css";
 import "./styles/account.css";
 import { doSignOut } from "../firebase/auth";
-
+import {useAuth} from "../context/authContext";
+import axios from "axios";
 
 const Account = (props) => {
+
+    const auth = useAuth();
 
     const navigate = useNavigate();
 
@@ -27,6 +30,43 @@ const Account = (props) => {
     const [recommendations, setRecommendations] = useState([]);
     const [deliveryDate, setDeliveryDate] = useState("");
 
+    const [user, setUser] = useState({});
+
+    const getUserFromDB = async () => {
+        try {
+            const result = auth.currentUser;
+            const email = result.email;
+            console.log(email)
+
+            const res = await axios.get(`${process.env.REACT_APP_DB_LINK}Person.json`);
+            const data = res.data || {};
+            if (!data) {
+                console.log("Error");
+                return
+            }
+
+            for (let key in data) {
+                if (data[key]) {
+                    if (data[key].email === email) {
+                        console.log("same emails");
+                        setUser({
+                            address: data[key].address,
+                            bonuses: data[key].bonuses,
+                            email: data[key].email,
+                            fullname: data[key].fullname,
+                            password: data[key].password,
+                            phone: data[key].phone,
+                        })
+                        console.log(user);
+                        return
+                    }
+                }
+            }
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
     useEffect(() => {
         // Встановлення доставки
         const tomorrow = new Date();
@@ -39,6 +79,8 @@ const Account = (props) => {
         // Рекомендації
         const shuffled = [...products].sort(() => 0.5 - Math.random());
         setRecommendations(shuffled.slice(0, 4));
+
+        getUserFromDB();
     }, []);
 
     const getLoyaltyInfo = () => {
@@ -75,7 +117,7 @@ const Account = (props) => {
                 <div className="profile-layout">
                     <div className="profile-box">
                         <div className="avatar"></div>
-                        <div className="profile-name">Profile Name</div>
+                        <div className="profile-name">{user.fullname}</div>
                         <div className="arrow">➤</div>
                     </div>
                     <div className="loyalty-card">
@@ -139,7 +181,7 @@ const Account = (props) => {
     const navItems = [
         {id: "profile", label: "Personal account"},
         {id: "orders", label: "Orders" },
-        { id: "bonuses", label: <>Bonuses <span className="bonus-info">0 <img src="/images/Group.svg" alt="bonus" /></span></> },
+        { id: "bonuses", label: <>Bonuses <span className="bonus-info">{user.bonuses} <img src="/images/Group.svg" alt="bonus" /></span></> },
         { id: "privileges", label: "Your privileges" },
         { id: "favorites", label: "Favorites" },
         { id: "comparison", label: "Comparison" },

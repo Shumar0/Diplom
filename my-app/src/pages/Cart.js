@@ -99,7 +99,7 @@ export default function Cart(props) {
                         <div className="cart-item-details">
                             <div className="cart-item-title">{item.title}</div>
                             <div className="cart-item-desc">{item.desc}</div>
-                            <a href="#" className="cart-item-fav">Add to Favorite</a>
+                            {/*<a href="#" className="cart-item-fav">Add to Favorite</a>*/}
                         </div>
                         <div className="cart-item-actions">
                             <div className="quantity-control">

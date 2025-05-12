@@ -5,17 +5,83 @@ import "./styles/header.css";
 import "./styles/footer.css";
 import "./styles/slider.css";
 import "./styles/favorites.css";
+import axios from "axios";
+import {useAuth} from "../context/authContext";
 
 const Favorites = ({ products: initialProducts }) => {
     const [products, setProducts] = useState([]);
+    const [favouriteProducts, setFavouriteProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    const auth = useAuth();
+
+    const fetchUserById = async () => {
+        try {
+            const res = await axios.get(`${process.env.REACT_APP_DB_LINK}Person.json`);
+            const data = res.data;
+
+            if (!data) {
+                return
+            }
+
+            for (let key in data) {
+                if (data[key]) {
+                    if (key === auth.currentUser.uid) {
+                        return data[key].id;
+                    }
+                }
+            }
+        } catch (error) {
+            console.error("Error fetching user by ID:", error);
+            return null;
+        }
+    };
 
     useEffect(() => {
-        const updated = initialProducts.map(p => ({
+        const fetchUserFavoriteItems = async () => {
+            setLoading(true);
+            setError(null);
+
+            const userId = await fetchUserById()
+
+            try {
+                const res = await axios.get(
+                    `${process.env.REACT_APP_DB_LINK}Favourite.json?orderBy="person_id"&equalTo=${userId}`
+                );
+                console.log(res);
+                const favouriteData = res.data;
+
+                const favouriteItemIds = [];
+
+                if (favouriteData) {
+                    for (const key in favouriteData) {
+                        if (favouriteData.hasOwnProperty(key)) {
+                            favouriteItemIds.push(favouriteData[key].item_id);
+                        }
+                    }
+                }
+                console.log(`User ${userId}'s Favourite Item IDs:`, favouriteItemIds);
+
+                setFavouriteProducts(initialProducts.filter(item => favouriteItemIds.includes(item.id)));
+
+            } catch (err) {
+                console.error("Error fetching user's favourite products:", err);
+                setError("Failed to fetch favourite products.");
+                setLoading(false);
+            }
+        };
+
+        fetchUserFavoriteItems();
+    }, [initialProducts]);
+
+    useEffect(() => {
+        const updated = favouriteProducts.map(p => ({
             ...p,
             quantity: p.quantity === undefined ? 1 : p.quantity,
         }));
         setProducts(updated);
-    }, [initialProducts]);
+    }, [favouriteProducts]);
 
     const updateQuantityByIndex = (index, delta) => {
         const updated = [...products];
@@ -39,8 +105,15 @@ const Favorites = ({ products: initialProducts }) => {
 
     const updateSummary = () => {
         const count = products.reduce((sum, item) => sum + item.quantity, 0);
-        const subtotal = products.reduce((sum, item) => sum + item.quantity * item.price, 0);
-        return { count, subtotal, discount: 0, total: subtotal };
+        const subtotalWithoutDiscount = products.reduce((sum, item) => sum + item.quantity * item.price, 0);
+        const discountAmount = products.reduce((sum, item) => {
+            if (item.discount > 0) {
+                return sum + item.quantity * item.price * (item.discount / 100);
+            }
+            return sum;
+        }, 0);
+        const total = subtotalWithoutDiscount - discountAmount;
+        return { count, subtotal: subtotalWithoutDiscount, discount: discountAmount, total };
     };
 
     const categoryMap = getCategoryMap();
@@ -154,10 +227,14 @@ const Favorites = ({ products: initialProducts }) => {
                                                             </button>
                                                         </div>
                                                         <div className="cart-item-price">
-                                                            <span
-                                                                className="current-price">{item.price * item.quantity}₴</span><br/>
-                                                            <span
-                                                                className="old-price">{oldPrice * item.quantity}₴</span>
+    <span className="current-price">
+        {(item.price * (item.discount > 0 ? (1 - item.discount / 100) : 1) * item.quantity).toFixed(0)}₴
+    </span><br/>
+                                                            {item.discount > 0 && (
+                                                                <span className="old-price">
+            {Math.round(item.price * item.quantity)}₴
+        </span>
+                                                            )}
                                                         </div>
                                                         <button className="delete-btn"
                                                                 onClick={() => removeItem(item.id)}>

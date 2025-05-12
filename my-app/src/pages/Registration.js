@@ -23,21 +23,28 @@ export default function Registration() {
         try {
             const res = await axios.get(`${process.env.REACT_APP_DB_LINK}Person.json`);
             const data = res.data || {};
-            const ids = Object.keys(data).map(id => parseInt(id, 10));
+            const ids = Object.values(data)
+                .map(user => user.id)
+                .filter(id => typeof id === 'number');
             const maxId = ids.length > 0 ? Math.max(...ids) : 0;
             return maxId + 1;
         } catch (e) {
-            console.log(e);
+            console.log("Error getting new ID:", e);
+            return 1;
         }
     };
 
-    const saveUserData = async (id, userData) => {
+    const saveUserData = async (uid, newId, userData) => {
         try {
-            await axios.put(`${process.env.REACT_APP_DB_LINK}Person/${id}.json`, userData);
+            await axios.put(`${process.env.REACT_APP_DB_LINK}Person/${uid}.json`, {
+                ...userData,
+                id: newId,
+            });
         } catch (err) {
             console.error("Error saving user data:", err);
         }
     };
+
 
     const emailExists = async (emailToCheck) => {
         try {
@@ -81,13 +88,15 @@ export default function Registration() {
             }
 
             const result = await doCreateUserWithEmailAndPassword(email, password);
+            const uid = result.user.uid;
             const newId = await getNewId();
-            await saveUserData(newId, {
+
+            await saveUserData(uid, newId, {
                 fullname: fullName,
-                address: address,
-                phone: phone,
-                email: email,
-                password: password,
+                address,
+                phone,
+                email,
+                password,
                 bonuses: 0
             });
         } catch (error) {
@@ -96,23 +105,27 @@ export default function Registration() {
         }
     };
 
+
     const onGoogleSignIn = async (e) => {
         e.preventDefault();
         setIsRegistering(true);
         try {
             const result = await doSignInWithGoogle();
-            const userEmail = result.user.email;
+            const uid = result.user.uid;
+            const email = result.user.email;
 
-            const exists = await emailExists(userEmail);
-            console.log('Email exists:', exists);
-            if (exists) return;
+            const exists = await emailExists(email);
+            if (exists) {
+                setIsRegistering(false);
+                return;
+            }
 
             const newId = await getNewId();
-            await saveUserData(newId, {
-                fullname: result.user.displayName,
+            await saveUserData(uid, newId, {
+                fullname: result.user.displayName || "",
                 address: "",
                 phone: "",
-                email: userEmail,
+                email,
                 password: "",
                 bonuses: 0
             });
@@ -121,6 +134,7 @@ export default function Registration() {
             setIsRegistering(false);
         }
     };
+
 
 
     if (userLoggedIn) return <Navigate to="/" replace />;
