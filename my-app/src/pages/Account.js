@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import {Link, Navigate, useNavigate} from "react-router-dom";
 import "./styles/style.css";
 import "./styles/header.css";
 import "./styles/footer.css";
 import "./styles/slider.css";
 import "./styles/account.css";
+import { doSignOut } from "../firebase/auth";
 
 
 const Account = (props) => {
+
+    const navigate = useNavigate();
 
     const loyaltyData = {
         levels: [
@@ -144,6 +147,11 @@ const Account = (props) => {
         { id: "cards", label: "Gift Cards" }
     ];
 
+    const handleLogout = async () => {
+        navigate("/", { replace: true });
+        await doSignOut();
+    };
+
     return (
         <div id="account">
             {/* ...Header code... */}
@@ -233,6 +241,7 @@ const Account = (props) => {
                 <div className="account-content">
                     {sections[activeSection]}
                 </div>
+                <button onClick={handleLogout}>Logout</button>
             </div>
 
             {/* ...Footer code... */}
