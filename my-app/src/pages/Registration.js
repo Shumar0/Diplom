@@ -6,6 +6,9 @@ import {
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
 import axios from "axios";
+import './styles/Registration.css'
+import { FcGoogle } from "react-icons/fc";
+import { Eye, EyeOff } from 'lucide-react';
 
 export default function Registration() {
     const { userLoggedIn } = useAuth();
@@ -16,6 +19,8 @@ export default function Registration() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false); // State for password visibility
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false); // State for confirm password visibility
     const [isRegistering, setIsRegistering] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
 
@@ -140,61 +145,79 @@ export default function Registration() {
     if (userLoggedIn) return <Navigate to="/" replace />;
 
     return (
-        <div id="registration">
-            <h2>Create an Account</h2>
-            <form onSubmit={onSubmit}>
-                <input
-                    type="text"
-                    placeholder="Full Name"
-                    value={fullName}
-                    onChange={e => setFullName(e.target.value)}
-                />
+        <div className="registration-overlay">
+            <div id="registration">
+                <h2>Create an Account</h2>
+                <form onSubmit={onSubmit}>
+                    <label>Full Name</label>
+                    <input
+                        type="text"
+                        value={fullName}
+                        onChange={e => setFullName(e.target.value)}
+                        required
+                    />
 
-                <input
-                    type="text"
-                    placeholder="Address"
-                    value={address}
-                    onChange={e => setAddress(e.target.value)}
-                />
+                    <label>Address</label>
+                    <input
+                        type="text"
+                        value={address}
+                        onChange={e => setAddress(e.target.value)}
+                        required
+                    />
 
-                <input
-                    type="tel"
-                    placeholder="Phone Number"
-                    value={phone}
-                    onChange={e => setPhone(e.target.value)}
-                />
+                    <label>Phone Number</label>
+                    <input
+                        type="tel"
+                        value={phone}
+                        onChange={e => setPhone(e.target.value)}
+                        required
+                    />
 
-                <input
-                    type="email"
-                    placeholder="Email"
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
-                />
+                    <label>Email</label>
+                    <input
+                        type="email"
+                        value={email}
+                        onChange={e => setEmail(e.target.value)}
+                        required
+                    />
 
-                <input
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={e => setPassword(e.target.value)}
-                />
+                    <label>Password</label>
+                    <div className="password-wrapper">
+                        <input
+                            type={showPassword ? "text" : "password"}
+                            value={password}
+                            onChange={e => setPassword(e.target.value)}
+                            required
+                        />
+                        <span onClick={() => setShowPassword(!showPassword)} className="eye-icon">
+                            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                        </span>
+                    </div>
 
-                <input
-                    type="password"
-                    placeholder="Confirm Password"
-                    value={confirmPassword}
-                    onChange={e => setConfirmPassword(e.target.value)}
-                />
+                    <label>Confirm Password</label>
+                    <div className="password-wrapper">
+                        <input
+                            type={showConfirmPassword ? "text" : "password"}
+                            value={confirmPassword}
+                            onChange={e => setConfirmPassword(e.target.value)}
+                            required
+                        />
+                        <span onClick={() => setShowConfirmPassword(!showConfirmPassword)} className="eye-icon">
+                            {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                        </span>
+                    </div>
 
-                <button type="submit" disabled={isRegistering}>
-                    {isRegistering ? "Registering..." : "Register"}
+                    <button type="submit" disabled={isRegistering}>
+                        {isRegistering ? "Registering..." : "Registration"}
+                    </button>
+                </form>
+
+                <button onClick={onGoogleSignIn} className="google-btn" disabled={isRegistering}>
+                    <FcGoogle /> Sign in with Google
                 </button>
-            </form>
 
-            <button onClick={onGoogleSignIn} disabled={isRegistering}>
-                Sign in with Google
-            </button>
-
-            {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
+                {errorMessage && <p className="error-text">{errorMessage}</p>}
+            </div>
         </div>
     );
 }

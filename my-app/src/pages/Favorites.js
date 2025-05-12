@@ -89,11 +89,6 @@ const Favorites = ({ products: initialProducts }) => {
         setProducts(updated);
     };
 
-    const removeItem = (id) => {
-        const filtered = products.filter(item => item.id !== id);
-        setProducts(filtered);
-    };
-
     const getCategoryMap = () => {
         const map = {};
         products.forEach(item => {
@@ -118,6 +113,14 @@ const Favorites = ({ products: initialProducts }) => {
 
     const categoryMap = getCategoryMap();
     const summary = updateSummary();
+
+    const deleteFromFavourite = async (key) => {
+        // try {
+        //     const res = axios.delete(`${process.env.REACT_APP_DB_LINK}Favourite/${key}.json`);
+        // } catch (e) {
+        //     console.error(e);
+        // }
+    }
 
     return (
         <>
@@ -206,7 +209,7 @@ const Favorites = ({ products: initialProducts }) => {
                                             <h3>{category}</h3>
                                             <p>({count}) {total}₴</p>
                                         </div>
-                                        {items.map((item, index) => {
+                                        {items.map((item,) => {
                                             const oldPrice = Math.round(item.price * 1.1 / 100) * 100;
                                             return (
                                                 <div key={item.id} className="cart-item">
@@ -237,7 +240,7 @@ const Favorites = ({ products: initialProducts }) => {
                                                             )}
                                                         </div>
                                                         <button className="delete-btn"
-                                                                onClick={() => removeItem(item.id)}>
+                                                                onClick={() => deleteFromFavourite(item.id)}>
                                                             {/* SVG і текст */}
                                                             Delete
                                                         </button>
