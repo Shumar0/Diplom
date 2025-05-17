@@ -1,14 +1,64 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import {Link, replace, useNavigate} from 'react-router-dom';
 import './styles/style.css';
 import './styles/header.css';
 import './styles/breadcrumb.css';
 import './styles/footer.css';
 import './styles/cart.css';
+import {useAuth} from "../context/authContext";
+import axios from "axios";
 
 export default function Cart(props) {
 
+    const { userLoggedIn } = useAuth()
+    const auth = useAuth();
+
+    const [user, setUser] = useState({})
+
     const [cartItems, setCartItems] = useState([]);
+
+    const [userName, setUserName] = useState('')
+    const [address, setAddress] = useState('')
+    const [paymentMethod, setPaymentMethod] = useState("Credit card");
+    const [deliveryMethod, setDeliveryMethod] = useState("By courier");
+    const [deliveryTime, setDeliveryTime] = useState("09:00–12:00");
+
+    const navigate = useNavigate();
+
+    const fetchUser = async () => {
+        try {
+            const res = await
+                axios.get(`${process.env.REACT_APP_DB_LINK}Person/${auth.currentUser.uid}.json`)
+            setUser(res.data)
+            console.log(res.data)
+            setUserName(res.data.fullname)
+            setAddress(res.data.address)
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    const fetchUserById = async () => {
+        try {
+            const res = await axios.get(`${process.env.REACT_APP_DB_LINK}Person.json`);
+            const data = res.data;
+
+            if (!data) {
+                return
+            }
+
+            for (let key in data) {
+                if (data[key]) {
+                    if (key === auth.currentUser.uid) {
+                        return data[key].id;
+                    }
+                }
+            }
+        } catch (error) {
+            console.error("Error fetching user by ID:", error);
+            return null;
+        }
+    };
 
     const getProductsFromCart = () => {
         const cartString = localStorage.getItem('cart');
@@ -19,6 +69,9 @@ export default function Cart(props) {
 
     useEffect(() => {
         getProductsFromCart();
+        if (userLoggedIn) {
+            fetchUser();
+        }
     }, []);
 
     useEffect(() => {
@@ -141,6 +194,111 @@ export default function Cart(props) {
         return cartItemElements;
     };
 
+    const getLastOrderId = async () => {
+        try {
+            const res = await axios.get(`${process.env.REACT_APP_DB_LINK}/Order.json`)
+            let maxId = 0
+            for (const key in res.data) {
+                if (res.data[key]) {
+                    const currentId = parseInt(res.data[key].id, 10)
+                    if (!isNaN(currentId) && currentId > maxId) {
+                        maxId = currentId
+                    }
+                }
+            }
+
+            return maxId + 1
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    function getNextDay(date = new Date()) {
+        const nextDay = new Date(date);
+        nextDay.setDate(nextDay.getDate() + 2);
+        return nextDay.toISOString().split('T')[0];
+    }
+
+    const createOrder = async () => {
+        if (userName.trim().length < 1) {
+            return
+        }
+        if (address.trim().length < 1) {
+            return
+        }
+
+        const id = await getLastOrderId();
+
+        const order = {
+            address: address,
+            date: new Date().toISOString(),
+            delivery_time: deliveryTime,
+            delivery_date: getNextDay(),
+            delivery_way: deliveryMethod,
+            payment_way: paymentMethod,
+            person: userLoggedIn ?  await fetchUserById() : "",
+            person_email: "",
+            status: "In process",
+            id: id
+        }
+
+        try {
+            const res = await axios.post(`${process.env.REACT_APP_DB_LINK}/Order.json`, order);
+            console.log("Order has been created");
+        } catch (e) {
+            console.error(e);
+        }
+
+        // add order_items
+        let bonuses = 0
+        const items = JSON.parse(localStorage.getItem("cart"));
+        console.log(items)
+        for (const key in items) {
+            console.log(items[key])
+            const item = {
+                amount: items[key].amount,
+                item_id: parseInt(items[key].item.id, 10),
+                order_id: id,
+                total: items[key].total_price
+            }
+
+            bonuses += parseInt(items[key].total_price)
+
+            console.log("Item: ", item)
+
+            try {
+                const res = await
+                    axios.post(`${process.env.REACT_APP_DB_LINK}/Order_Item.json`, item);
+                console.log("Item has been added");
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        bonuses = parseInt((bonuses / 100), 10)
+        console.log(bonuses)
+
+        const newUser = {
+            ...user,
+            bonuses
+        }
+
+        try {
+            const res = await
+                axios.put(`${process.env.REACT_APP_DB_LINK}/Person/${auth.currentUser.uid}.json`, newUser);
+            console.log("User has been updated");
+        } catch (e) {
+            console.error(e);
+        }
+
+        localStorage.removeItem("cart")
+        window.location.reload()
+
+        navigate("/", {replace: true})
+
+        // send email
+    }
+
     return (
         <div id="cart">
             {/* Header, Breadcrumb, and other static elements remain the same */}
@@ -229,21 +387,21 @@ export default function Cart(props) {
                                 <div className="form-content" id="view-mode">
                                     <div className="form-row">
                                         <div className="form-label">Full name:</div>
-                                        <div className="form-value" id="name-value"></div>
+                                        <div className="form-value" id="name-value">{userName}</div>
                                     </div>
                                     <div className="form-row">
                                         <div className="form-label">Address:</div>
-                                        <div className="form-value" id="address-value"></div>
+                                        <div className="form-value" id="address-value">{address}</div>
                                     </div>
                                 </div>
                                 <div className="form-edit" id="edit-mode">
                                     <label>
                                         Full name:<br/>
-                                        <input type="text" id="full-name" defaultValue=""/>
+                                        <input type="text" id="full-name" value={userName}/>
                                     </label><br/>
                                     <label>
                                         Address:<br/>
-                                        <input type="text" id="address" defaultValue=""/>
+                                        <input type="text" id="address" value={address}/>
                                     </label><br/>
                                     <button id="save-btn">Save</button>
                                     <button id="cancel-btn" type="button">Cancel</button>
@@ -252,19 +410,31 @@ export default function Cart(props) {
                             <div className="form-block">
                                 <div className="form-header">Payment method</div>
                                 <div className="form-content">
-                                    <label><input type="radio" name="payment" defaultChecked/> Credit card</label><br/>
-                                    <label><input type="radio" name="payment"/> Cash to the courier</label><br/>
-                                    <label><input type="radio" name="payment"/> Online payment</label>
+                                    <label><input type="radio" name="payment" defaultChecked
+                                                  onChange={() => setPaymentMethod("Credit card")}/>
+                                        Credit card</label><br/>
+                                    <label><input type="radio" name="payment"
+                                                  onChange={() => setPaymentMethod("Cash to the courier")}/>
+                                        Cash to the courier</label><br/>
+                                    <label><input type="radio" name="payment"
+                                                  onChange={() => setPaymentMethod("Online payment")}/>
+                                        Online payment</label>
                                 </div>
                             </div>
 
                             <div className="form-block">
                                 <div className="form-header">Delivery method</div>
                                 <div className="form-content">
-                                    <label><input type="radio" name="delivery" defaultChecked/> By courier</label><br/>
-                                    <label><input type="radio" name="delivery"/> Pick up from pick-up
-                                        point</label><br/>
-                                    <label><input type="radio" name="delivery"/> Pick up from warehouse</label>
+                                    <label><input type="radio" name="delivery" defaultChecked
+                                                  onChange={() => setDeliveryMethod("By courier")}/>
+                                        By courier</label><br/>
+                                    <label><input type="radio" name="delivery"
+                                                  onChange={() => setDeliveryMethod("Pick up from pick-up\n" +
+                                                      "                                        point")}/>
+                                        Pick up from pick-up point</label><br/>
+                                    <label><input type="radio" name="delivery"
+                                                  onChange={() => setDeliveryMethod("Pick up from warehouse")}/>
+                                        Pick up from warehouse</label>
                                 </div>
                             </div>
 
@@ -275,7 +445,10 @@ export default function Cart(props) {
 
                                 <div className="time-select-container">
                                     <label htmlFor="time-select">Select time:</label>
-                                    <select id="time-select">
+                                    <select
+                                        id="time-select"
+                                        onChange={(event) =>
+                                            setDeliveryTime(event.target.value)}>
                                         <option value="09:00–12:00">09:00–12:00</option>
                                         <option value="12:00–15:00">12:00–15:00</option>
                                         <option value="15:00–18:00">15:00–18:00</option>
@@ -311,7 +484,7 @@ export default function Cart(props) {
                         <div className="summary-total">
                             Total cost <span id="total">0₴</span>
                         </div>
-                        <button className="btn-payment">Proceed to payment</button>
+                        <button className="btn-payment" onClick={createOrder}>Proceed to payment</button>
                     </div>
                 </div>
             </div>

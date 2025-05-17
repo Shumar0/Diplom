@@ -62,7 +62,8 @@ export default function Catalog(props) {
         const objectToCart = {
             amount: 1,
             item: product,
-            total_price: product.price,
+            total_price: product.discount ?
+                parseInt((product.price - (product.price * product.discount / 100)), 10) : product.price,
         };
 
         const cartString = localStorage.getItem('cart');

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import {data, Link} from "react-router-dom";
 import "./styles/style.css";
 import "./styles/header.css";
 import "./styles/footer.css";
@@ -38,40 +38,40 @@ const Favorites = ({ products: initialProducts }) => {
         }
     };
 
-    useEffect(() => {
-        const fetchUserFavoriteItems = async () => {
-            setLoading(true);
-            setError(null);
+    const fetchUserFavoriteItems = async () => {
+        setLoading(true);
+        setError(null);
 
-            const userId = await fetchUserById()
+        const userId = await fetchUserById()
 
-            try {
-                const res = await axios.get(
-                    `${process.env.REACT_APP_DB_LINK}Favourite.json?orderBy="person_id"&equalTo=${userId}`
-                );
-                console.log(res);
-                const favouriteData = res.data;
+        try {
+            const res = await axios.get(
+                `${process.env.REACT_APP_DB_LINK}Favourite.json?orderBy="person_id"&equalTo=${userId}`
+            );
+            console.log(res);
+            const favouriteData = res.data;
 
-                const favouriteItemIds = [];
+            const favouriteItemIds = [];
 
-                if (favouriteData) {
-                    for (const key in favouriteData) {
-                        if (favouriteData.hasOwnProperty(key)) {
-                            favouriteItemIds.push(favouriteData[key].item_id);
-                        }
+            if (favouriteData) {
+                for (const key in favouriteData) {
+                    if (favouriteData.hasOwnProperty(key)) {
+                        favouriteItemIds.push(favouriteData[key].item_id);
                     }
                 }
-                console.log(`User ${userId}'s Favourite Item IDs:`, favouriteItemIds);
-
-                setFavouriteProducts(initialProducts.filter(item => favouriteItemIds.includes(item.id)));
-
-            } catch (err) {
-                console.error("Error fetching user's favourite products:", err);
-                setError("Failed to fetch favourite products.");
-                setLoading(false);
             }
-        };
+            console.log(`User ${userId}'s Favourite Item IDs:`, favouriteItemIds);
 
+            setFavouriteProducts(initialProducts.filter(item => favouriteItemIds.includes(item.id)));
+
+        } catch (err) {
+            console.error("Error fetching user's favourite products:", err);
+            setError("Failed to fetch favourite products.");
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
         fetchUserFavoriteItems();
     }, [initialProducts]);
 
@@ -114,12 +114,27 @@ const Favorites = ({ products: initialProducts }) => {
     const categoryMap = getCategoryMap();
     const summary = updateSummary();
 
-    const deleteFromFavourite = async (key) => {
-        // try {
-        //     const res = axios.delete(`${process.env.REACT_APP_DB_LINK}Favourite/${key}.json`);
-        // } catch (e) {
-        //     console.error(e);
-        // }
+    const deleteFromFavourite = async (item_id) => {
+        try {
+            const res = await axios.get(`${process.env.REACT_APP_DB_LINK}Favourite.json`)
+            if (res.data) {
+                let objectToDeleteKey = null
+                for (const key in res.data) {
+                    if (res.data[key] && res.data[key].item_id === item_id &&
+                        res.data[key].person_id === await fetchUserById()) {
+                        objectToDeleteKey = key;
+                        break
+                    }
+                }
+
+                const deleteObj = await
+                    axios.delete(`${process.env.REACT_APP_DB_LINK}Favourite/${objectToDeleteKey}.json`)
+                console.log(deleteObj);
+                fetchUserFavoriteItems()
+            }
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     return (
