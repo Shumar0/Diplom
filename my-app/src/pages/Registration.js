@@ -102,7 +102,8 @@ export default function Registration() {
                 phone,
                 email,
                 password,
-                bonuses: 0
+                bonuses: 0,
+                role: 'user'
             });
         } catch (error) {
             setErrorMessage(error.message);
@@ -132,7 +133,8 @@ export default function Registration() {
                 phone: "",
                 email,
                 password: "",
-                bonuses: 0
+                bonuses: 0,
+                role: 'user'
             });
         } catch (error) {
             setErrorMessage(error.message);

@@ -11,6 +11,10 @@
     display: flex;
     gap: 20px;
   }
+
+  .order-layout{
+    margin-bottom: 50px;
+  }
   
   .order-form {
     flex-wrap: wrap;

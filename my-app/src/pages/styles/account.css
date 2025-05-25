@@ -289,4 +289,23 @@
     white-space: nowrap;  /* не дає ціні переноситись */
     flex-shrink: 0;
 }
+.logout-button {
+    height: 70px;
+    width: 100%;
+    background-color: #1e1e1e; /* або #f0f0f0, якщо хочеш як у звичайного пункту */
+    border: none;
+    border-radius: 12px;
+    padding: 0 20px;
+    font-weight: 500;
+    font-size: 16px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
 
+.logout-button:hover {
+    background-color: #2a2a2a; /* або інший колір при наведенні */
+}

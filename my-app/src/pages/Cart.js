@@ -280,7 +280,7 @@ export default function Cart(props) {
 
         const newUser = {
             ...user,
-            bonuses
+            bonuses: user.bonuses+bonuses
         }
 
         try {
