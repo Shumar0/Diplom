@@ -119,8 +119,7 @@ const Account = (props) => {
             <div id="account">
                 <div className="profile-layout">
                     <div className="profile-box">
-                        {/*<div className="avatar"></div>*/} <img className="avatar" src={auth.currentUser.photoURL}
-                                                                  alt=""/>
+                        {/*<div className="avatar"></div>*/} <img className="avatar" src={auth.currentUser.photoURL} alt=""/>
                         <div className="profile-name">{user.fullname}</div>
                         <div className="arrow">➤</div>
                     </div>

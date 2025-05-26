@@ -1,10 +1,11 @@
-import { doSignInWithEmailAndPassword, doSignInWithGoogle, doPasswordReset } from '../firebase/auth';
+import { doSignInWithEmailAndPassword, doSignInWithGoogle } from '../firebase/auth';
 import { useAuth } from "../context/authContext";
 import { useState } from "react";
-import { Link, Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from 'lucide-react';
-import './styles/Login.css'
 import { FcGoogle } from "react-icons/fc";
+import { getDatabase, ref, get } from "firebase/database";
+import './styles/Login.css';
 
 export default function Login() {
     const { userLoggedIn } = useAuth();
@@ -15,12 +16,30 @@ export default function Login() {
     const [isSigningIn, setIsSigningIn] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
 
+    const navigate = useNavigate();
+
+    const getRoleAndRedirect = async (uid) => {
+        const dbRef = ref(getDatabase(), 'Person/' + uid);
+        const snapshot = await get(dbRef);
+
+        if (snapshot.exists()) {
+            const role = snapshot.val().role;
+            if (role === 'admin') {
+                navigate('/account-manager');
+            } else {
+                navigate('/');
+            }
+        }
+    };
+
     const onSubmit = async (e) => {
         e.preventDefault();
         setErrorMessage('');
         setIsSigningIn(true);
+
         try {
-            await doSignInWithEmailAndPassword(email, password);
+            const result = await doSignInWithEmailAndPassword(email, password);
+            await getRoleAndRedirect(result.user.uid);
         } catch (err) {
             setErrorMessage(err.message);
             setIsSigningIn(false);
@@ -31,15 +50,17 @@ export default function Login() {
         e.preventDefault();
         setErrorMessage('');
         setIsSigningIn(true);
+
         try {
-            await doSignInWithGoogle();
+            const result = await doSignInWithGoogle();
+            await getRoleAndRedirect(result.user.uid);
         } catch (err) {
             setErrorMessage(err.message);
             setIsSigningIn(false);
         }
     };
 
-    if (userLoggedIn) return <Navigate to="/" replace />;
+    // if (userLoggedIn) return <Navigate to="/" replace />;
 
     return (
         <div className="login-overlay">
@@ -76,10 +97,8 @@ export default function Login() {
                     <FcGoogle /> Login with Google
                 </button>
 
-                {/*<Link className="forgot-link" to="/auth/reset" onClick={(email) => doPasswordReset()}>Forgot the password</Link>*/}
-
                 <p className="register-text">
-                    Don’t have an account? <Link to="/auth/registration">Register here</Link>
+                    Don’t have an account? <a href="/auth/registration">Register here</a>
                 </p>
 
                 {errorMessage && <p className="error-text">{errorMessage}</p>}

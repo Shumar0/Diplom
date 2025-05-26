@@ -1,104 +1,80 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { getDatabase, ref, get, child } from "firebase/database";
+import { getAuth } from "firebase/auth";
 import "./styles/style.css";
 import "./styles/header.css";
 import "./styles/footer.css";
 import "./styles/slider.css";
 import "./styles/account_manager.css";
+import {useAuth} from "../context/authContext";
 
 
-const Account_manager = (props) => {
+const Account_manager = ({ products }) => {
+    const [activeSection, setActiveSection] = useState("profile");
+    const [currentUser, setCurrentUser] = useState(null);
+    const [userOrders, setUserOrders] = useState([]);
+    const [allUsers, setAllUsers] = useState([]);
+    const auth = useAuth();
 
-    const products = props.products;
+    useEffect(() => {
+        const auth = getAuth();
+        const db = getDatabase();
+        const dbRef = ref(db);
 
-    const dashboardData = {
-        dateRange: 'From 1–31 May, 2025',
-        pieChartData: [
-            { label: 'Device', value: 28, color: '#dcd6f3' },
-            { label: 'Laptops', value: 40, color: '#5b5fa4' },
-            { label: 'Phone', value: 32, color: '#a9aef1' }
-        ],
-        barChart: {
-            change: 2.1,
-            date: 'Sales from 1–31 May, 2025',
-        },
-        totalCustomers: {
-            value: 5423,
-            change: 2
-        }
-    };
+        const fetchUserData = async () => {
+            const user = auth.currentUser;
+            if (!user) return;
 
-    const users = {
-        user1: {
-            fullName: "John Smith",
-            statuses: ["Admin"],
-            email: "john.smith@example.com",
-            telephone: "+1 234 567 8900"
-        },
-        user2: {
-            fullName: "Emily Johnson",
-            statuses: ["Manager"],
-            email: "emily.johnson@example.com",
-            telephone: "+1 987 654 3210"
-        }
-    };
+            const snapshot = await get(child(dbRef, `Person/${user.uid}`));
+            if (snapshot.exists()) {
+                setCurrentUser(snapshot.val());
+            }
+        };
 
-    const orders = [
-        {
-            id: 1,
-            name: 'Marc Arnold',
-            address: 'Poltava city, M. Kotsiubynskyi lane, 18',
-            delivery: 'by courier on May 25 at 15:00',
-            status: 'On way',
-            productId: 1
-        },
-        {
-            id: 2,
-            name: 'Marc Arnold',
-            address: 'Poltava city, M. Kotsiubynskyi lane, 18',
-            delivery: 'by courier on May 25 at 15:00',
-            status: 'Delivered',
-            productId: 1
-        },
-        {
-            id: 3,
-            name: 'Marc Arnold',
-            address: 'Poltava city, M. Kotsiubynskyi lane, 18',
-            delivery: 'by courier on May 25 at 15:00',
-            status: 'Is being drawn up',
-            productId: 1
-        }
-    ];
+        // const fetchUserData = async () => {
+        //     const user = auth.currentUser;
+        //     if (!user) return;
+        //
+        //     const snapshot = await get(child(dbRef, `Person/${user.uid}`));
+        //     if (snapshot.exists()) {
+        //         setCurrentUser(snapshot.val());
+        //     }
+        // };
+
+        const fetchOrders = async () => {
+            const db = getDatabase();
+            const dbRef = ref(db);
+
+            const snapshot = await get(child(dbRef, `Order`));
+            setUserOrders(snapshot.val());
+        };
+
+        fetchUserData();
+        fetchOrders();
+    }, []);
 
     const getStatusClass = (status) => {
         switch (status) {
-            case 'Delivered':
-                return 'order-card delivered';
-            case 'On way':
-                return 'order-card on-way';
-            case 'Is being drawn up':
-                return 'order-card pending';
-            default:
-                return 'order-card';
+            case 'Delivered': return 'order-card delivered';
+            case 'On way': return 'order-card on-way';
+            case 'Is being drawn up': return 'order-card pending';
+            default: return 'order-card';
         }
     };
 
-    const loggedInUserId = "user2";
-
-    const currentUser = users[loggedInUserId];
-
-    const [activeSection, setActiveSection] = useState("profile");
-
-
     const sections = {
-        profile: (
+        profile: currentUser ? (
             <div className="profile-section">
                 <div className="profile-box">
-                    <div className="avatar"></div>
-                    <div className="profile-name">{currentUser.fullName}</div>
+                    <img
+                        className="avatar"
+                        src={auth.currentUser?.photoURL || "/default-avatar.png"}
+                        alt="User Avatar"
+                    />
+                    <div className="profile-name">{currentUser.fullname}</div>
                     <div className="arrow">➤</div>
                 </div>
-
                 <div className="account-details">
                     <h2>Account details</h2>
                     <div className="details-grid">
@@ -109,97 +85,55 @@ const Account_manager = (props) => {
                             <p><strong>Telephone:</strong></p>
                         </div>
                         <div>
-                            <p>{currentUser.fullName}</p>
-                            <p>{currentUser.statuses.join(", ")}</p>
+                            <p>{currentUser.fullname}</p>
+                            <p>{currentUser.role}</p>
                             <p>{currentUser.email}</p>
-                            <p>{currentUser.telephone}</p>
+                            <p>{currentUser.phone || '—'}</p>
                         </div>
                     </div>
                 </div>
             </div>
-        ),
+        ) : <p>Loading profile...</p>,
+
         orders: (
             <div className="orders-section">
                 <h2>User Orders</h2>
                 <div className="orders-grid">
-                    {orders.map(order => {
-                        const product = products.find(p => p.id === order.productId);
-                        return (
-                            <div className={getStatusClass(order.status)} key={order.id}>
-                                <div className="image-wrapper">
-                                    {product && (
-                                        <img className="order-image" src={product.image} alt={product.title}/>
-                                    )}
-                                </div>
+                    {Object.entries(userOrders).map(([key,order]) =>
+                        (
+                            <div className={getStatusClass(order.status || 'Is being drawn up')} key={key}>
+                                {/*<div className="image-wrapper">*/}
+                                {/*    {product && (*/}
+                                {/*        <img className="order-image" src={product.image} alt={product.title}/>*/}
+                                {/*    )}*/}
+                                {/*</div>*/}
                                 <div className="order-details">
-                                    <p><strong>Name:</strong> {order.name}</p>
-                                    <p>
-                                        <strong>Address:</strong>
-                                        <span>{order.address}</span>
-                                    </p>
-                                    <p><strong>Delivery:</strong> {order.delivery}</p>
-                                    <p><strong>Delivery status:</strong> {order.status}</p>
+
+                                    <p><strong>Address:</strong> {order.address}</p>
+                                    <p><strong>Delivery:</strong> {order.delivery_way} {order.delivery_time}</p>
+                                    <p><strong>Status:</strong> {order.status|| 'Is being drawn up'}</p>
+
                                 </div>
                             </div>
-                        );
-                    })}
+                        )
+                    )}
                 </div>
             </div>
         ),
+
         dashboard: (
             <div className="dashboard">
                 <h2>Dashboard</h2>
-                <div className="dashboard-grid">
-
-                    {/* Pie Chart Card */}
-                    <div className="dashboard-card pie-chart">
-                        <h4>Order Product</h4>
-                        <p className="subtext">{dashboardData.dateRange}</p>
-                        <div className="chart-placeholder">[Pie Chart]</div>
-                        <ul className="legend">
-                            {dashboardData.pieChartData.map((item, idx) => (
-                                <li key={idx}>
-                <span
-                    className="legend-color"
-                    style={{backgroundColor: item.color}}
-                ></span>
-                                    {item.label} — {item.value}%
-                                </li>
-                            ))}
-                        </ul>
-                        <button className="export-btn">Export Report</button>
-                    </div>
-
-                    {/* Bar Chart Card */}
-                    <div className="dashboard-card bar-chart">
-                        <h4>Orders</h4>
-                        <p className="subtext up">↑ {dashboardData.barChart.change}% vs last week</p>
-                        <p className="subtext">{dashboardData.barChart.date}</p>
-                        <div className="chart-placeholder">[Bar Chart]</div>
-                        <button className="export-btn">Export Report</button>
-                    </div>
-
-                    {/* Total Customers */}
-                    <div className="dashboard-card total-customers">
-                        <div className="icon-circle">
-                           <img src="images/user.svg" alt="User"/>  {/* Нужна иконка свг*/}
-                        </div>
-                        <div>
-                            <h3>{dashboardData.totalCustomers.value.toLocaleString()}</h3>
-                            <p className="subtext">Total Customers</p>
-                            <p className="subtext up-blue">↑ {dashboardData.totalCustomers.change}% this month</p>
-                        </div>
-                    </div>
-                </div>
+                <p>Additional dashboard data here...</p>
             </div>
         )
     };
 
     const navItems = [
-        {id: "profile", label: "Personal account"},
-        {id: "orders", label: "Orders"},
-        {id: "dashboard", label: "Dashboard"},
-        {id: "content management", label: "Content management"},
+        { id: "profile", label: "Personal account" },
+        { id: "orders", label: "Orders" },
+        { id: "dashboard", label: "Dashboard" },
+        { id: "content management", label: "Content management" },
     ];
 
     return (
@@ -265,7 +199,7 @@ const Account_manager = (props) => {
                                 <img src="images/heart.svg" alt="Favorites" className="icon icon-heart"/>
                             </button>
                         </Link>
-                        <Link to="/account">
+                        <Link to="/account-manager">
                             <button className="icon-button">
                                 <img src="images/user.svg" alt="Profile" className="icon icon-user"/>
                             </button>
