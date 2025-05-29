@@ -72,11 +72,7 @@
     font-weight: 600;
     color: #000;
 }
-#account-manager .profile-section {
-    display: flex;
-    flex-direction: column;
-    gap: 20px; /* Відстань між profile-box і account-details */
-}
+
 
 #account-manager .orders-grid {
     display: grid;
@@ -128,8 +124,6 @@
     justify-content: center;
     width: 150px;
 }
-
-
 
 .order-details p {
     display: flex;
