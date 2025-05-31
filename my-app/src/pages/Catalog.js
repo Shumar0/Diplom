@@ -7,7 +7,7 @@ import Header from './Header';
 import Footer from './Footer';
 import Delivery_box from './Delivery_box';
 import {Link, useNavigate} from "react-router-dom";
-import axios from "axios";
+
 
 export default function Catalog(props) {
     const products = props.products;
@@ -18,22 +18,26 @@ export default function Catalog(props) {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 5;
 
-    // Завантаження конфігів
+
+
+    // Групуємо specs з товарів, для масивів беремо лише перший елемент
     useEffect(() => {
-        axios.get(`${process.env.REACT_APP_DB_LINK}Config.json`)
-            .then(res => {
-                const data = res.data;
-                const grouped = {};
-                for (let i = 1; i < data.length; i++) {
-                    const conf = data[i];
-                    if (!conf?.item_id) continue;
-                    if (!grouped[conf.item_id]) grouped[conf.item_id] = [];
-                    grouped[conf.item_id].push({ key: conf.key, value: conf.value });
+        const grouped = {};
+
+        for (const product of products) {
+            if (!product.id || !product.specs) continue;
+            const specsArray = Object.entries(product.specs).map(([key, value]) => {
+                let displayValue = value;
+                if (Array.isArray(value)) {
+                    displayValue = value[0];
                 }
-                setConfigs(grouped);
-            })
-            .catch(err => console.error('Error', err));
-    }, []);
+                return { key, value: displayValue };
+            });
+            grouped[product.id] = specsArray;
+        }
+
+        setConfigs(grouped);
+    }, [products]);
 
     function getNextDay(date = new Date()) {
         const nextDay = new Date(date);
@@ -55,9 +59,35 @@ export default function Catalog(props) {
                     ))}
                 </div>
                 <div className="chahracteristics-block">
-                    {confList.map((conf, index) => (
-                        <p key={`val-${index}`} className="chahracteristic-value data-field">{conf.value}</p>
-                    ))}
+                    {confList.map((conf, index) => {
+                        const value = conf.value;
+                        const isColor = typeof value === 'string' && (
+                            /^#([0-9a-f]{3}){1,2}$/i.test(value) ||
+                            /^rgb/.test(value) ||
+                            ['red', 'green', 'blue', 'black', 'white', 'gray', 'yellow', 'purple', 'orange'].includes(value.toLowerCase())
+                        );
+
+                        return (
+                            <p
+                                key={`val-${index}`}
+                                className="chahracteristic-value data-field"
+                                style={{ display: 'flex', alignItems: 'center' }}
+                            >
+                                {isColor ? (
+                                    <span style={{
+                                        width: '16px',
+                                        height: '16px',
+                                        borderRadius: '50%',
+                                        backgroundColor: value,
+                                        border: '1px solid #ccc',
+                                        display: 'inline-block',
+                                    }} />
+                                ) : (
+                                    <span>{value}</span>
+                                )}
+                            </p>
+                        );
+                    })}
                 </div>
             </div>
         );
@@ -68,8 +98,8 @@ export default function Catalog(props) {
         const [visible, setVisible] = useState(false);
 
         useEffect(() => {
-            const appearDelay = index * 150; // Поступова поява
-            const disappearDelay = 3000 + index * 400; // Поступове зникнення
+            const appearDelay = index * 150;
+            const disappearDelay = 3000 + index * 400;
 
             const appearTimeout = setTimeout(() => setVisible(true), appearDelay);
             const hideTimeout = setTimeout(() => setVisible(false), disappearDelay);
@@ -103,7 +133,7 @@ export default function Catalog(props) {
             amount: 1,
             item: product,
             total_price: product.discount
-                ? parseInt((product.price - (product.price * product.discount / 100)), 10)
+                ? parseInt(product.price - (product.price * product.discount / 100), 10)
                 : product.price,
         };
 
@@ -130,14 +160,14 @@ export default function Catalog(props) {
     const paginate = (pageNumber) => {
         if (pageNumber < 1 || pageNumber > totalPages) return;
         setCurrentPage(pageNumber);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     };
-
 
     return (
         <div id="catalog-page">
             {/* Повідомлення */}
             <div className="notifications-container">
-                {notificationMessages.map(({ id, text }, index) => (
+                {notificationMessages.map(({id, text}, index) => (
                     <NotificationItem
                         key={id}
                         id={id}
@@ -148,7 +178,7 @@ export default function Catalog(props) {
                 ))}
             </div>
 
-            <Header />
+            <Header/>
 
             {/* Хлібні крихти */}
             <nav className="breadcrumb" id="breadcrumb"></nav>
@@ -170,7 +200,7 @@ export default function Catalog(props) {
                         <div className="filter-options">
                             {["Apple", "Asus", "HP"].map(brand => (
                                 <label className="custom-radio" key={brand}>
-                                    <input type="checkbox" name="brand" value={brand} />
+                                    <input type="checkbox" name="brand" value={brand}/>
                                     <span className="checkmark"></span>
                                     {brand}
                                 </label>
@@ -188,8 +218,8 @@ export default function Catalog(props) {
                         <div className="filter-options">
                             <div className="range-container">
                                 <div className="slider-track"></div>
-                                <input type="range" id="min-price" className="range-slider" />
-                                <input type="range" id="max-price" className="range-slider" />
+                                <input type="range" id="min-price" className="range-slider"/>
+                                <input type="range" id="max-price" className="range-slider"/>
                             </div>
                             <div className="range-labels">
                                 <span id="min-price-label">0</span> ₴ — <span id="max-price-label">10000</span> ₴
@@ -202,7 +232,7 @@ export default function Catalog(props) {
                         <div className="filter-title">Available</div>
                         <div className="filter-options">
                             <label className="custom-radio">
-                                <input type="checkbox" id="availability-checkbox" value="inStock" />
+                                <input type="checkbox" id="availability-checkbox" value="inStock"/>
                                 <span className="checkmark"></span>
                                 In stock
                             </label>
@@ -211,20 +241,16 @@ export default function Catalog(props) {
                 </div>
 
                 <div className="products" id="product-list">
-                    {products.map(product => (
+                    {currentProducts.map(product => (
                         <div
                             key={product.id}
                             className="product-card"
-                            style={product.discount > 0 ? {
-                                backgroundColor: '#f9f2f2',
-                                border: '1px solid #ffe3e3'
-                            } : {}}
                         >
                             <div className="left-product-block" onClick={() =>
                                 navigator(`/product/${product.id}`)}>
                                 <div className="product-image-block">
                                     <div className="product-image-slider">
-                                        <img className="product-image" src={product.image} alt={product.title} />
+                                        <img className="product-image" src={product.image} alt={product.title}/>
                                     </div>
                                 </div>
                                 <div className="product-info-block">
@@ -240,12 +266,12 @@ export default function Catalog(props) {
                             <div className="right-product-block">
                                 <div className="product-status">
                                     <div className="status-indicator"
-                                         style={{ backgroundColor: product.available ? 'green' : 'red' }}></div>
+                                         style={{backgroundColor: product.available ? 'green' : 'red'}}></div>
                                     <p className="status-text">{product.available ? 'In stock' : 'Out of stock'}</p>
                                 </div>
                                 <div className="delivery-block">
                                     <div className="delivery-icon">
-                                        <Delivery_box width="100" height="100" />
+                                        <Delivery_box width="100" height="100"/>
                                     </div>
                                     <p className="delivery-data">
                                         {product.available ? `Delivery: ${getNextDay()}` : 'No info'}
@@ -272,7 +298,20 @@ export default function Catalog(props) {
                     ))}
                 </div>
             </div>
-            <Footer />
+
+            <div className="pagination">
+                {Array.from({length: totalPages}, (_, index) => (
+                    <div
+                        key={index}
+                        className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}
+                        onClick={() => paginate(index + 1)}
+                    >
+                        {index + 1}
+                    </div>
+                ))}
+            </div>
+
+            <Footer/>
         </div>
     );
 }

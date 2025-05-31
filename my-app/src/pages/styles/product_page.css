@@ -137,8 +137,7 @@
 #product .inner-container {
     max-width: 1080px;
     margin: 0 auto;
-    padding: 0 20px;
-    display: flex; /* перемістили сюди */
+    display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
     overflow: hidden;
@@ -190,8 +189,17 @@
 }
 
 #product .product-info-right .bonuses {
+    font-size: 20px;
     margin-bottom: 15px;
-    color: #555;
+    color: #ADACAC;
+}
+
+.bonus-icon {
+    width: 20px !important;      /* робимо менше */
+    height: 20px !important;
+    fill: #ADACAC !important;    /* новий колір */
+
+    vertical-align: middle;      /* вирівнювання по тексту */
 }
 
 #product .save-note {
@@ -393,4 +401,37 @@
     height: 100%;
     background-color: #008CF6;
     border-radius: 5px;
+}
+
+.Order-button {
+    background-color: #0071e3; /* яскравий синій */
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 12px 50px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    user-select: none;
+    box-shadow: 0 4px 8px rgba(0, 113, 227, 0.3);
+}
+
+.Order-button:hover:not(:disabled) {
+    background-color: #005bb5; /* темніший синій при наведенні */
+    box-shadow: 0 6px 12px rgba(0, 91, 181, 0.5);
+}
+
+.Order-button:active:not(:disabled) {
+    background-color: #004080; /* ще темніший при натисканні */
+    box-shadow: 0 2px 4px rgba(0, 64, 128, 0.7);
+    transform: translateY(1px);
+}
+
+.Order-button:disabled {
+    background-color: #cccccc;
+    color: #666666;
+    cursor: not-allowed;
+    box-shadow: none;
+    opacity: 0.7;
 }

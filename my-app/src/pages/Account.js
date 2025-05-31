@@ -8,6 +8,8 @@ import {useAuth} from "../context/authContext";
 import axios from "axios";
 import Footer from "./Footer";
 import Header from "./Header";
+import Bonus from "./Bonus";
+import {Baby} from "lucide-react";
 
 
 const Account = (props) => {
@@ -376,15 +378,9 @@ const Account = (props) => {
     const navItems = [
         {id: "profile", label: "Personal account"},
         {id: "orders", label: "Orders"},
-        {
-            id: "bonuses",
+        {id: "bonuses",
             label: (
-                <>
-                    Bonuses{" "}
-                    <span className="bonus-info">
-            {user.bonuses} <img src="/images/Group.svg" alt="bonus"/>
-          </span>
-                </>
+                <>Bonuses{" "} <span className="bonus-info"> {user.bonuses} <Bonus fillColor="#007AFF" width={24} height={24} /> </span> </>
             ),
         },
         {id: "privileges", label: "Your privileges"},

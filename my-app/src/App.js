@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+  import React, { useState, useEffect } from "react";
 import {BrowserRouter as Router, Routes, Route, Navigate} from "react-router-dom";
 import Main from "./pages/Main";
 import Catalog from "./pages/Catalog";
@@ -38,23 +38,20 @@ function App() {
                     return;
                 }
 
-                const loadedItems = [];
-
-                for (const key in data) {
-                    if (data[key]) {
-                        loadedItems.push({
-                            id: data[key].id,
-                            brand: data[key].brand,
-                            title: data[key].title,
-                            price: data[key].price,
-                            image: data[key].image,
-                            amount_on_stock: data[key].amount_on_stock,
-                            category: data[key].category,
-                            available: data[key].amount_on_stock > 0,
-                            discount: data[key].discount
-                        });
-                    }
-                }
+                const loadedItems = Object.entries(data)
+                    .filter(([key, item]) => item !== null) // ⛔️ Фільтруємо null
+                    .map(([key, item]) => ({
+                        id: item.id || key,
+                        brand: item.brand,
+                        title: item.title,
+                        price: item.price,
+                        image: item.image,
+                        amount_on_stock: item.amount_on_stock,
+                        category: item.category,
+                        available: item.amount_on_stock > 0,
+                        discount: item.discount || 0,
+                        specs: item.specs || {},
+                    }));
 
                 setItems(loadedItems);
             })

@@ -48,7 +48,7 @@ const Header = () => {
 
             <div className="header-center">
                 <Link to="/">
-                    <img src="images/logo.png" alt="NextTech Logo" className="logo" />
+                    <img src="https://firebasestorage.googleapis.com/v0/b/market-4376c.firebasestorage.app/o/logo.png?alt=media&token=74639de1-46ad-47c0-9236-058de8f19b3d" alt="NextTech Logo" className="logo" />
                 </Link>
             </div>
 
@@ -56,23 +56,23 @@ const Header = () => {
                 <div className="search-bar">
                     <input type="text" placeholder="Site search..." />
                     <button className="search-button">
-                        <img src="images/search.svg" alt="Search" className="icon-small" />
+                        <img src="https://firebasestorage.googleapis.com/v0/b/market-4376c.firebasestorage.app/o/search.svg?alt=media&token=f3cc5479-5ef3-4ae4-aa8d-cc4a2e8d55f2" alt="Search" className="icon-small" />
                     </button>
                 </div>
                 <div className="header-icons">
                     <Link to="/cart">
                         <button className="icon-button">
-                            <img src="images/cart.svg" alt="Cart" className="icon icon-cart" />
+                            <img src="https://firebasestorage.googleapis.com/v0/b/market-4376c.firebasestorage.app/o/cart.svg?alt=media&token=b3fd4578-5e7b-4e90-89d9-767281054677" alt="Cart" className="icon icon-cart" />
                         </button>
                     </Link>
                     <Link to="/favorites">
                         <button className="icon-button">
-                            <img src="images/heart.svg" alt="Favorites" className="icon icon-heart" />
+                            <img src="https://firebasestorage.googleapis.com/v0/b/market-4376c.firebasestorage.app/o/heart.svg?alt=media&token=a75130aa-146f-42b1-9c10-526018d4b695" alt="Favorites" className="icon icon-heart" />
                         </button>
                     </Link>
                     <Link to="/account">
                         <button className="icon-button">
-                            <img src="images/user.svg" alt="Profile" className="icon icon-user" />
+                            <img src="https://firebasestorage.googleapis.com/v0/b/market-4376c.firebasestorage.app/o/user.svg?alt=media&token=20951306-0fa1-4433-8127-f01b4ba1c769" alt="Profile" className="icon icon-user" />
                         </button>
                     </Link>
                 </div>
