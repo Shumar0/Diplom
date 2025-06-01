@@ -159,10 +159,10 @@ export default function Product() {
                                     setSelectedSpecs((prev) => ({ ...prev, [id]: value }))
                                 }
                                 type="button"
-                            >
-                <span style={{ fontSize: "20px", fontWeight: "600" }}>
-                  {value.toString().replace(/[^\d]/g, "")}
-                </span>
+                                >
+                                <span style={{ fontSize: "20px", fontWeight: "600" }}>
+                                  {value.toString().replace(/[^\d]/g, "")}
+                                </span>
                                 <span
                                     style={{
                                         fontSize: "12px",

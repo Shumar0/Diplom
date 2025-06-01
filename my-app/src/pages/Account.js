@@ -168,6 +168,24 @@ const Account = (props) => {
         }
     };
 
+    const OrderImages = ({ products }) => {
+        const maxVisible = 3;
+        const extraCount = products.length - maxVisible;
+
+        if (products.length === 1) {
+            return (
+                <img
+                    src={products[0].image}
+                    alt={products[0].title}
+                    className="order-single-image"
+                    width={120}
+                    height={120}
+                    style={{objectFit: 'contain', borderRadius: '8px'}}
+                />
+            );
+        }
+    };
+
     const sections = {
         profile: (
             <div id="account-profile">
@@ -255,38 +273,125 @@ const Account = (props) => {
                 <h2 className="section-title">Orders</h2>
                 {orders.length > 0 ? (
                     <div className="orders-container">
-                        {orders.map((order, index) => (
-                            <div key={index} className={getStatusClass(order.status)}>
-                                <div className="order-products">
-                                    {order.products.map((item, idx) => {
-                                        const product = products.find(p => p.id === item.item_id);
-                                        if (!product) return null;
-                                        return (
-                                            <div key={idx} className="product-card">
-                                                <img src={product.image} alt={product.title} className="product-img"/>
-                                                <div className="product-details">
-                                                    <div className="product-info">
-                                                        <h4>{product.title}</h4>
-                                                        <p>Price: {product.price}₴</p>
+                        {orders.map((order, index) => {
+                            const orderProducts = order.products
+                                .map(item => products.find(p => p.id === item.item_id))
+                                .filter(Boolean);
+
+                            const maxVisible = 3;
+                            const displayedProducts = orderProducts.slice(0, maxVisible);
+                            const extraCount = orderProducts.length - maxVisible;
+
+                            const totalSum = order.products.reduce((sum, item) => {
+                                const product = products.find(p => p.id === item.item_id);
+                                if (!product) return sum;
+                                const price = product.discount
+                                    ? product.price - (product.price * product.discount) / 100
+                                    : product.price;
+                                return sum + price * (item.amount || 1);
+                            }, 0);
+
+                            return (
+                                <div
+                                    key={index}
+                                    className={`order-card ${getStatusClass(order.status)}`}
+                                    style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: 16,
+                                        padding: 12,
+                                        borderRadius: 8,
+                                        marginBottom: 12,
+                                    }}
+                                >
+                                    <div
+                                        className="order-images"
+                                        style={{ width: 120, height: 120, flexShrink: 0 }}
+                                    >
+                                        {orderProducts.length === 1 ? (
+                                            <img
+                                                src={orderProducts[0].image}
+                                                alt={orderProducts[0].title}
+                                                className="order-single-image"
+                                                style={{
+                                                    width: 120,
+                                                    height: 120,
+                                                    objectFit: 'contain',
+                                                    borderRadius: 8,
+                                                }}
+                                            />
+                                        ) : (
+                                            <div
+                                                className="order-images-grid"
+                                                style={{
+                                                    display: 'grid',
+                                                    gridTemplateColumns: 'repeat(2, 1fr)',
+                                                    gridTemplateRows: 'repeat(2, 1fr)',
+                                                    gap: 4,
+                                                    width: 120,
+                                                    height: 120,
+                                                    borderRadius: 8,
+                                                    overflow: 'hidden',
+                                                }}
+                                            >
+                                                {displayedProducts.map((product, idx) => (
+                                                    <img
+                                                        key={idx}
+                                                        src={product.image}
+                                                        alt={product.title}
+                                                        style={{
+                                                            width: '100%',
+                                                            height: '100%',
+                                                            objectFit: 'contain',
+                                                            borderRadius: 6,
+                                                        }}
+                                                    />
+                                                ))}
+                                                {extraCount > 0 && (
+                                                    <div
+                                                        className="order-more-images"
+                                                        style={{
+                                                            background: '#D9D9D9',
+                                                            borderRadius: 6,
+                                                            display: 'flex',
+                                                            justifyContent: 'center',
+                                                            alignItems: 'center',
+                                                            fontWeight: '700',
+                                                            fontSize: '1.2rem',
+                                                            color: '#555',
+                                                            userSelect: 'none',
+                                                        }}
+                                                    >
+                                                        +{extraCount}
                                                     </div>
-                                                    <div className="order-info">
-                                                        <strong>{order.status}</strong>
-                                                        <div
-                                                            className="light">{order.delivery_date} {order.delivery_time}</div>
-                                                    </div>
-                                                </div>
+                                                )}
                                             </div>
-                                        );
-                                    })}
+                                        )}
+                                    </div>
+                                    <div className="order-info" style={{ flexGrow: 1 }}>
+                                        <strong className="order-status" style={{ fontSize: '1.1rem' }}>
+                                            {order.status}
+                                        </strong>
+                                        <div className="order-delivery-date" style={{ marginTop: 8 }}>
+                                            {order.delivery_date} {order.delivery_time}
+                                        </div>
+                                        <div
+                                            className="order-total-sum"
+                                            style={{ marginTop: 8, fontWeight: '600' }}
+                                        >
+                                            Total: {totalSum.toFixed(2)}₴
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 ) : (
                     <p>No current orders in progress.</p>
                 )}
             </div>
         ),
+
 
         bonuses: <div>[Bonuses Info]</div>,
         privileges: <div>[Privileges Content]</div>,
@@ -317,13 +422,13 @@ const Account = (props) => {
                                 <button type="button" onClick={() => setIsEditing(true)}>Change</button>
                             )}
                         </div>
-                            <form id="account-form" onSubmit={(e) => e.preventDefault()}>
-                                <div className="details-row">
-                                    <p><strong>Full Name:</strong></p>
-                                    <input
-                                        type="text"
-                                        value={user.fullname}
-                                        onChange={(e) => setUser({...user, fullname: e.target.value})}
+                        <form id="account-form" onSubmit={(e) => e.preventDefault()}>
+                            <div className="details-row">
+                                <p><strong>Full Name:</strong></p>
+                                <input
+                                    type="text"
+                                    value={user.fullname}
+                                    onChange={(e) => setUser({...user, fullname: e.target.value})}
                                         disabled={!isEditing}
                                     />
                                 </div>

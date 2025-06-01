@@ -11,7 +11,7 @@
   align-items: flex-start;
   gap: 20px;
   max-width: var(--max-width);
-  min-height: 120px;
+  min-height: 140px;
 }
 
 #catalog-page #product-count {
@@ -34,12 +34,14 @@
   background-color: white;
   color: #1f1f1f;
   font-family: 'Gilroy-Light', sans-serif;
-  cursor: default;
-  transition: background 0.3s;
+
+  cursor: pointer;            /* змінили з default на pointer */
+  user-select: none;          /* заборона виділення тексту */
+  transition: none;           /* скасувати плавну зміну */
 }
 
 #catalog-page .active-filter:hover {
-  background: #f0f0f0;
+  background-color: white !important; /* заборона зміни фону при ховері */
 }
 
 #catalog-page .filter-group {
@@ -336,22 +338,47 @@
   background-color: #ADACAC;
 }
 
-#catalog-page .range-container {
+/* Рядок з мінімальною ціною, повзунками і максимальною ціною */
+.price-range-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Мінімальна і максимальна ціна з боків */
+.min-price-label,
+.max-price-label {
+  width: 40px;
+  font-size: 14px;
+  color: #1f1f1f;
+  font-family: "Gilroy-Light", sans-serif;
+  text-align: center;
+  user-select: none;
+}
+
+/* Контейнер для повзунків (накладених) */
+.range-container {
   position: relative;
-  width: 100%;
+  flex-grow: 1; /* займати решту рядка */
   height: 40px;
 }
 
-#catalog-page .range-slider {
+/* Повзунки (input[type=range]) накладаються */
+.range-slider {
   position: absolute;
+  left: 0;
+  top: 0;
   width: 100%;
   height: 40px;
   background: none;
   pointer-events: none;
   -webkit-appearance: none;
+  z-index: 2;
+  cursor: pointer;
 }
 
-#catalog-page .range-slider::-webkit-slider-thumb {
+/* Активна зона для користувача */
+.range-slider::-webkit-slider-thumb {
   pointer-events: auto;
   -webkit-appearance: none;
   height: 20px;
@@ -359,21 +386,34 @@
   border-radius: 50%;
   background: #1F1F1F;
   border: none;
-  cursor: pointer;
-  margin-top: 2px; /* 👈 опускає кружечки вниз */
-  z-index: 2;
+  margin-top: 2px; /* опускання кружечків */
   position: relative;
+  z-index: 3;
+  cursor: pointer;
 }
 
-#catalog-page .slider-track {
+/* Трек (лінія) під повзунками */
+.slider-track {
   position: absolute;
   height: 4px;
   width: 100%;
-
-  z-index: 0;
   top: 50%;
+  left: 0;
   transform: translateY(-50%);
   border-radius: 5px;
+  background-color: #007AFF; /* світло-сіра лінія */
+  z-index: 1;
+}
+
+/* Значення цін під повзунками */
+.range-labels {
+  margin-top: 6px;
+  font-size: 14px;
+  color: #1f1f1f;
+  font-family: "Gilroy-Light", sans-serif;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
 }
 
 #catalog-page .filters-container {
