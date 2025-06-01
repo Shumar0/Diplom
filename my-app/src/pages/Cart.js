@@ -7,6 +7,7 @@ import './styles/footer.css';
 import './styles/cart.css';
 import {useAuth} from "../context/authContext";
 import axios from "axios";
+import * as emailjs from "emailjs-com";
 
 export default function Cart(props) {
 
@@ -291,12 +292,48 @@ export default function Cart(props) {
             console.error(e);
         }
 
-        localStorage.removeItem("cart")
-        window.location.reload()
-
-        navigate("/", {replace: true})
+        const email = user.email;
+        const customerName = userName
 
         // send email
+
+        const itemsHtml = Object.values(items).map(({ item, amount, total_price }) => (
+            `<tr style="border-bottom: 1px solid #ddd;">
+     <td style="padding: 10px;"><img src="${item.image}" alt="${item.name}" width="64" style="border-radius: 4px;" /></td>
+     <td style="padding: 10px;">
+       <div style="font-weight: 600;">${item.brand} ${item.title}</div>
+       <div style="color: #777; font-size: 12px;">Qty: ${amount}</div>
+     </td>
+     <td style="padding: 10px; text-align: right; font-weight: bold;">${total_price.toFixed(2)}</td>
+   </tr>`
+        )).join("");
+
+        const emailParams = {
+            id: id,
+            email: user.email,
+            customerName: userName,
+            items_html: itemsHtml,
+            cost: {
+                total: Object.values(items).reduce((sum, it) => sum + it.total_price, 0)
+            }
+        }
+
+        try {
+            await emailjs.send(
+                'service_kryhz9o',
+                'template_cqf7437',
+                emailParams,
+                'zInO861ZWknLUMjnn'
+            );
+            console.log("Email sent");
+        } catch (e) {
+            console.error("Failed to send email", e);
+        }
+
+        localStorage.removeItem("cart")
+
+        window.location.reload()
+        navigate("/")
     }
 
     return (
