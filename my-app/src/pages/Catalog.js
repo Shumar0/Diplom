@@ -238,6 +238,7 @@ export default function Catalog(props) {
                 ))}
             </div>
 
+
             <Header />
             <nav className="breadcrumb" id="breadcrumb"></nav>
 
@@ -258,17 +259,18 @@ export default function Catalog(props) {
 
             <div className="main">
                 <div className="filters-container">
+
                     {/* BRAND FILTER */}
                     <div className={`filter-group ${brandOpen ? 'open' : ''}`}>
                         <button className="filter-toggle" onClick={toggleBrand}>
                             Brand
                             <span className="arrow">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                     strokeWidth="2"
-                                     strokeLinecap="round" strokeLinejoin="round">
-                                <polyline points="6 9 12 15 18 9"/>
-                                </svg>
-                            </span>
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                             strokeWidth="2"
+                                             strokeLinecap="round" strokeLinejoin="round">
+                                        <polyline points="6 9 12 15 18 9"/>
+                                        </svg>
+                                    </span>
                         </button>
                         <div className="filter-options">
                             {uniqueBrands.map(brand => (
@@ -291,11 +293,11 @@ export default function Catalog(props) {
                         <button className="filter-toggle" onClick={togglePrice}>
                             Price
                             <span className="arrow">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-                                     strokeLinecap="round" strokeLinejoin="round">
-                                  <polyline points="6 9 12 15 18 9"/>
-                                </svg>
-                            </span>
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+                                             strokeLinecap="round" strokeLinejoin="round">
+                                          <polyline points="6 9 12 15 18 9"/>
+                                        </svg>
+                                    </span>
                         </button>
 
                         <div className="filter-options">
@@ -351,6 +353,7 @@ export default function Catalog(props) {
                         </div>
                     </div>
                 </div>
+
                 <div className="products" id="product-list">
                     {currentProducts.map(product => (
                         <div key={product.id} className="product-card">
@@ -397,20 +400,21 @@ export default function Catalog(props) {
                         </div>
                     ))}
                 </div>
-            </div>
 
-            <div className="pagination">
-                {Array.from({ length: totalPages }, (_, index) => (
-                    <div
-                        key={index}
-                        className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}
-                        onClick={() => paginate(index + 1)}
-                    >
-                        {index + 1}
-                    </div>
-                ))}
+                <div className="pagination">
+                    <button onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1}>
+                        &lt;
+                    </button>
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map(number => (
+                        <button key={number} onClick={() => paginate(number)} className={currentPage === number ? 'active' : ''}>
+                            {number}
+                        </button>
+                    ))}
+                    <button onClick={() => paginate(currentPage + 1)} disabled={currentPage === totalPages}>
+                        &gt;
+                    </button>
+                </div>
             </div>
-
             <Footer />
         </div>
     );

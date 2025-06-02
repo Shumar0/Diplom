@@ -3,11 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@react-email/components": "^0.0.41",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.9.0",
+    "emailjs-com": "^3.2.0",
     "firebase": "^11.7.1",
     "lucide-react": "^0.509.0",
     "react": "^19.1.0",
@@ -16,13 +18,15 @@
     "react-icons": "^5.5.0",
     "react-router-dom": "^7.5.3",
     "react-scripts": "5.0.1",
+    "resend": "^4.5.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "dev:emails": "react-email preview src/emails"
   },
   "eslintConfig": {
     "extends": [
@@ -41,5 +45,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "react-email": "^4.0.15"
   }
 }
