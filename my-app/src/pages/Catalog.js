@@ -233,13 +233,13 @@ export default function Catalog(props) {
     return (
         <div id="catalog-page">
             <div className="notifications-container">
-                {notificationMessages.map(({ id, text }, index) => (
-                    <NotificationItem key={id} id={id} text={text} index={index} onRemove={removeNotification} />
+                {notificationMessages.map(({id, text}, index) => (
+                    <NotificationItem key={id} id={id} text={text} index={index} onRemove={removeNotification}/>
                 ))}
             </div>
 
 
-            <Header />
+            <Header/>
             <nav className="breadcrumb" id="breadcrumb"></nav>
 
             <div className="catalog-header">
@@ -265,7 +265,8 @@ export default function Catalog(props) {
                         <button className="filter-toggle" onClick={toggleBrand}>
                             Brand
                             <span className="arrow">
-                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                             stroke="currentColor"
                                              strokeWidth="2"
                                              strokeLinecap="round" strokeLinejoin="round">
                                         <polyline points="6 9 12 15 18 9"/>
@@ -293,7 +294,8 @@ export default function Catalog(props) {
                         <button className="filter-toggle" onClick={togglePrice}>
                             Price
                             <span className="arrow">
-                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                             stroke="currentColor" strokeWidth="2"
                                              strokeLinecap="round" strokeLinejoin="round">
                                           <polyline points="6 9 12 15 18 9"/>
                                         </svg>
@@ -387,35 +389,39 @@ export default function Catalog(props) {
                                 </div>
                                 <div className="price-block">
                                     {product.discount > 0 && (
-                                        <h3 style={{ color: '#888', textDecoration: 'line-through', fontSize: '0.9rem' }}>{product.price} ₴</h3>
+                                        <h3 style={{
+                                            color: '#888',
+                                            textDecoration: 'line-through',
+                                            fontSize: '0.9rem'
+                                        }}>{product.price} ₴</h3>
                                     )}
                                     <h2 className="product-price">
                                         {product.discount > 0
                                             ? (product.price - product.price * product.discount / 100).toFixed(0)
                                             : product.price} ₴
                                     </h2>
-                                    <button className="add-to-cart" onClick={() => addToCart(product)}>Add to cart</button>
+                                    <button className="add-to-cart" onClick={() => addToCart(product)}>Add to cart
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     ))}
                 </div>
 
-                <div className="pagination">
-                    <button onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1}>
-                        &lt;
-                    </button>
-                    {Array.from({ length: totalPages }, (_, i) => i + 1).map(number => (
-                        <button key={number} onClick={() => paginate(number)} className={currentPage === number ? 'active' : ''}>
-                            {number}
-                        </button>
-                    ))}
-                    <button onClick={() => paginate(currentPage + 1)} disabled={currentPage === totalPages}>
-                        &gt;
-                    </button>
-                </div>
+
             </div>
-            <Footer />
+            <div className="pagination">
+                {Array.from({length: totalPages}, (_, i) => i + 1).map(number => (
+                    <button
+                        key={number}
+                        onClick={() => paginate(number)}
+                        className={`page-item ${currentPage === number ? 'active' : ''}`}
+                    >
+                        {number}
+                    </button>
+                ))}
+            </div>
+            <Footer/>
         </div>
     );
 }

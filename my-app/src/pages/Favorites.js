@@ -102,17 +102,31 @@ const Favorites = ({ products: initialProducts }) => {
 
     // Підрахунок підсумку
     const updateSummary = () => {
-        const count = products.reduce((sum, item) => sum + item.quantity, 0);
-        const subtotal = products.reduce((sum, item) => sum + item.quantity * item.price, 0);
-        const discount = products.reduce((sum, item) => {
-            if (item.discount > 0) {
-                return sum + item.quantity * item.price * (item.discount / 100);
-            }
-            return sum;
-        }, 0);
-        return { count, subtotal, discount, total: subtotal - discount };
-    };
+        const summary = products.reduce(
+            (acc, item) => {
+                const quantity = Number(item.quantity) || 0;
+                const price = Number(item.price) || 0;
+                const discountPercent = Number(item.discount) || 0;
 
+                acc.count += quantity;
+                acc.subtotal += quantity * price;
+                if (discountPercent > 0) {
+                    acc.discount += quantity * price * (discountPercent / 100);
+                }
+
+                return acc;
+            },
+            { count: 0, subtotal: 0, discount: 0 }
+        );
+
+        const round = (num) => Math.round(num * 100) / 100;
+
+        summary.subtotal = round(summary.subtotal);
+        summary.discount = round(summary.discount);
+        summary.total = round(summary.subtotal - summary.discount);
+
+        return summary;
+    };
     // Видалення товару з улюблених в БД
     const deleteFromFavourite = async (item_id) => {
         try {
@@ -251,14 +265,20 @@ const Favorites = ({ products: initialProducts }) => {
 
                     <div className="right-side">
                         <div className="summary-title">
-                            Your cart <span>{summary.count}</span><span>Products</span>
+                            Your cart: <span>{summary.count}</span>
+                            <span>{summary.count === 1 ? 'Product' : 'Products'}</span>
                         </div>
-                        <div className="summary-item">Products <span>{summary.subtotal}₴</span></div>
-                        <div className="summary-item">Discount <span>{summary.discount}₴</span></div>
+                        <div className="summary-item">
+                            Discount: <span>-{Math.round(summary.discount * 100) / 100}₴</span>
+                        </div>
                         <div className="line"></div>
-                        <div className="summary-item">Delivery <span>Free</span></div>
+                        <div className="summary-item">
+                            Delivery: <span>Free</span>
+                        </div>
                         <div className="line"></div>
-                        <div className="summary-total">Total cost <span>{summary.total}₴</span></div>
+                        <div className="summary-total">
+                            Total cost: <span>{Math.round(summary.total*100)/ 100}₴</span>
+                        </div>
 
                         <button className="btn-payment" onClick={moveFavoritesToCart}>
                             Proceed to payment

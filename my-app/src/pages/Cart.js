@@ -87,9 +87,14 @@ export default function Cart(props) {
                 newCartItems[index].total_price = newCartItems[index].amount * newCartItems[index].item.price;
             }
             localStorage.setItem('cart', JSON.stringify(newCartItems));
+
+            // Додано — оновити підсумки
+            setTimeout(updateSummary, 0);
+
             return newCartItems;
         });
     };
+
 
     const removeItem = (itemId) => {
         const updatedCart = cartItems.filter(item => item.item.id !== itemId);
@@ -320,10 +325,10 @@ export default function Cart(props) {
 
         try {
             await emailjs.send(
-                'service_kryhz9o',
-                'template_cqf7437',
+                'service_ooqb1lm',
+                'template_bx8di34',
                 emailParams,
-                'zInO861ZWknLUMjnn'
+                'aE5meQcvMfU7WOGsW'
             );
             console.log("Email sent");
         } catch (e) {

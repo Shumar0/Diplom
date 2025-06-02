@@ -79,7 +79,7 @@ const Account = (props) => {
             const itemsData = itemsRes.data || {};
 
             const userOrders = Object.values(ordersData)
-
+                .filter(order => order.person === personId) // 🔥 ВАЖЛИВО: типи мають співпадати (наприклад, число === число)
                 .map(order => {
                     const orderItems = Object.values(itemsData).filter(item => item.order_id === order.id);
                     return { ...order, products: orderItems };
@@ -90,7 +90,6 @@ const Account = (props) => {
             console.error(e);
         }
     };
-
     useEffect(() => {
         
 
@@ -267,7 +266,7 @@ const Account = (props) => {
                 </section>
             </div>
         ),
-
+        // заказы только авторизированного пользователся
         orders: (
             <div id="account-orders">
                 <h2 className="section-title">Orders</h2>
