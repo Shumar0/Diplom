@@ -12,7 +12,6 @@ const Main = (props) => {
 
   return (
       <div id="main">
-          <Header />
 
           <div id="search-results"></div>
 

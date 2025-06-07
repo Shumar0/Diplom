@@ -42,6 +42,7 @@
     font-family: "Gilroy-Medium", sans-serif;
     padding: 10px;
     margin-bottom: 18px;
+    border-radius: 5px;
     background-color: #CACACA;
     display: flex;
     gap: 15px;
@@ -236,4 +237,12 @@
         width: 100%;
         position: static;
     }
+}
+
+.empty-favorites-message {
+    font-size: 1.5rem;
+    color: #666666;
+    text-align: center;
+    margin: 40px 0;
+    font-weight: 500;
 }

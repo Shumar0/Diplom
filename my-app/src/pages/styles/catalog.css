@@ -311,16 +311,53 @@
 }
 
 #catalog-page .price-block {
-  align-items: center;
   width: 100%;
-  justify-content: space-between;
-  margin-bottom: 22px;
+  margin-bottom: 10px; /* менший відступ перед кнопкою */
+}
+
+#catalog-page .price-bonuses {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+#catalog-page .old-price {
+  color: #888;
+  text-decoration: line-through;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+#catalog-page .price-and-bonuses {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;  /* рознести по краях */
+  width: 100%;                    /* на всю ширину */
+  color: #fff;
 }
 
 #catalog-page .product-price {
-
   font-weight: 400;
   font-size: 24px;
+  margin: 0;
+}
+
+#catalog-page .bonuses-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #fff;
+  font-family: Gilroy, sans-serif;
+
+  font-size: 14px;
+  line-height: 1;
+}
+
+#catalog-page .bonuses-label {
+  font-weight: 300;
+  font-size: 12px;
+  margin-top: 2px;
+  opacity: 0.8;
 }
 
 #catalog-page .add-to-cart {
@@ -332,10 +369,10 @@
   border-radius: 10px;
   padding: 13px 80px;
   color: #000;
-}
-
-#catalog-page .add-to-cart.out-of-stock {
-  background-color: #ADACAC;
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  margin-top: 15px; /* відступ зверху, щоб кнопка була нижче */
 }
 
 /* Рядок з мінімальною ціною, повзунками і максимальною ціною */
@@ -469,7 +506,7 @@
 }
 
 .notification {
-  background-color: #4caf50;
+  background-color: #1F1F1F;
   color: white;
   padding: 12px 20px;
   border-radius: 8px;

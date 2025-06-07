@@ -16,16 +16,16 @@ export default function Catalog(props) {
     const [configs, setConfigs] = useState({});
     const [notificationMessages, setNotificationMessages] = useState([]);
 
-    // Фільтри
+    // Filters
     const [selectedBrands, setSelectedBrands] = useState([]);
     const [availabilityFilter, setAvailabilityFilter] = useState(false);
     const [priceRange, setPriceRange] = useState([0, 10000]);
 
-    // Для пагінації
+    // For pagination
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 5;
 
-    // Групування характеристик
+    // Grouping characteristics
     useEffect(() => {
         const grouped = {};
         for (const product of products) {
@@ -39,12 +39,12 @@ export default function Catalog(props) {
         setConfigs(grouped);
     }, [products]);
 
-    // Унікальні бренди
+    // Unique brands
     const uniqueBrands = useMemo(() => {
         return Array.from(new Set(products.map(p => p.brand).filter(Boolean)));
     }, [products]);
 
-    // Мін/макс ціни
+    // Min/max prices
     const minPrice = Math.min(...products.map(p => p.price));
     const maxPrice = Math.max(...products.map(p => p.price));
 
@@ -52,11 +52,11 @@ export default function Catalog(props) {
         setPriceRange([minPrice, maxPrice]);
     }, [minPrice, maxPrice]);
 
-    // Стан відкритості фільтрів
+    // Filter open/close state
     const [brandOpen, setBrandOpen] = useState(false);
     const [priceOpen, setPriceOpen] = useState(false);
 
-    // Відсоток для лінії між повзунками
+    // Percentage for the line between sliders
     const minPercent = ((priceRange[0] - minPrice) / (maxPrice - minPrice)) * 100;
     const maxPercent = ((priceRange[1] - minPrice) / (maxPrice - minPrice)) * 100;
 
@@ -86,7 +86,7 @@ export default function Catalog(props) {
         },
     ].filter(Boolean);
 
-    // Функції відкриття/закриття фільтрів
+    // Filter open/close functions
     const toggleBrand = () => setBrandOpen(prev => !prev);
     const togglePrice = () => setPriceOpen(prev => !prev);
 
@@ -101,7 +101,7 @@ export default function Catalog(props) {
         setAvailabilityFilter(e.target.checked);
     };
 
-    // Виправлена логіка, щоб мінімальний повзунок не переходив за максимальний і навпаки
+    // Fixed logic so the minimum slider doesn't go past the maximum and vice versa
     const handleMinPriceChange = (e) => {
         const value = Math.min(Number(e.target.value), priceRange[1] - 1);
         setPriceRange([value, priceRange[1]]);
@@ -170,7 +170,13 @@ export default function Catalog(props) {
 
         if (itemIndex > -1) {
             cart[itemIndex].amount += 1;
-            cart[itemIndex].total_price += objectToCart.total_price;
+            // Ensure total_price is updated correctly based on the initial item price
+            // and NOT by adding the total_price of `objectToCart` again,
+            // as objectToCart.total_price is calculated for a single item.
+            // Instead, recalculate based on the new amount.
+            cart[itemIndex].total_price = cart[itemIndex].amount * (product.discount
+                ? parseInt(product.price - (product.price * product.discount / 100), 10)
+                : product.price);
         } else {
             cart.push(objectToCart);
         }
@@ -178,6 +184,7 @@ export default function Catalog(props) {
         localStorage.setItem('cart', JSON.stringify(cart));
         addNotification(`Product "${product.title}" added to your cart`);
     };
+
 
     const renderConfig = (itemId) => {
         const confList = configs[itemId] || [];
@@ -218,7 +225,7 @@ export default function Catalog(props) {
         );
     };
 
-    // Пагінація
+    // Pagination
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentProducts = filteredProducts.slice(indexOfFirstItem, indexOfLastItem);
@@ -238,8 +245,6 @@ export default function Catalog(props) {
                 ))}
             </div>
 
-
-            <Header/>
             <nav className="breadcrumb" id="breadcrumb"></nav>
 
             <div className="catalog-header">
@@ -326,7 +331,7 @@ export default function Catalog(props) {
                                         className="range-slider"
                                     />
 
-                                    {/* Оновлений трек */}
+                                    {/* Updated track */}
                                     <div
                                         className="slider-track"
                                         style={{
@@ -357,55 +362,72 @@ export default function Catalog(props) {
                 </div>
 
                 <div className="products" id="product-list">
-                    {currentProducts.map(product => (
-                        <div key={product.id} className="product-card">
-                            <div className="left-product-block" onClick={() => navigator(`/product/${product.id}`)}>
-                                <div className="product-image-block">
-                                    <div className="product-image-slider">
-                                        <img className="product-image" src={product.image} alt={product.title}/>
+                    {currentProducts.map(product => {
+                        // Calculate final price considering discount
+                        const finalPrice = product.discount > 0
+                            ? (product.price - product.price * product.discount / 100)
+                            : product.price;
+
+                        // Calculate bonuses (e.g., 1% of final price, rounded down)
+                        const bonuses = Math.floor(finalPrice * 0.01); // 1% as an example
+
+                        return (
+                            <div key={product.id} className="product-card">
+                                <div className="left-product-block" onClick={() => navigator(`/product/${product.id}`)}>
+                                    <div className="product-image-block">
+                                        <div className="product-image-slider">
+                                            <img className="product-image" src={product.image} alt={product.title}/>
+                                        </div>
+                                    </div>
+                                    <div className="product-info-block">
+                                        <div className="product-controls">
+                                            <div className="add-to-fav product-controls-btn"><Save_for_later/></div>
+                                            <div className="add-to-comp product-controls-btn"></div>
+                                        </div>
+                                        <p className="product-category data-field">{product.category}</p>
+                                        <h3 className="product-name">{product.title}</h3>
+                                        {renderConfig(product.id)}
                                     </div>
                                 </div>
-                                <div className="product-info-block">
-                                    <div className="product-controls">
-                                        <div className="add-to-fav product-controls-btn"><Save_for_later/></div>
-                                        <div className="add-to-comp product-controls-btn"></div>
+                                <div className="right-product-block">
+                                    <div className="product-status">
+                                        <div className="status-indicator"
+                                             style={{backgroundColor: product.available ? 'green' : 'red'}}></div>
+                                        <p className="status-text">{product.available ? 'In stock' : 'Out of stock'}</p>
                                     </div>
-                                    <p className="product-category data-field">{product.category}</p>
-                                    <h3 className="product-name">{product.title}</h3>
-                                    {renderConfig(product.id)}
-                                </div>
-                            </div>
-                            <div className="right-product-block">
-                                <div className="product-status">
-                                    <div className="status-indicator"
-                                         style={{backgroundColor: product.available ? 'green' : 'red'}}></div>
-                                    <p className="status-text">{product.available ? 'In stock' : 'Out of stock'}</p>
-                                </div>
-                                <div className="delivery-block">
-                                    <Delivery_box width="20" height="20"/>
-                                    <p className="delivery-data">
-                                        {product.available ? `Delivery: ${getNextDay()}` : 'No info'}
-                                    </p>
-                                </div>
-                                <div className="price-block">
-                                    {product.discount > 0 && (
-                                        <h3 style={{
-                                            color: '#888',
-                                            textDecoration: 'line-through',
-                                            fontSize: '0.9rem'
-                                        }}>{product.price} ₴</h3>
-                                    )}
-                                    <h2 className="product-price">
-                                        {product.discount > 0
-                                            ? (product.price - product.price * product.discount / 100).toFixed(0)
-                                            : product.price} ₴
-                                    </h2>
-                                    <button className="add-to-cart" onClick={() => addToCart(product)}>Add to cart
+                                    <div className="delivery-block">
+                                        <Delivery_box width="20" height="20"/>
+                                        <p className="delivery-data">
+                                            {product.available ? `Delivery: ${getNextDay()}` : 'No info'}
+                                        </p>
+                                    </div>
+                                    <div className="price-block">
+                                        {product.discount > 0 && (
+                                            <h3 className="old-price">{product.price} ₴</h3>
+                                        )}
+                                        <div className="price-bonuses">
+                                            <div className="price-and-bonuses">
+                                                <h2 className="product-price">
+                                                    {finalPrice.toFixed(0)} ₴
+                                                </h2>
+                                                {bonuses > 0 && (
+                                                    <div className="bonuses-block">
+                                                        <span className="bonuses-count">+ {bonuses}</span>
+                                                        <span className="bonuses-label">bonuses</span>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <button className="add-to-cart" onClick={() => addToCart(product)}>
+                                        Add to cart
                                     </button>
+
                                 </div>
                             </div>
-                        </div>
-                    ))}
+                        );
+                    })}
                 </div>
 
 

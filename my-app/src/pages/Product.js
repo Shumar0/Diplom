@@ -255,7 +255,6 @@ export default function Product() {
 
     return (
         <div id="product">
-            <Header />
 
             {toastMessage && (
                 <Toast message={toastMessage} onClose={() => setToastMessage("")} />

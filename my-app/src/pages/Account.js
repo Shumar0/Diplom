@@ -9,19 +9,17 @@ import axios from "axios";
 import Footer from "./Footer";
 import Header from "./Header";
 import Bonus from "./Bonus";
-import {Baby} from "lucide-react";
 
 
 const Account = (props) => {
     const auth = useAuth();
     const navigate = useNavigate();
-    const products = props.products;
+    const products = props.products; // Products prop is likely the list of all items from your DB
 
     const [activeSection, setActiveSection] = useState("profile");
     const [recommendations, setRecommendations] = useState([]);
-    const [deliveryDate, setDeliveryDate] = useState("");
     const [user, setUser] = useState({});
-    const [orders, setOrders] = useState([]);
+    const [orders, setOrders] = useState([]); // This will hold user-specific orders with their items
     const [isEditing, setIsEditing] = useState(false);
     const [toast, setToast] = useState({ visible: false, message: "" });
 
@@ -41,15 +39,14 @@ const Account = (props) => {
 
             const uid = currentUser.uid;
 
-            const res = await axios.get(`${process.env.REACT_APP_DB_LINK}Person.json`);
-            const data = res.data || {};
+            // Fetch user data directly from their UID path
+            const res = await axios.get(`${process.env.REACT_APP_DB_LINK}Person/${uid}.json`);
+            const userData = res.data; // data will be null if no user is found
 
-            if (data[uid]) {
-                const userData = data[uid];
-
+            if (userData) {
                 const userInfo = {
-                    uid: uid, // 🔑 firebase uid
-                    id: userData.id, // 🔑 person id (1)
+                    uid: uid, // Use Firebase Auth UID here
+                    id: userData.id, // This is your internal numeric ID
                     address: userData.address,
                     bonuses: userData.bonuses,
                     email: userData.email,
@@ -60,11 +57,15 @@ const Account = (props) => {
 
                 setUser(userInfo);
 
-                // Завантажуємо замовлення, прив'язані до person.id
+                // Load orders tied to person.id
+                // Ensure personId passed here is the internal numeric ID from your DB
                 fetchOrders(userData.id);
+            } else {
+                console.log("No user data found for current UID.");
+                // Optionally redirect to login or show a message
             }
         } catch (e) {
-            console.error(e);
+            console.error("Error fetching user from DB:", e);
         }
     };
 
@@ -78,27 +79,41 @@ const Account = (props) => {
             const ordersData = ordersRes.data || {};
             const itemsData = itemsRes.data || {};
 
+            // Filter orders belonging to this user (by personId)
             const userOrders = Object.values(ordersData)
-                .filter(order => order.person === personId) // 🔥 ВАЖЛИВО: типи мають співпадати (наприклад, число === число)
+                .filter(order => String(order.person) === String(personId)) // IMPORTANT: Ensure types match
                 .map(order => {
-                    const orderItems = Object.values(itemsData).filter(item => item.order_id === order.id);
-                    return { ...order, products: orderItems };
-                });
+                    // Attach order items to each order
+                    const orderItemsForThisOrder = Object.values(itemsData).filter(item => item.order_id === order.id);
+
+                    // For each order item, find the full product details from the 'products' prop
+                    const productsWithDetails = orderItemsForThisOrder.map(orderItem => {
+                        const productDetail = products.find(p => p.id === orderItem.item_id);
+                        return {
+                            ...orderItem,
+                            // Add item details, handling cases where product might not be found
+                            item: productDetail || { title: "Unknown Product", image: "/default-product.png", price: 0 }
+                        };
+                    });
+                    return { ...order, products: productsWithDetails };
+                })
+                .sort((a, b) => new Date(b.date) - new Date(a.date)); // Sort by date, newest first
 
             setOrders(userOrders);
         } catch (e) {
-            console.error(e);
+            console.error("Error fetching orders:", e);
         }
     };
+
     useEffect(() => {
-        
+        getUserFromDB(); // Call this to fetch user data and then their orders
 
-        // Рекомендации (случайные товары)
-        const shuffled = [...products].sort(() => 0.5 - Math.random());
-        setRecommendations(shuffled.slice(0, 4));
-
-        getUserFromDB();
-    }, []);
+        // Recommendations (random products)
+        if (products && products.length > 0) {
+            const shuffled = [...products].sort(() => 0.5 - Math.random());
+            setRecommendations(shuffled.slice(0, 4));
+        }
+    }, [auth.currentUser, products]); // Re-run effect if current user or products change
 
     const getLoyaltyInfo = () => {
         const { currentPoints, levels } = loyaltyData;
@@ -129,8 +144,8 @@ const Account = (props) => {
     const loyalty = getLoyaltyInfo();
 
     const handleLogout = async () => {
-        navigate("/", { replace: true });
         await doSignOut();
+        navigate("/", { replace: true }); // Redirect to home after logout
     };
 
     const getStatusClass = (status) => {
@@ -155,33 +170,12 @@ const Account = (props) => {
                 address: user.address,
             });
             setIsEditing(false);
-            // Показуємо toast з повідомленням
             setToast({ visible: true, message: "Data has been successfully updated" });
-
-            // Приховуємо toast через 3 секунди
             setTimeout(() => setToast({ visible: false, message: "" }), 3000);
         } catch (e) {
-            console.error(e);
+            console.error("Error saving changes:", e);
             setToast({ visible: true, message: "Error updating data" });
             setTimeout(() => setToast({ visible: false, message: "" }), 3000);
-        }
-    };
-
-    const OrderImages = ({ products }) => {
-        const maxVisible = 3;
-        const extraCount = products.length - maxVisible;
-
-        if (products.length === 1) {
-            return (
-                <img
-                    src={products[0].image}
-                    alt={products[0].title}
-                    className="order-single-image"
-                    width={120}
-                    height={120}
-                    style={{objectFit: 'contain', borderRadius: '8px'}}
-                />
-            );
         }
     };
 
@@ -190,7 +184,11 @@ const Account = (props) => {
             <div id="account-profile">
                 <div className="profile-layout">
                     <div className="profile-box">
-                        <img className="avatar" src={auth.currentUser?.photoURL} alt="avatar"/>
+                        <img
+                            className="avatar"
+                            src={auth.currentUser?.photoURL || "/default-avatar.png"}
+                            alt="User Avatar"
+                        />
                         <div className="profile-name">{user.fullname}</div>
                         <div className="arrow">➤</div>
                     </div>
@@ -211,30 +209,35 @@ const Account = (props) => {
                     </div>
                 </div>
 
-                <h2 className="section-title">Orders</h2>
+                <h2 className="section-title">Current Orders</h2>
                 <div className="orders-container">
                     {Array.isArray(orders) && orders.length > 0 ? (
                         orders
                             .filter(order =>
-                                order.person === user.id &&
-                                (order.status === "On way" || order.status === "In process")
+                                order.status === "On way" || order.status === "Is being drawn up"
                             )
                             .slice(0, 3)
-                            .map((order, index) => (
-                                <div key={index} className="order-card">
-                                    <img
-                                        src={products.find(p => p.id === order.products[0]?.item_id)?.image}
-                                        alt="Product"
-                                        className="ordered-product-img"
-                                    />
+                            .map((order) => (
+                                <div key={order.id} className={`order-card ${getStatusClass(order.status)}`}>
+                                    {order.products && order.products.length > 0 && (
+                                        <img
+                                            src={order.products[0].item?.image || "/default-product.png"}
+                                            alt={order.products[0].item?.title || "Product"}
+                                            className="ordered-product-img"
+                                            style={{objectFit: 'contain', borderRadius: '8px', width: '120px', height: '120px'}}
+                                        />
+                                    )}
                                     <div className="order-info">
                                         <strong>{order.status}</strong>
                                         <div className="light">
                                             {order.delivery_date} {order.delivery_time}
                                         </div>
+                                        <div className="order-total-sum">
+                                            Total: {order.products.reduce((sum, item) => sum + (item.total || 0), 0).toFixed(2)}₴
+                                        </div>
                                     </div>
                                 </div>
-                        ))
+                            ))
                     ) : (
                         <p>No current orders in progress.</p>
                     )}
@@ -254,9 +257,9 @@ const Account = (props) => {
                                     <h3 className="product-title">{product.title}</h3>
 
                                     <div className="card-bottom">
-                                        <a href="#" className="go-btn">
+                                        <Link to={`/product/${product.id}`} className="go-btn">
                                             Go to
-                                        </a>
+                                        </Link>
                                         <span className="product-price">{product.price}₴</span>
                                     </div>
                                 </div>
@@ -266,118 +269,60 @@ const Account = (props) => {
                 </section>
             </div>
         ),
-        // заказы только авторизированного пользователся
         orders: (
             <div id="account-orders">
-                <h2 className="section-title">Orders</h2>
+                <h2 className="section-title">My Orders</h2>
                 {orders.length > 0 ? (
                     <div className="orders-container">
-                        {orders.map((order, index) => {
-                            const orderProducts = order.products
-                                .map(item => products.find(p => p.id === item.item_id))
-                                .filter(Boolean);
+                        {orders.map((order) => {
+                            const productsInOrder = order.products || [];
 
-                            const maxVisible = 3;
-                            const displayedProducts = orderProducts.slice(0, maxVisible);
-                            const extraCount = orderProducts.length - maxVisible;
-
-                            const totalSum = order.products.reduce((sum, item) => {
-                                const product = products.find(p => p.id === item.item_id);
-                                if (!product) return sum;
-                                const price = product.discount
-                                    ? product.price - (product.price * product.discount) / 100
-                                    : product.price;
-                                return sum + price * (item.amount || 1);
+                            const totalSum = productsInOrder.reduce((sum, item) => {
+                                return sum + (item.total || 0);
                             }, 0);
 
+                            const maxVisible = 3;
+                            const displayedProducts = productsInOrder.slice(0, maxVisible);
+                            const extraCount = productsInOrder.length - maxVisible;
+
                             return (
-                                <div
-                                    key={index}
-                                    className={`order-card ${getStatusClass(order.status)}`}
-                                    style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        gap: 16,
-                                        padding: 12,
-                                        borderRadius: 8,
-                                        marginBottom: 12,
-                                    }}
-                                >
-                                    <div
-                                        className="order-images"
-                                        style={{ width: 120, height: 120, flexShrink: 0 }}
-                                    >
-                                        {orderProducts.length === 1 ? (
+                                <div key={order.id} className={`order-card ${getStatusClass(order.status)}`} >
+                                    <div className="order-images" >
+                                        {productsInOrder.length === 1 && productsInOrder[0].item ? (
                                             <img
-                                                src={orderProducts[0].image}
-                                                alt={orderProducts[0].title}
+                                                src={productsInOrder[0].item.image}
+                                                alt={productsInOrder[0].item.title}
                                                 className="order-single-image"
-                                                style={{
-                                                    width: 120,
-                                                    height: 120,
-                                                    objectFit: 'contain',
-                                                    borderRadius: 8,
-                                                }}
+
                                             />
                                         ) : (
                                             <div
                                                 className="order-images-grid"
-                                                style={{
-                                                    display: 'grid',
-                                                    gridTemplateColumns: 'repeat(2, 1fr)',
-                                                    gridTemplateRows: 'repeat(2, 1fr)',
-                                                    gap: 4,
-                                                    width: 120,
-                                                    height: 120,
-                                                    borderRadius: 8,
-                                                    overflow: 'hidden',
-                                                }}
+
                                             >
-                                                {displayedProducts.map((product, idx) => (
-                                                    <img
-                                                        key={idx}
-                                                        src={product.image}
-                                                        alt={product.title}
-                                                        style={{
-                                                            width: '100%',
-                                                            height: '100%',
-                                                            objectFit: 'contain',
-                                                            borderRadius: 6,
-                                                        }}
-                                                    />
-                                                ))}
+                                                {displayedProducts.map((item, idx) =>
+                                                    item.item ? (
+                                                        <img
+                                                            key={idx}
+                                                            src={item.item.image}
+                                                            alt={item.item.title}
+                                                        />
+                                                    ) : null
+                                                )}
                                                 {extraCount > 0 && (
-                                                    <div
-                                                        className="order-more-images"
-                                                        style={{
-                                                            background: '#D9D9D9',
-                                                            borderRadius: 6,
-                                                            display: 'flex',
-                                                            justifyContent: 'center',
-                                                            alignItems: 'center',
-                                                            fontWeight: '700',
-                                                            fontSize: '1.2rem',
-                                                            color: '#555',
-                                                            userSelect: 'none',
-                                                        }}
-                                                    >
-                                                        +{extraCount}
-                                                    </div>
+                                                    <div className="order-more-images">+{extraCount} </div>
                                                 )}
                                             </div>
                                         )}
                                     </div>
                                     <div className="order-info" style={{ flexGrow: 1 }}>
-                                        <strong className="order-status" style={{ fontSize: '1.1rem' }}>
+                                        <strong className="order-status">
                                             {order.status}
                                         </strong>
-                                        <div className="order-delivery-date" style={{ marginTop: 8 }}>
-                                            {order.delivery_date} {order.delivery_time}
+                                        <div className="order-delivery-date">
+                                            Delivery: {order.delivery_date} {order.delivery_time}
                                         </div>
-                                        <div
-                                            className="order-total-sum"
-                                            style={{ marginTop: 8, fontWeight: '600' }}
-                                        >
+                                        <div className="order-total-sum">
                                             Total: {totalSum.toFixed(2)}₴
                                         </div>
                                     </div>
@@ -386,16 +331,13 @@ const Account = (props) => {
                         })}
                     </div>
                 ) : (
-                    <p>No current orders in progress.</p>
+                    <p>You have no orders to display.</p>
                 )}
             </div>
         ),
 
-
-        bonuses: <div>[Bonuses Info]</div>,
+        bonuses: <div>[Bonuses Content]</div>,
         privileges: <div>[Privileges Content]</div>,
-        favorites: <div>[Favorites]</div>,
-        comparison: <div>[Comparison Items]</div>,
         data: user ? (
             <div id="account-details">
                 <div className="profile-section">
@@ -426,43 +368,43 @@ const Account = (props) => {
                                 <p><strong>Full Name:</strong></p>
                                 <input
                                     type="text"
-                                    value={user.fullname}
+                                    value={user.fullname || ''}
                                     onChange={(e) => setUser({...user, fullname: e.target.value})}
-                                        disabled={!isEditing}
-                                    />
-                                </div>
-                                <div className="details-row">
-                                    <p><strong>Account status:</strong></p>
-                                    <p className="static-field">{user.role}</p>
-                                </div>
-                                <div className="details-row">
-                                    <p><strong>Email:</strong></p>
-                                    <input
-                                        type="email"
-                                        value={user.email}
-                                        onChange={(e) => setUser({...user, email: e.target.value})}
-                                        disabled={!isEditing}
-                                    />
-                                </div>
-                                <div className="details-row">
-                                    <p><strong>Telephone:</strong></p>
-                                    <input
-                                        type="tel"
-                                        value={user.phone || ""}
-                                        onChange={(e) => setUser({...user, phone: e.target.value})}
-                                        disabled={!isEditing}
-                                    />
-                                </div>
-                                <div className="details-row">
-                                    <p><strong>Address:</strong></p>
-                                    <input
-                                        type="text"
-                                        value={user.address || ""}
-                                        onChange={(e) => setUser({...user, address: e.target.value})}
-                                        disabled={!isEditing}
-                                    />
-                                </div>
-                            </form>
+                                    disabled={!isEditing}
+                                />
+                            </div>
+                            <div className="details-row">
+                                <p><strong>Account status:</strong></p>
+                                <p className="static-field">{user.role}</p>
+                            </div>
+                            <div className="details-row">
+                                <p><strong>Email:</strong></p>
+                                <input
+                                    type="email"
+                                    value={user.email || ''}
+                                    onChange={(e) => setUser({...user, email: e.target.value})}
+                                    disabled={!isEditing}
+                                />
+                            </div>
+                            <div className="details-row">
+                                <p><strong>Telephone:</strong></p>
+                                <input
+                                    type="tel"
+                                    value={user.phone || ""}
+                                    onChange={(e) => setUser({...user, phone: e.target.value})}
+                                    disabled={!isEditing}
+                                />
+                            </div>
+                            <div className="details-row">
+                                <p><strong>Address:</strong></p>
+                                <input
+                                    type="text"
+                                    value={user.address || ""}
+                                    onChange={(e) => setUser({...user, address: e.target.value})}
+                                    disabled={!isEditing}
+                                />
+                            </div>
+                        </form>
                     </div>
                 </div>
                 {toast.visible && (
@@ -488,8 +430,6 @@ const Account = (props) => {
             ),
         },
         {id: "privileges", label: "Your privileges"},
-        {id: "favorites", label: "Favorites"},
-        {id: "comparison", label: "Comparison"},
         {id: "data", label: "Personal data"},
         {id: "cards", label: "Gift Cards"},
         {
@@ -497,8 +437,8 @@ const Account = (props) => {
             label: (
                 <button
                     onClick={(e) => {
-                        e.stopPropagation(); // щоб не активувалась навігація
-                        handleLogout(); // викликає вихід
+                        e.stopPropagation();
+                        handleLogout();
                     }}
                     className="logout-button"
                 >
@@ -530,7 +470,6 @@ const Account = (props) => {
 
     return (
         <div id="account">
-            <Header />
 
             <div className="account-wrapper">
                 <div className="navigation-container">
