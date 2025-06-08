@@ -192,13 +192,12 @@ const Account_manager = ({ products }) => {
         orders: (
             <div id="order_manager">
                 <h2 className="section-title">Orders</h2>
-                {ordersArray.length > 0 ? ( // Use ordersArray
+                {ordersArray.length > 0 ? (
                     <div className="orders-container">
-                        {ordersArray.map((order) => { // Use ordersArray.map
-                            const productsInOrder = orderItems[order.id] || []; // Get items for this order
+                        {ordersArray.map((order) => {
+                            const productsInOrder = orderItems[order.id] || [];
 
                             const totalSum = productsInOrder.reduce((sum, item) => {
-                                // `item.total` already holds the total price for that order_item (amount * price)
                                 return sum + (item.total || 0);
                             }, 0);
 
@@ -207,7 +206,6 @@ const Account_manager = ({ products }) => {
                             const extraCount = productsInOrder.length - maxVisible;
 
                             return (
-
                                 <div
                                     key={order.id}
                                     className={`order-card ${getStatusClass(order.status)}`}
@@ -215,7 +213,14 @@ const Account_manager = ({ products }) => {
                                     <div className="order-images">
                                         {productsInOrder.length === 1 && productsInOrder[0].item ? (
                                             <img
-                                                src={productsInOrder[0].item.image}
+                                                src={
+                                                    Array.isArray(productsInOrder[0].item.image)
+                                                        ? productsInOrder[0].item.image[0]
+                                                        : typeof productsInOrder[0].item.image === "object" &&
+                                                        productsInOrder[0].item.image !== null
+                                                            ? Object.values(productsInOrder[0].item.image)[0]
+                                                            : productsInOrder[0].item.image || "/default-product.png"
+                                                }
                                                 alt={productsInOrder[0].item.title}
                                                 className="order-single-image"
                                             />
@@ -225,26 +230,27 @@ const Account_manager = ({ products }) => {
                                                     item.item ? (
                                                         <img
                                                             key={idx}
-                                                            src={item.item.image}
+                                                            src={
+                                                                Array.isArray(item.item.image)
+                                                                    ? item.item.image[0]
+                                                                    : typeof item.item.image === "object" &&
+                                                                    item.item.image !== null
+                                                                        ? Object.values(item.item.image)[0]
+                                                                        : item.item.image || "/default-product.png"
+                                                            }
                                                             alt={item.item.title}
                                                         />
                                                     ) : null
                                                 )}
                                                 {extraCount > 0 && (
-                                                    <div className="order-more-images">
-                                                        +{extraCount}
-                                                    </div>
+                                                    <div className="order-more-images">+{extraCount}</div>
                                                 )}
                                             </div>
                                         )}
                                     </div>
                                     <div className="order-info">
-                                        <strong className="order-status">
-                                            {order.status}
-                                        </strong>
-                                        <div className="order-id">
-                                            Order ID: {order.id}
-                                        </div>
+                                        <strong className="order-status">{order.status}</strong>
+                                        <div className="order-id">Order ID: {order.id}</div>
                                         <div className="order-delivery-date">
                                             Delivery: {order.delivery_date} {order.delivery_time}
                                         </div>
@@ -258,7 +264,6 @@ const Account_manager = ({ products }) => {
                                         </div>
                                     </div>
                                 </div>
-
                             );
                         })}
                     </div>

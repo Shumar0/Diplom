@@ -160,8 +160,8 @@
 }
 
 #catalog-page .product-card:hover .product-image {
-  transform: scale(1.1);
-  transition: transform 0.3s ease;
+  transform: scale(1.1); /* Збільшення при наведенні */
+  z-index: 10;
 }
 
 #catalog-page .product-image {
@@ -178,15 +178,46 @@
 
 #catalog-page .product-image-slider {
   display: flex;
+  flex-direction: column; /* Колонка: изображение + навигация */
   align-items: center;
   justify-content: center;
-  max-width: 300px;
-  height: 250px;
+  width: 300px;          /* фиксированная ширина */
+  height: 250px;         /* фиксированная высота */
   margin-bottom: 10px;
+  position: relative;    /* для возможных абсолютных элементов */
+  overflow: visible;      /* обрезаем, если что-то выпадает */
 }
 
 #catalog-page .product-image {
-  max-width: 100%;
+  width: 100%;           /* занимает всю ширину контейнера */
+  height: 100%;          /* занимает всю высоту контейнера */
+  object-fit: contain;   /* сохраняет пропорции, показывая всю картинку */
+  transition: transform 0.3s ease; /* плавное масштабирование при ховере */
+}
+
+#catalog-page .slider-indicators {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 25px;
+}
+
+#catalog-page .slider-rect {
+  width: 30px;
+  height: 5px;
+  background-color: #ADACAC;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#catalog-page .slider-rect.active {
+  background-color: #787777;
+}
+
+#catalog-page .product-image {
+  margin-top: 20px;
+  max-height: 80%;
 }
 
 #catalog-page .image-controls {
@@ -222,7 +253,7 @@
   margin-left: auto;
   align-items: center;
   gap: 30px;
-  margin-bottom: 15px;
+
 }
 
 #catalog-page .product-controls-btn:hover {

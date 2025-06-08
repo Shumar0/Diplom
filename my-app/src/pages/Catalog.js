@@ -11,10 +11,11 @@ import Save_for_later from "./Save_for_later";
 
 export default function Catalog(props) {
     const products = props.products;
-    const navigator = useNavigate();
+    const navigate = useNavigate();
 
     const [configs, setConfigs] = useState({});
     const [notificationMessages, setNotificationMessages] = useState([]);
+    const [activeImageIndex, setActiveImageIndex] = useState({});
 
     // Filters
     const [selectedBrands, setSelectedBrands] = useState([]);
@@ -66,6 +67,20 @@ export default function Catalog(props) {
 
     const resetPriceRange = () => {
         setPriceRange([minPrice, maxPrice]);
+    };
+
+    const handlePrev = (productId) => {
+        setActiveImageIndex(prev => ({
+            ...prev,
+            [productId]: Math.max((prev[productId] || 0) - 1, 0)
+        }));
+    };
+
+    const handleNext = (productId, imagesLength) => {
+        setActiveImageIndex(prev => ({
+            ...prev,
+            [productId]: Math.min((prev[productId] || 0) + 1, imagesLength - 1)
+        }));
     };
 
     const activeFilters = [
@@ -121,7 +136,7 @@ export default function Catalog(props) {
 
     const getNextDay = (date = new Date()) => {
         const nextDay = new Date(date);
-        nextDay.setDate(nextDay.getDate() + 2);
+        nextDay.setDate(nextDay.getDate() + 2); // Assuming 2 days for delivery, adjust as needed
         return nextDay.toISOString().split('T')[0];
     };
 
@@ -170,10 +185,6 @@ export default function Catalog(props) {
 
         if (itemIndex > -1) {
             cart[itemIndex].amount += 1;
-            // Ensure total_price is updated correctly based on the initial item price
-            // and NOT by adding the total_price of `objectToCart` again,
-            // as objectToCart.total_price is calculated for a single item.
-            // Instead, recalculate based on the new amount.
             cart[itemIndex].total_price = cart[itemIndex].amount * (product.discount
                 ? parseInt(product.price - (product.price * product.discount / 100), 10)
                 : product.price);
@@ -363,22 +374,62 @@ export default function Catalog(props) {
 
                 <div className="products" id="product-list">
                     {currentProducts.map(product => {
-                        // Calculate final price considering discount
                         const finalPrice = product.discount > 0
                             ? (product.price - product.price * product.discount / 100)
                             : product.price;
 
-                        // Calculate bonuses (e.g., 1% of final price, rounded down)
-                        const bonuses = Math.floor(finalPrice * 0.01); // 1% as an example
+                        const bonuses = Math.floor(finalPrice * 0.01); // 1% як приклад
+
+                        const productImages = product.image || [];
+                        const currentImageIndex = activeImageIndex[product.id] || 0;
 
                         return (
                             <div key={product.id} className="product-card">
-                                <div className="left-product-block" onClick={() => navigator(`/product/${product.id}`)}>
-                                    <div className="product-image-block">
-                                        <div className="product-image-slider">
-                                            <img className="product-image" src={product.image} alt={product.title}/>
-                                        </div>
+                                <div className="left-product-block" onClick={() => navigate(`/product/${product.id}`)}>
+                                    <div className="product-image-slider">
+                                        {productImages ? (
+                                            // Перевіряємо, чи productImages є масивом
+                                            Array.isArray(productImages) ? (
+                                                <>
+                                                    <img
+                                                        className="product-image"
+                                                        src={productImages[currentImageIndex]}
+                                                        alt={product.title || "Product image"}
+                                                        loading="lazy"
+                                                    />
+
+                                                    {productImages.length > 1 && (
+                                                        <div className="slider-indicators">
+                                                            {productImages.map((_, idx) => (
+                                                                <div
+                                                                    key={idx}
+                                                                    className={`slider-rect ${idx === currentImageIndex ? 'active' : ''}`}
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation();
+                                                                        setActiveImageIndex(prev => ({
+                                                                            ...prev,
+                                                                            [product.id]: idx
+                                                                        }));
+                                                                    }}
+                                                                />
+                                                            ))}
+                                                        </div>
+                                                    )}
+                                                </>
+                                            ) : (
+                                                // Якщо productImages — не масив (очікуємо рядок з URL), просто виводимо одне зображення
+                                                <img
+                                                    className="product-image"
+                                                    src={productImages}
+                                                    alt={product.title || "Product image"}
+                                                    loading="lazy"
+                                                />
+                                            )
+                                        ) : (
+                                            <p>No image available</p>
+                                        )}
                                     </div>
+
                                     <div className="product-info-block">
                                         <div className="product-controls">
                                             <div className="add-to-fav product-controls-btn"><Save_for_later/></div>
@@ -389,22 +440,30 @@ export default function Catalog(props) {
                                         {renderConfig(product.id)}
                                     </div>
                                 </div>
+
                                 <div className="right-product-block">
                                     <div className="product-status">
-                                        <div className="status-indicator"
-                                             style={{backgroundColor: product.available ? 'green' : 'red'}}></div>
-                                        <p className="status-text">{product.available ? 'In stock' : 'Out of stock'}</p>
+                                        <div
+                                            className="status-indicator"
+                                            style={{backgroundColor: product.amount_on_stock > 0 ? 'green' : 'red'}}
+                                        />
+                                        <p className="status-text">
+                                            {product.amount_on_stock > 0 ? 'In stock' : 'Out of stock'}
+                                        </p>
                                     </div>
+
                                     <div className="delivery-block">
                                         <Delivery_box width="20" height="20"/>
                                         <p className="delivery-data">
-                                            {product.available ? `Delivery: ${getNextDay()}` : 'No info'}
+                                            {product.amount_on_stock > 0 ? `Delivery: ${getNextDay()}` : 'No info'}
                                         </p>
                                     </div>
+
                                     <div className="price-block">
                                         {product.discount > 0 && (
                                             <h3 className="old-price">{product.price} ₴</h3>
                                         )}
+
                                         <div className="price-bonuses">
                                             <div className="price-and-bonuses">
                                                 <h2 className="product-price">
@@ -423,7 +482,6 @@ export default function Catalog(props) {
                                     <button className="add-to-cart" onClick={() => addToCart(product)}>
                                         Add to cart
                                     </button>
-
                                 </div>
                             </div>
                         );

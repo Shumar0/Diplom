@@ -240,9 +240,12 @@ const Favorites = ({ products: initialProducts }) => {
                                             </div>
                                             {items.map((item) => (
                                                 <div key={item.id} className="cart-item">
-                                                    <img src={item.image} alt={item.title}/>
+                                                    <img
+                                                        src={Array.isArray(item.image) ? item.image[0] : item.image}
+                                                        alt={item.title || "Product"}
+                                                    />
                                                     <div className="cart-item-details">
-                                                        <div className="cart-item-title">{item.title}</div>
+                                                    <div className="cart-item-title">{item.title}</div>
                                                         <div className="cart-item-desc">{item.desc}</div>
                                                     </div>
                                                     <div className="cart-item-actions">
@@ -252,9 +255,9 @@ const Favorites = ({ products: initialProducts }) => {
                                                             <button onClick={() => updateQuantityByIndex(products.indexOf(item), 1)}>+</button>
                                                         </div>
                                                         <div className="cart-item-price">
-                            <span className="current-price">
-                              {(item.price * (1 - (item.discount || 0) / 100) * item.quantity).toFixed(0)}₴
-                            </span>
+                                                            <span className="current-price">
+                                                              {(item.price * (1 - (item.discount || 0) / 100) * item.quantity).toFixed(0)}₴
+                                                            </span>
                                                             {item.discount > 0 && (
                                                                 <span className="old-price">{Math.round(item.price * item.quantity)}₴</span>
                                                             )}

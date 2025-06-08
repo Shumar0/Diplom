@@ -27,7 +27,7 @@
 }
 
 .nav-item.active {
-    background-color: #000;
+    background-color: #1e1e1e;
     font-weight: bold;
     color: #fff;
 }
@@ -295,7 +295,7 @@
 .section-title {
     font-size: 22px;
     font-weight: bold;
-    margin: 30px 0 15px;
+    margin: 0 0 15px 0;
 }
 
 .recommend-grid {
@@ -427,7 +427,7 @@
 }
 
 .logout-button:hover {
-    background-color: #2a2a2a; /* або інший колір при наведенні */
+    background-color: #1e1e1e;
 }
 
 
@@ -567,7 +567,7 @@
     position: fixed;
     bottom: 20px;
     right: 20px;
-    background-color: #4caf50; /* зелений фон для успіху */
+    background-color: #1e1e1e;
     color: white;
     padding: 15px 25px;
     border-radius: 5px;

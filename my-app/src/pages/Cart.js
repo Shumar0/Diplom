@@ -164,7 +164,10 @@ export default function Cart(props) {
 
                 cartItemElements.push(
                     <div key={item.id} className="cart-item">
-                        <img src={item.image} alt={item.title} />
+                        <img
+                            src={Array.isArray(item.image) ? item.image[0] : item.image}
+                            alt={item.title || "Product"}
+                        />
                         <div className="cart-item-details">
                             <div className="cart-item-title">{item.title}</div>
                             <div className="cart-item-desc">{item.desc}</div>

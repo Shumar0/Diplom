@@ -7,7 +7,7 @@ import { doSignOut } from "../firebase/auth";
 import {useAuth} from "../context/authContext";
 import axios from "axios";
 import Footer from "./Footer";
-import Header from "./Header";
+
 import Bonus from "./Bonus";
 
 
@@ -221,10 +221,21 @@ const Account = (props) => {
                                 <div key={order.id} className={`order-card ${getStatusClass(order.status)}`}>
                                     {order.products && order.products.length > 0 && (
                                         <img
-                                            src={order.products[0].item?.image || "/default-product.png"}
-                                            alt={order.products[0].item?.title || "Product"}
+                                            src={
+                                                order.products?.[0]?.item
+                                                    ? (Array.isArray(order.products[0].item.image) && order.products[0].item.image.length > 0
+                                                        ? order.products[0].item.image[0]
+                                                        : order.products[0].item.image || "/default-product.png")
+                                                    : "/default-product.png"
+                                            }
+                                            alt={order.products?.[0]?.item?.title || "Product"}
                                             className="ordered-product-img"
-                                            style={{objectFit: 'contain', borderRadius: '8px', width: '120px', height: '120px'}}
+                                            style={{
+                                                objectFit: 'contain',
+                                                borderRadius: '8px',
+                                                width: '120px',
+                                                height: '120px'
+                                            }}
                                         />
                                     )}
                                     <div className="order-info">
@@ -233,7 +244,7 @@ const Account = (props) => {
                                             {order.delivery_date} {order.delivery_time}
                                         </div>
                                         <div className="order-total-sum">
-                                            Total: {order.products.reduce((sum, item) => sum + (item.total || 0), 0).toFixed(2)}₴
+                                        Total: {order.products.reduce((sum, item) => sum + (item.total || 0), 0).toFixed(2)}₴
                                         </div>
                                     </div>
                                 </div>
@@ -251,7 +262,10 @@ const Account = (props) => {
                                 <div className="card-top">
                                     <button className="like-btn">♡</button>
                                 </div>
-                                <img src={product.image} alt={product.title} className="product-img"/>
+                                <img
+                                    src={Array.isArray(product.image) ? product.image[0] : product.image}
+                                    alt={product.title} className="product-img"
+                                />
                                 <div className="product-info">
                                     <p className="product-category">{product.category}</p>
                                     <h3 className="product-title">{product.title}</h3>
@@ -285,40 +299,42 @@ const Account = (props) => {
                             const displayedProducts = productsInOrder.slice(0, maxVisible);
                             const extraCount = productsInOrder.length - maxVisible;
 
+                            // Функція для безпечного отримання першого зображення
+                            const getFirstImage = (image) => {
+                                if (!image) return "/default-product.png"; // дефолтне зображення
+                                if (Array.isArray(image) && image.length > 0) return image[0];
+                                if (typeof image === "string") return image;
+                                return "/default-product.png";
+                            };
+
                             return (
-                                <div key={order.id} className={`order-card ${getStatusClass(order.status)}`} >
-                                    <div className="order-images" >
+                                <div key={order.id} className={`order-card ${getStatusClass(order.status)}`}>
+                                    <div className="order-images">
                                         {productsInOrder.length === 1 && productsInOrder[0].item ? (
                                             <img
-                                                src={productsInOrder[0].item.image}
-                                                alt={productsInOrder[0].item.title}
+                                                src={getFirstImage(productsInOrder[0].item.image)}
+                                                alt={productsInOrder[0].item.title || "Product"}
                                                 className="order-single-image"
-
                                             />
                                         ) : (
-                                            <div
-                                                className="order-images-grid"
-
-                                            >
+                                            <div className="order-images-grid">
                                                 {displayedProducts.map((item, idx) =>
                                                     item.item ? (
                                                         <img
                                                             key={idx}
-                                                            src={item.item.image}
-                                                            alt={item.item.title}
+                                                            src={getFirstImage(item.item.image)}
+                                                            alt={item.item.title || "Product"}
                                                         />
                                                     ) : null
                                                 )}
                                                 {extraCount > 0 && (
-                                                    <div className="order-more-images">+{extraCount} </div>
+                                                    <div className="order-more-images">+{extraCount}</div>
                                                 )}
                                             </div>
                                         )}
                                     </div>
                                     <div className="order-info" style={{ flexGrow: 1 }}>
-                                        <strong className="order-status">
-                                            {order.status}
-                                        </strong>
+                                        <strong className="order-status">{order.status}</strong>
                                         <div className="order-delivery-date">
                                             Delivery: {order.delivery_date} {order.delivery_time}
                                         </div>
@@ -335,6 +351,7 @@ const Account = (props) => {
                 )}
             </div>
         ),
+
 
         bonuses: <div>[Bonuses Content]</div>,
         privileges: <div>[Privileges Content]</div>,

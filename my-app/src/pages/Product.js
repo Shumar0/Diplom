@@ -63,12 +63,14 @@ export default function Product() {
 
                 if (data[param.id]) {
                     const product = data[param.id];
+                    console.log("Banner URL:", product.banner); // ← проверь
                     setItem({
                         id: param.id,
                         brand: product.brand,
                         title: product.title,
                         price: product.price,
                         image: product.image,
+                        banner: product.banner,
                         amount_on_stock: product.amount_on_stock,
                         category: product.category,
                         available: product.amount_on_stock > 0,
@@ -207,6 +209,7 @@ export default function Product() {
         navigate("/catalog");
     };
 
+
     // Функція для отримання personId за поточним користувачем
     const fetchUserById = async () => {
         try {
@@ -251,6 +254,8 @@ export default function Product() {
         }
     };
 
+
+
     if (!item) return <p>Loading product...</p>;
 
     return (
@@ -277,7 +282,7 @@ export default function Product() {
                             >
                                 From {item.price}₴
                             </div>
-                            <div style={{ color: "green", fontWeight: "bold" }}>
+                            <div style={{ color: "#0071e3", fontWeight: "bold" }}>
                                 Now from {(item.price * (1 - item.discount / 100)).toFixed(0)}₴
                             </div>
                         </div>
@@ -289,7 +294,11 @@ export default function Product() {
 
             <div className="product-main">
                 <div className="product-left">
-                    <img id="product-image" src={item.image} alt="Product Image" />
+                    <img
+                        id="product-image"
+                        src={Array.isArray(item.image) ? item.image[0] : item.image}
+                        alt="Product Image"
+                    />
                 </div>
                 <div className="product-right configurator">
                     {Object.entries(groupedConfigs).map(([key, values]) =>
@@ -309,10 +318,24 @@ export default function Product() {
                 <div className="inner-container">
                     <div className="product-info-left">
                         <h2>
-                            Your New <br />
-                            <span id="productName"></span>
+                            Your New <br/>
+                            <span id="productName">{item.title}</span>
                         </h2>
                         <p className="subtitle">Just the way you want it</p>
+
+                        {item.banner && (
+                            <img
+                                src={item.banner}
+                                alt="Banner"
+                                style={{
+                                    maxWidth: "500px",
+
+                                    objectFit: "cover",
+                                    marginTop: "1rem",
+                                    display: "block",
+                                }}
+                            />
+                        )}
                     </div>
 
                     <div className="product-info-right">
@@ -333,7 +356,7 @@ export default function Product() {
                                         </strong>
                                         <strong
                                             id="productPrice"
-                                            style={{ color: "#008CF6", fontWeight: "bold" }}
+                                            style={{color: "#008CF6", fontWeight: "bold"}}
                                         >
                                             {(item.price * (1 - item.discount / 100)).toFixed(0)}₴
                                         </strong>
@@ -345,16 +368,19 @@ export default function Product() {
                                 )}
                             </p>
                             <p className="bonuses">
-                                Bonuses: <span id="productBonus">{item.price / 100}</span>{" "}
-                                <Bonus fillColor="#ADACAC" width={20} height={20} className="bonus-icon" />
+                                Bonuses:{" "}
+                                <span id="productBonus">
+                                    {Math.floor(item.price * (1 - item.discount / 100) * 0.01)}
+                                </span>{" "}
+                                <Bonus fillColor="#ADACAC" width={20} height={20} className="bonus-icon"/>
                             </p>
 
                             <p className="save-note">
                                 Need a moment?
-                                <br />
+                                <br/>
                                 <span>Keep your selections by saving this device to Your Saves.</span>
                             </p>
-                            <div style={{ marginTop: "20px" }}>
+                            <div style={{marginTop: "20px"}}>
                                 <button
                                     onClick={() => {
                                         addToFavourite();
@@ -368,7 +394,7 @@ export default function Product() {
                                         textAlign: "left",
                                     }}
                                 >
-                                    <Save_for_later />
+                                    <Save_for_later/>
                                     Save for later
                                 </button>
                             </div>
@@ -414,7 +440,7 @@ export default function Product() {
                 </div>
             </div>
 
-            <Footer />
+            <Footer/>
         </div>
     );
 }

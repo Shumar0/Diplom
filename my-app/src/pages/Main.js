@@ -84,7 +84,17 @@ const Main = (props) => {
           <div id="productCatalog">
               {products.map(product => (
                   <div key={product.id} className="product-card" data-stock={product.available} data-special={product.isSpecial} data-new={product.isNew}>
-                      <img src={product.image} alt={product.name} className="product-image"/>
+                      <img
+                          src={
+                              Array.isArray(product.image)
+                                  ? product.image[0] // перше зображення з масиву
+                                  : typeof product.image === 'object' && product.image !== null
+                                      ? Object.values(product.image)[0] // перше зображення з об’єкта
+                                      : product.image // якщо це рядок
+                          }
+                          alt={product.name || "Product"}
+                          className="product-image"
+                      />
                       <div className="product-info">
                           <span className="product-category">{product.category}</span>
                           <h3 className="product-name">{product.brand} {product.title}</h3>
